@@ -1,4 +1,4 @@
-import { TasksListScreen } from "../../../features/tasksList/TasksListScreen";
+import { TasksListScreen } from "../../../src/features/tasksList/TasksListScreen";
 
 
 export default function TasksList() {

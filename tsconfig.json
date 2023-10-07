@@ -8,5 +8,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "config/axios-instance.ts", "config/i18n.ts"  ]
 }

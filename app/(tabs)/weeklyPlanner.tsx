@@ -1,4 +1,4 @@
-import { WeeklyPlannerScreen } from "../../features/weeklyPlanner/WeeklyPlannerScreen";
+import { WeeklyPlannerScreen } from "../../src/features/weeklyPlanner/WeeklyPlannerScreen";
 
 export default function WeeklyPlanner() {
   return (

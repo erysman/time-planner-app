@@ -1,22 +1,22 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
+import { Slot, SplashScreen, Stack } from 'expo-router';
+import { Suspense, useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import { TamaguiProvider, Theme } from 'tamagui';
 import tamaguiConfig from '../config/tamagui.config';
-import { ScreenDimensionsProvider } from '../core/dimensions/UseScreenDimensions';
-
+import { ScreenDimensionsProvider } from '../src/core/dimensions/UseScreenDimensions';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from '../src/features/auth/hooks/UseAuth';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
 
-// export const unstable_settings = {
-//   // Ensure that reloading on `/modal` keeps a back button present.
-//   initialRouteName: 'tasks',
-// };
+export const unstable_settings = {
+  initialRouteName: '(auth)',
+};
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -46,23 +46,23 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+const queryClient = new QueryClient();
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
     <>
       <ScreenDimensionsProvider>
-        <TamaguiProvider config={tamaguiConfig}>
-          <Theme name="light_green">
-            <Stack
-              screenOptions={{
-                headerShown: false
-              }}
-            >
-              <Stack.Screen name="(tabs)" />
-            </Stack>
-          </Theme>
-        </TamaguiProvider>
+        <QueryClientProvider client={queryClient}>
+          <TamaguiProvider config={tamaguiConfig}>
+            <Theme name="light_green">
+              <AuthProvider>
+                <Slot/>
+              </AuthProvider>
+            </Theme>
+          </TamaguiProvider>
+        </QueryClientProvider>
       </ScreenDimensionsProvider>
     </>
   );

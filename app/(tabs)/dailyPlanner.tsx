@@ -1,4 +1,4 @@
-import { DailyPlannerScreen } from "../../features/dailyPlanner/DailyPlannerScreen";
+import { DailyPlannerScreen } from "../../src/features/dailyPlanner/DailyPlannerScreen";
 
 export default function DailyPlanner() {
   return (

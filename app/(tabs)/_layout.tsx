@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { TabBar } from "../../core/navigation/TabBar";
+import { TabBar } from "../../src/core/navigation/TabBar";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 
