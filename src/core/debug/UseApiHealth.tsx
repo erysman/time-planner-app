@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { API_HEALTH_INTERVAL } from "../../../config/constants";
 import { useHealth } from "../../clients/time-planner-server/client";
 
 export const useApiHealth = () => {
-    const {data, isError, isLoading, isRefetching, refetch} = useHealth({
+    const {data, isError, isLoading, isRefetching} = useHealth({
         query: {
-            cacheTime: 0
+            cacheTime: 0,
+            refetchInterval: API_HEALTH_INTERVAL
         }
     })
 
@@ -21,5 +23,5 @@ export const useApiHealth = () => {
         }
     }, [isLoading, isError, isRefetching, data]);
 
-    return {isServerAlive, refetch}
+    return {isServerAlive}
 }

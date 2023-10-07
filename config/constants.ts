@@ -1,0 +1,1 @@
+export const API_HEALTH_INTERVAL=2000;
