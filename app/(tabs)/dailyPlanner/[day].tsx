@@ -1,16 +1,16 @@
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import {
-  DAY_FORMAT,
   DailyPlannerScreen,
 } from "../../../src/features/dailyPlanner/DailyPlannerScreen";
 import dayjs from "dayjs";
 import { useEffect } from "react";
 import { Button, SizableText } from "tamagui";
 import { ExpoIcon } from "../../../src/core/components/ExpoIcon";
+import { DAY_FORMAT } from "../../../config/constants";
 
 
 //TODO: screen transition animations https://reactnavigation.org/docs/stack-navigator/#animation-related-options
-
+//TODO: always preload next and previous day screen in background
 export default function DailyPlanner() {
   const { day } = useLocalSearchParams<{ day: string }>();
   const isDateValid = day && dayjs(day, DAY_FORMAT).isValid();

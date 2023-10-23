@@ -9,7 +9,7 @@ export const TasksListScreen = () => {
 
     return (
         <YStack space={"$2"}>
-            <Link href={{
+            {/* <Link href={{
                 pathname: "/(tabs)/(tasks)/tasks/[taskId]",
                 params: {
                     taskId: "1"
@@ -18,7 +18,7 @@ export const TasksListScreen = () => {
                 <Button>
                     {"Task 1"}
                 </Button>
-            </Link>
+            </Link> */}
             <Button>
                 {"Add new project"}
             </Button>

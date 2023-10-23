@@ -1,21 +1,27 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Slot, SplashScreen, Stack } from 'expo-router';
-import { Suspense, useEffect } from 'react';
-import { useColorScheme } from 'react-native';
-import { TamaguiProvider, Theme } from 'tamagui';
-import tamaguiConfig from '../config/tamagui.config';
-import { ScreenDimensionsProvider } from '../src/core/dimensions/UseScreenDimensions';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from '../src/features/auth/hooks/UseAuth';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import {
+  DarkTheme,
+  DefaultTheme,
+  Theme as NavTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { Slot, SplashScreen, Stack } from "expo-router";
+import { Suspense, useEffect } from "react";
+import { useColorScheme } from "react-native";
+import { TamaguiProvider, Theme, useTheme } from "tamagui";
+import tamaguiConfig from "../config/tamagui.config";
+import { ScreenDimensionsProvider } from "../src/core/dimensions/UseScreenDimensions";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "../src/features/auth/hooks/UseAuth";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router';
+} from "expo-router";
+import { UseThemeResult } from "@tamagui/web"
 
 export const unstable_settings = {
-  initialRouteName: '(auth)',
+  initialRouteName: "(auth)",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -56,10 +62,12 @@ function RootLayoutNav() {
       <ScreenDimensionsProvider>
         <QueryClientProvider client={queryClient}>
           <TamaguiProvider config={tamaguiConfig}>
-            <Theme name="light_green">
-              <AuthProvider>
-                <Slot/>
-              </AuthProvider>
+            <Theme name="light_blue_alt1">
+              <NavigationTheme>
+                <AuthProvider>
+                  <Slot />
+                </AuthProvider>
+              </NavigationTheme>
             </Theme>
           </TamaguiProvider>
         </QueryClientProvider>
@@ -67,3 +75,23 @@ function RootLayoutNav() {
     </>
   );
 }
+
+export function getTamaguiTheme(theme: UseThemeResult) {
+  return {
+    dark: false,
+    colors: {
+      primary: theme.color.get(),
+      background: theme.background.get(),
+      card: theme.background.get(),
+      text: theme.color.get(),
+      border: theme.backgroundFocus.get(),
+      notification: theme.color.get(),
+    },
+  } as NavTheme;
+}
+
+export const NavigationTheme = (props: { children: any }) => {
+  const theme = useTheme();
+  return <ThemeProvider value={getTamaguiTheme(theme)}>{props.children}</ThemeProvider>;
+};
+

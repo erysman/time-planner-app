@@ -30,22 +30,20 @@ const unsignedAuthContext: IAuthContext = {
 
 const AuthContext = createContext<IAuthContext>(unsignedAuthContext);
 
-function useAuthInterceptor() {
+function useAuthInterceptor(user: FirebaseAuthTypes.User | null) {
     const [interceptor, setInterceptor] = useState<number | null>(null);
-    const [token, setToken] = useState<string | null>(null)
 
     useEffect(() => {
         if (interceptor) {
             removeInterceptor(interceptor);
             setInterceptor(null);
         }
-        if (!token) {
+        if (!user) {
             return;
         }
-        const newInterceptor = addAuthenticationHeaderInterceptor(token);
+        const newInterceptor = addAuthenticationHeaderInterceptor(async () => await user?.getIdToken());
         setInterceptor(newInterceptor);
-    }, [token])
-    return { token, setTokenForClient: setToken }
+    }, [user])
 }
 
 
@@ -53,7 +51,6 @@ function useSetUserOnAuthStateChange(
     setUser: React.Dispatch<React.SetStateAction<FirebaseAuthTypes.User | null>>,
     setLoggingInProgress: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-    const {setTokenForClient} = useAuthInterceptor();
     useEffect(() => {
         return auth().onAuthStateChanged(async (user) => {
             console.log(`auth state changed: ${user?.email}`);
@@ -61,11 +58,9 @@ function useSetUserOnAuthStateChange(
                 // console.log(`token: ${await user.getIdToken()}`);
                 setUser(user);
                 setLoggingInProgress(false);
-                setTokenForClient(await user.getIdToken())
             } else {
                 setUser(null);
                 setLoggingInProgress(false);
-                setTokenForClient(null);
             }
         });
     }, [auth, setUser]);
@@ -76,6 +71,7 @@ export const AuthProvider = (props: any) => {
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
     useSetUserOnAuthStateChange(setUser, setLoggingInProgress);
     useProtectRoutes(user);
+    useAuthInterceptor(user);
 
     return (
         <AuthContext.Provider value={{

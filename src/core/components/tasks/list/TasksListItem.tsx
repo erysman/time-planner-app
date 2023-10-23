@@ -1,19 +1,24 @@
 import React from "react";
-import { Checkbox, H5, H6, SizableText, XStack } from "tamagui";
+import { Checkbox, H5, H6, SizableText, StackProps, XStack } from "tamagui";
 import { ExpoIcon } from "../../ExpoIcon";
 
-export type TasksListItemProps = {
-  name: string;
+export interface TasksListItemProps extends StackProps {
+  name: string,
+  first?: boolean,
+  last?: boolean
 };
 
-export default function TasksListItem({ name }: TasksListItemProps) {
+export default function TasksListItem({ name, first, last, ...props }: TasksListItemProps) {
   return (
     <XStack
       h={55}
       w={"100%"}
       alignItems="center"
+      borderColor="$borderColor"
       borderBottomWidth={1}
       borderTopWidth={1}
+      marginTop={first ? 0 : -1}
+      {...props}
     >
       <Checkbox size="$2" circular marginHorizontal={16}>
         <Checkbox.Indicator>

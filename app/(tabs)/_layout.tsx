@@ -27,7 +27,7 @@ export default function TabLayout() {
         name="dailyPlanner"
         options={{
           title: "",
-          tabBarLabel: 'Daily Planner',
+          tabBarLabel: 'Daily Plan',
           tabBarIcon: (props) => {
             return <MaterialIcons name={"today"} {...props} />
           },
@@ -37,9 +37,19 @@ export default function TabLayout() {
         name="weeklyPlanner"
         options={{
           title: "",
-          tabBarLabel: 'Weekly Planner',
+          tabBarLabel: 'Weekly Plan',
           tabBarIcon: (props) => {
             return <MaterialCommunityIcons name="calendar-week" {...props} />
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "",
+          tabBarLabel: 'Settings',
+          tabBarIcon: (props) => {
+            return <MaterialIcons name="settings" {...props} />
           },
         }}
       />

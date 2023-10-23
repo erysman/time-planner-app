@@ -1,12 +1,18 @@
 import { Stack } from "expo-router";
+import { useTheme } from "tamagui";
 
 
 export default function DailyPlannerLayout() {
-
+  const theme = useTheme();
   return (
     <Stack
       screenOptions={{
-        headerTitleAlign: "center"
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: theme.background.get(),
+        },
+        headerShadowVisible: false,
+        headerTintColor: theme.color.get(),
       }}
     >
       <Stack.Screen

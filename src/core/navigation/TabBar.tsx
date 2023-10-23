@@ -15,12 +15,17 @@ export const TabBar = ({state, insets, descriptors, navigation}: TabBarProps) =>
         <XStack backgroundColor={"$background"}
                 width={screenWidth}
                 height={tabBarHeight}
-                borderTopLeftRadius={"$9"}
-                borderTopRightRadius={"$9"}
-                position={"absolute"}
-                top={screenHeight - tabBarHeight}
+                // borderTopLeftRadius={"$9"}
+                // borderTopRightRadius={"$9"}
+                borderTopWidth={1}
+                // borderLeftWidth={1}
+                // borderRightWidth={1}
+                borderColor={"$backgroundFocus"}
+                // position={"absolute"}
+                // top={screenHeight - tabBarHeight}
                 justifyContent={"space-evenly"}
                 alignItems={"center"}
+                elevation={25}
         >
             {
                 state.routes.map((route, index) => {
@@ -59,6 +64,8 @@ export const TabBar = ({state, insets, descriptors, navigation}: TabBarProps) =>
                             accessibilityState={isFocused ? {selected: true} : {}}
                             alignItems={"center"}
                             justifyContent={"center"}
+                            borderTopLeftRadius={"$9"}
+                borderTopRightRadius={"$9"}
                         >
                             <XStack
                                 width={"$6"}

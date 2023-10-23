@@ -13,9 +13,10 @@ export const AXIOS_INSTANCE = Axios.create({
     baseURL: baseUrl
 });
 
-export const addAuthenticationHeaderInterceptor = (token: string) => {
-    return AXIOS_INSTANCE.interceptors.request.use(function (config) {
-        config.headers.Authorization = "Bearer "+token;
+export const addAuthenticationHeaderInterceptor = async (getToken: () => Promise<string>) => {
+    console.log(`Bearer ${await getToken()}`)
+    return AXIOS_INSTANCE.interceptors.request.use(async function (config) {
+        config.headers.Authorization = `Bearer ${await getToken()}`;
         return config;
     });
 }
