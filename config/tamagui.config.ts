@@ -1,7 +1,28 @@
 import { config } from '@tamagui/config'
-
+import { createAnimations } from '@tamagui/animations-moti'
 import { createTamagui } from 'tamagui'
-const tamaguiConfig = createTamagui(config)
+
+const tamaguiConfig = createTamagui({
+  ...config,
+  animations: createAnimations({
+    fast: {
+      type: 'spring',
+      damping: 20,
+      mass: 1.2,
+      stiffness: 250,
+    },
+    medium: {
+      type: 'spring',
+      damping: 10,
+      mass: 0.9,
+      stiffness: 100,
+    },
+    slow: {
+      type: 'spring',
+      damping: 20,
+      stiffness: 60,
+    },
+  })})
 // this makes typescript properly type everything based on the config
 
 type Conf = typeof tamaguiConfig

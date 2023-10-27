@@ -3,7 +3,8 @@ import Axios, { AxiosRequestConfig } from 'axios';
 
 import * as Device from 'expo-device';
 
-const baseUrlForRealDevice = process.env.EXPO_PUBLIC_SERVER_BASE_URL
+const hardcodedUrl = "http://192.168.1.103:8080"
+const baseUrlForRealDevice = hardcodedUrl || process.env.EXPO_PUBLIC_SERVER_BASE_URL
 const baseUrlForEmulator = process.env.EXPO_PUBLIC_EMULATOR_SERVER_BASE_URL
 const baseUrl = Device.isDevice ? baseUrlForRealDevice : baseUrlForEmulator;
 console.log("Real device?: "+ Device.isDevice);
@@ -14,7 +15,6 @@ export const AXIOS_INSTANCE = Axios.create({
 });
 
 export const addAuthenticationHeaderInterceptor = async (getToken: () => Promise<string>) => {
-    console.log(`Bearer ${await getToken()}`)
     return AXIOS_INSTANCE.interceptors.request.use(async function (config) {
         config.headers.Authorization = `Bearer ${await getToken()}`;
         return config;

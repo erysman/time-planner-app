@@ -1,14 +1,14 @@
 import React from "react";
 import { Checkbox, H5, H6, SizableText, StackProps, XStack } from "tamagui";
 import { ExpoIcon } from "../../ExpoIcon";
+import { ITask } from "../../../../features/dailyPlanner/model/model";
 
 export interface TasksListItemProps extends StackProps {
-  name: string,
-  first?: boolean,
-  last?: boolean
+  task: ITask,
+  first?: boolean
 };
 
-export default function TasksListItem({ name, first, last, ...props }: TasksListItemProps) {
+export default function TasksListItem({ task, first, ...props }: TasksListItemProps) {
   return (
     <XStack
       h={55}
@@ -25,7 +25,7 @@ export default function TasksListItem({ name, first, last, ...props }: TasksList
           <ExpoIcon iconSet="MaterialIcons" name='check' size={24} color='color' />
         </Checkbox.Indicator>
       </Checkbox>
-      <SizableText flexGrow={1} flexShrink={1} size={"$5"} numberOfLines={1} ellipsizeMode="tail">{name}</SizableText>
+      <SizableText flexGrow={1} flexShrink={1} size={"$5"} numberOfLines={1} ellipsizeMode="tail">{task.name}</SizableText>
       <SizableText  size={"$3"} marginHorizontal={16}>Important</SizableText>
     </XStack>
   );

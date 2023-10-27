@@ -5,6 +5,7 @@
  * OpenAPI spec version: v0
  */
 
+export * from './getTasksParams';
 export * from './health200One';
 export * from './health200Three';
 export * from './health200Two';
@@ -15,3 +16,5 @@ export * from './link';
 export * from './links200One';
 export * from './links200Three';
 export * from './links200Two';
+export * from './taskDTO';
+export * from './taskUpdateDTO';

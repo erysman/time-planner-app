@@ -1,31 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TasksListItem, { TasksListItemProps } from "./TasksListItem";
 import { ScrollView, YStack } from "tamagui";
-import { ITask } from "../../../../features/dailyPlanner/defaultData";
+import { ITask } from "../../../../features/dailyPlanner/model/model";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { DailyPlannerViewMode, useHeightByViewMode } from "../../../../features/dailyPlanner/logic/UseDailyPlannerViewMode";
+import { DimensionInPercent } from "../../../model/types";
 
 export type TasksListProps = {
-  items: ITask[];
+  tasks: ITask[];
+  height: any;
+  viewMode: DailyPlannerViewMode;
 };
 
-export default function TasksList({ items }: TasksListProps) {
+export default function TasksList({ tasks, viewMode }: TasksListProps) {
+  const style = useHeightByViewMode(viewMode, getListHeight);
   return (
-    <YStack>
+    <Animated.View style={[style]}>
       <ScrollView
-        h={"50%"}
+        h={"100%"}
         alwaysBounceHorizontal={false}
         alwaysBounceVertical={false}
         bounces={false}
         overScrollMode="never"
       >
-        {items.map((item, i) => (
-          <TasksListItem
-            key={item.id}
-            {...item}
-            first={i === 0}
-            last={i === items.length - 1}
-          />
+        {tasks.map((task, i) => (
+          <TasksListItem key={task.id} task={task} first={i === 0} />
         ))}
       </ScrollView>
-    </YStack>
+    </Animated.View>
   );
+}
+
+function getListHeight(viewMode: DailyPlannerViewMode): DimensionInPercent {
+  switch (viewMode) {
+    case "both":
+      return "50%";
+    case "calendar":
+      return "0%";
+    case "list":
+      return "100%";
+  }
 }

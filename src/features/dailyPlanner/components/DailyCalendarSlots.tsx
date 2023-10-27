@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import * as Localization from "expo-localization";
 import { Separator, SizableText, YStack } from "tamagui";
 
-export const DailyCalendarSlots = (props: {slotHeight: number}) => {
+export const DailyCalendarSlots = (props: {hourSlotHeight: number}) => {
 
     const listAllHours = useCallback((locale: string): string[] => {
         return [...Array(24).keys()].map((i) => {
@@ -19,7 +19,7 @@ export const DailyCalendarSlots = (props: {slotHeight: number}) => {
     return (
         <>
         {hoursInLocale.map((hour) => (
-            <DailyCalendarSlot key={hour} hour={hour} height={props.slotHeight} />
+            <DailyCalendarSlot key={hour} hour={hour} height={props.hourSlotHeight} />
           ))}
         </>
     )

@@ -2,10 +2,11 @@ import { Link } from "expo-router"
 import { Button, H6, YStack } from "tamagui"
 import { useApiAuthValidate } from "../../core/debug/UseApiAuthValidate"
 import { useApiHealth } from "../../core/debug/UseApiHealth"
+import { useAuth } from "../auth/hooks/UseAuth"
 
 export const TasksListScreen = () => {
     const { isServerAlive } = useApiHealth();
-    const { isApiAuthValid } = useApiAuthValidate();
+    const auth = useAuth();
 
     return (
         <YStack space={"$2"}>
@@ -19,11 +20,10 @@ export const TasksListScreen = () => {
                     {"Task 1"}
                 </Button>
             </Link> */}
-            <Button>
-                {"Add new project"}
+            <Button onPress={async () => console.log(await auth.user?.getIdToken())}>
+                {"Log auth token"}
             </Button>
             <H6>{`Server connected: ${isServerAlive}`}</H6>
-            <H6>{`Authentication valid: ${isApiAuthValid}`}</H6>
         </YStack>
     )
 }

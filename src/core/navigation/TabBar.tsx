@@ -87,4 +87,3 @@ export const TabBar = ({state, insets, descriptors, navigation}: TabBarProps) =>
         </XStack>
     )
 }
-// todo: orange theme

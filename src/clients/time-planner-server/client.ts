@@ -5,15 +5,21 @@
  * OpenAPI spec version: v0
  */
 import {
-  useQuery
+  useQuery,
+  useMutation
 } from '@tanstack/react-query'
 import type {
   UseQueryOptions,
+  UseMutationOptions,
   QueryFunction,
+  MutationFunction,
   UseQueryResult,
   QueryKey
 } from '@tanstack/react-query'
 import type {
+  TaskDTO,
+  TaskUpdateDTO,
+  GetTasksParams,
   Links200One,
   Links200Two,
   Links200Three,
@@ -36,6 +42,112 @@ import { customInstance } from '../../../config/axios-instance';
   ? P
   : never;
 
+export const getTask = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<TaskDTO>(
+      {url: `/tasks/${id}`, method: 'get', signal
+    },
+      options);
+    }
+  
+
+export const getGetTaskQueryKey = (id: string,) => {
+    
+    return [`/tasks/${id}`] as const;
+    }
+  
+
+    
+export const getGetTaskQueryOptions = <TData = Awaited<ReturnType<typeof getTask>>, TError = unknown>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTask>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTaskQueryKey(id);
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTask>>> = ({ signal }) => getTask(id, requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTask>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTaskQueryResult = NonNullable<Awaited<ReturnType<typeof getTask>>>
+export type GetTaskQueryError = unknown
+
+export const useGetTask = <TData = Awaited<ReturnType<typeof getTask>>, TError = unknown>(
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTask>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetTaskQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+export const updateTask = (
+    id: string,
+    taskUpdateDTO: TaskUpdateDTO,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<TaskDTO>(
+      {url: `/tasks/${id}`, method: 'patch',
+      headers: {'Content-Type': 'application/json', },
+      data: taskUpdateDTO
+    },
+      options);
+    }
+  
+
+
+export const getUpdateTaskMutationOptions = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTask>>, {id: string;data: TaskUpdateDTO}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateTask(id,data,requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateTaskMutationResult = NonNullable<Awaited<ReturnType<typeof updateTask>>>
+    export type UpdateTaskMutationBody = TaskUpdateDTO
+    export type UpdateTaskMutationError = unknown
+
+    export const useUpdateTask = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getUpdateTaskMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
 export const validate = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
@@ -83,6 +195,69 @@ export const useValidate = <TData = Awaited<ReturnType<typeof validate>>, TError
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
   const queryOptions = getValidateQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+/**
+ * @summary Get tasks
+ */
+export const getTasks = (
+    params: GetTasksParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<TaskDTO[]>(
+      {url: `/tasks`, method: 'get',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetTasksQueryKey = (params: GetTasksParams,) => {
+    
+    return [`/tasks`, ...(params ? [params]: [])] as const;
+    }
+  
+
+    
+export const getGetTasksQueryOptions = <TData = Awaited<ReturnType<typeof getTasks>>, TError = unknown>(params: GetTasksParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTasksQueryKey(params);
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTasks>>> = ({ signal }) => getTasks(params, requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTasksQueryResult = NonNullable<Awaited<ReturnType<typeof getTasks>>>
+export type GetTasksQueryError = unknown
+
+/**
+ * @summary Get tasks
+ */
+export const useGetTasks = <TData = Awaited<ReturnType<typeof getTasks>>, TError = unknown>(
+ params: GetTasksParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetTasksQueryOptions(params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

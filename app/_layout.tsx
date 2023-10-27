@@ -19,6 +19,7 @@ export {
   ErrorBoundary,
 } from "expo-router";
 import { UseThemeResult } from "@tamagui/web"
+import { useSetupReactQuery } from "../config/react-query";
 
 export const unstable_settings = {
   initialRouteName: "(auth)",
@@ -56,6 +57,7 @@ const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  useSetupReactQuery()
 
   return (
     <>

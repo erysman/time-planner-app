@@ -1,7 +1,7 @@
 import { Redirect } from "expo-router";
 import {
   DailyPlannerScreen,
-} from "../../../src/features/dailyPlanner/DailyPlannerScreen";
+} from "../../../src/features/dailyPlanner/screens/DailyPlannerScreen";
 import dayjs from "dayjs";
 import { DAY_FORMAT } from "../../../config/constants";
 export default function DailyPlannerIndex() {
