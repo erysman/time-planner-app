@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import Animated, {
   Extrapolation,
   interpolate,
-  useAnimatedProps
+  useAnimatedProps,
 } from "react-native-reanimated";
 import { Checkbox, SizableText, XStack } from "tamagui";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
@@ -44,7 +44,7 @@ export const DailyCalendarTask = ({
     minuteInPixels
   );
   const height = useMemo(
-    () => mapDurationToHeight(durationMin, minuteInPixels), //TODO: small margin to see boundry between tasks
+    () => mapDurationToHeight(durationMin, minuteInPixels),
     [durationMin]
   );
 
@@ -52,7 +52,7 @@ export const DailyCalendarTask = ({
     <CalendarTaskEditHandler
       isEdited={isEdited}
       top={top}
-      height={height}
+      height={isEdited ? height : height - 2} //2px margin to see boundry between tasks
       minuteInPixels={minuteInPixels}
       task={task}
     >
@@ -126,7 +126,6 @@ const CalendarTaskView = ({
         flexGrow={1}
         flexShrink={1}
         size={"$5"}
-        // numberOfLines={Math.max(Math.trunc(height / 30), 1)}
         ellipsizeMode="tail"
         onPress={() => onPress(task)}
         animatedProps={nameProps}

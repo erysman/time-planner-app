@@ -45,11 +45,11 @@ export const CalendarTaskEditHandler = ({
   );
 
   const style = useAnimatedStyle(() => ({
-    height: newHeight.value - 2,
+    height: newHeight.value, //- 2
   }));
 
   return (
-    <Stack>
+    <Stack zIndex={isEdited ? 300 : 100}>
       <GestureDetector gesture={verticalMovementPan}>
         <Animated.View
           style={[

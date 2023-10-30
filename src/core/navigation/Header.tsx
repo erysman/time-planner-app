@@ -51,7 +51,6 @@ export const Header = ({ title, headerLeft, headerRight }: IHeaderProps) => {
       height={headerHeight}
       alignItems={"center"}
       justifyContent={"center"}
-      position="relative"
     >
       <XStack flexGrow={1} flexShrink={1}>
         {headerLeft && headerLeft()}

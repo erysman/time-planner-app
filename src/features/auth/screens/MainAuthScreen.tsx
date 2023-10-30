@@ -1,10 +1,9 @@
-import { Button, H1, SizableText, Stack, XStack, YStack } from "tamagui";
-import { useAuth } from "../hooks/UseAuth";
-import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
-import { Link } from "expo-router";
-import { ExpoIcon } from "../../../core/components/ExpoIcon";
 import { tokens } from "@tamagui/themes";
+import { Link } from "expo-router";
+import { Button, H1, SizableText, XStack, YStack } from "tamagui";
 import i18n from "../../../../config/i18n";
+import { ExpoIcon } from "../../../core/components/ExpoIcon";
+import { useAuth } from "../hooks/UseAuth";
 
 export const MainAuthScreen = () => {
   const {
