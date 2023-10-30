@@ -18,9 +18,8 @@ const tamaguiConfig = createTamagui({
       stiffness: 100,
     },
     slow: {
-      type: 'spring',
-      damping: 20,
-      stiffness: 60,
+      type: 'timing',
+      duration: 350,
     },
   })})
 // this makes typescript properly type everything based on the config

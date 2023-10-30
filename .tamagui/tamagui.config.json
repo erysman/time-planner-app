@@ -20823,9 +20823,8 @@
           "stiffness": 100
         },
         "slow": {
-          "type": "spring",
-          "damping": 20,
-          "stiffness": 60
+          "type": "timing",
+          "duration": 350
         }
       },
       "usePresence": "Function",

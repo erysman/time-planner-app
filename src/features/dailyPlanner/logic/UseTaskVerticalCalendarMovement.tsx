@@ -46,7 +46,9 @@ export const useTaskVerticalCalendarMovement = (
   const newTop = useDerivedValue(() => {
     const numberOfSteps = Math.trunc(startTimeOffset.value / stepHeight);
     const newTop = top + numberOfSteps * stepHeight;
-    return newTop;
+    //TODO: task shouldn't exceed calendar end
+    //TODO: drag with negative "newTop" should move task to tasks list (remove startTime)
+    return Math.max(newTop, 0);
   });
 
   const updateTaskTimeFn = (newTop: SharedValue<number>) => {

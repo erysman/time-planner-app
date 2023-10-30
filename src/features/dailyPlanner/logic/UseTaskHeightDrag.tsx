@@ -27,11 +27,14 @@ export const useTaskHeightDrag = (
   const newHeight = useDerivedValue(() => {
     const numberOfSteps = Math.trunc(durationOffset.value / stepHeight);
     const newHeight = height + numberOfSteps * stepHeight;
-    return newHeight;
+    //TODO: height shouldn't exceed calendar end
+    return Math.max(newHeight, 2*stepHeight);
   });
+
   useEffect(() => {
     durationOffset.value = 0;
   }, [durationMin]);
+  
   const queryClient = useQueryClient();
   const updateTask = useUpdateTask({
     mutation: {

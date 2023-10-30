@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { Button } from "tamagui";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
-import { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { DimensionValue } from "react-native";
 import { DimensionInPercent } from "../../../core/model/types";
 
 export type DailyPlannerViewMode = "list" | "calendar" | "both";
@@ -39,11 +42,7 @@ export const useDailyPlannerViewMode = () => {
   const changeViewModeButton: JSX.Element = useMemo(
     () => (
       <Button
-        onPress={() => {
-          setViewMode((prev) => {
-            console.log(`set new view mode, from ${prev} to ${getNextViewMode(prev)}`)
-            return getNextViewMode(prev)});
-        }}
+        onPress={() => setViewMode((prev) => getNextViewMode(prev))}
         variant="outlined"
       >
         <ExpoIcon
@@ -57,17 +56,20 @@ export const useDailyPlannerViewMode = () => {
     [viewMode]
   );
 
-  return { viewMode, changeViewModeButton };
+  return { viewMode, changeViewModeButton, setViewMode };
 };
 
-export const useHeightByViewMode = (viewMode: DailyPlannerViewMode, getHeight: (viewMode: DailyPlannerViewMode) => DimensionInPercent) => {
+export const useHeightByViewMode = (
+  viewMode: DailyPlannerViewMode,
+  getHeight: (viewMode: DailyPlannerViewMode) => DimensionInPercent
+) => {
   const height = useSharedValue(getHeight(viewMode));
   useEffect(() => {
-    height.value = withTiming(getHeight(viewMode))
-  }, [viewMode])
+    height.value = withTiming(getHeight(viewMode));
+  }, [viewMode]);
   const style = useAnimatedStyle(() => ({
-    height: height.value
-  }))
+    height: height.value,
+  }));
 
   return style;
-}
+};

@@ -18,6 +18,10 @@ export interface CalendarTaskEditHandlerProps {
   children: any;
 }
 
+/*
+  TODO:
+    * in editMode bottom circle should be animated
+*/
 export const CalendarTaskEditHandler = ({
   isEdited,
   top,
