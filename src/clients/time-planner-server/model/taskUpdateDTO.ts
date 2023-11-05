@@ -10,4 +10,5 @@ export interface TaskUpdateDTO {
   startDate?: string;
   startTime?: string;
   durationMin?: number;
+  listPosition?: number;
 }

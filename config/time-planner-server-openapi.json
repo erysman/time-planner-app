@@ -290,6 +290,10 @@
           "durationMin": {
             "type": "integer",
             "format": "int32"
+          },
+          "listPosition": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -312,6 +316,10 @@
             "type": "string"
           },
           "durationMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "listPosition": {
             "type": "integer",
             "format": "int32"
           }

@@ -5,12 +5,15 @@ export interface ITask {
   startDate?: string;
   startTime?: string;
   durationMin?: number;
+  listPosition?: number;
 }
 
-export interface ITaskWithTime {
-  id: string;
-  name: string;
+export interface ITaskWithTime extends ITask{
   startDate: string;
   startTime: string;
   durationMin: number;
+}
+
+export interface ITaskWithPosition extends ITask {
+  listPosition: number;
 }

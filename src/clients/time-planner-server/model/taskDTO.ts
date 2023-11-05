@@ -11,4 +11,5 @@ export interface TaskDTO {
   startDate?: string;
   startTime?: string;
   durationMin?: number;
+  listPosition?: number;
 }

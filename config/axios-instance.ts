@@ -3,7 +3,7 @@ import Axios, { AxiosRequestConfig } from 'axios';
 
 import * as Device from 'expo-device';
 
-const hardcodedUrl = "http://192.168.1.103:8080"
+const hardcodedUrl = "http://192.168.1.103:8080/" //"https://time-planner-ltilgqmrgq-lm.a.run.app/"
 const baseUrlForRealDevice = hardcodedUrl || process.env.EXPO_PUBLIC_SERVER_BASE_URL
 const baseUrlForEmulator = process.env.EXPO_PUBLIC_EMULATOR_SERVER_BASE_URL
 const baseUrl = Device.isDevice ? baseUrlForRealDevice : baseUrlForEmulator;
