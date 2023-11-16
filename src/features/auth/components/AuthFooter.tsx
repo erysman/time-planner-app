@@ -32,18 +32,6 @@ export const AuthFooter = ({
         <XStack space={"$3"} mt={"$3"}>
           <Button
             circular
-            disabled={true}
-            icon={
-              <ExpoIcon
-                iconSet={"FontAwesome"}
-                name={"facebook"}
-                size={16}
-                color={"color"}
-              />
-            }
-          />
-          <Button
-            circular
             onPress={onPress}
             disabled={disabled}
             icon={

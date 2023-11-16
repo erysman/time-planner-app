@@ -137,7 +137,7 @@ export const MovableTask = ({
   positions,
 }: MovableTaskProps) => {
   const moveStyle = useAnimatedStyle(() => ({
-    top: isEdited && pressed.value ? top.value : withTiming(positions.value[task.id] * (taskHeight - 1), {duration: 100}),
+    top: (isEdited && pressed.value ? top.value : withTiming((positions.value[task.id] ?? 0) * (taskHeight - 1), {duration: 100})),
     overflow: "hidden" 
   }));
 

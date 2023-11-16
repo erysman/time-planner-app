@@ -136,6 +136,7 @@ function getAuthContextActions(setLoggingInProgress: React.Dispatch<React.SetSta
         try {
             setLoggingInProgress(true);
             await auth().signOut()
+            // GoogleSignin.revokeAccess()
             console.log('Signed out!');
         } finally {
             setLoggingInProgress(false);
