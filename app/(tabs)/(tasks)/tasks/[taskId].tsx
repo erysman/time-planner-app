@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import { TasksListScreen } from "../../../../src/features/tasksList/TasksListScreen";
+import { TasksListScreen } from "../../../../src/features/tasksList/screens/TasksListScreen";
 import { SizableText } from "tamagui";
 
 

@@ -1,5 +1,6 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { tokens } from "@tamagui/themes";
+import { useState } from "react";
 import {
   GetProps,
   SizableText,
@@ -8,7 +9,6 @@ import {
   XStack,
   YStack,
 } from "tamagui";
-import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
 
 type StackProps = GetProps<typeof Stack>;
 
@@ -21,7 +21,9 @@ export const TabBar = ({
   navigation,
 }: TabBarProps) => {
   const { color } = useTheme();
-  const { screenWidth } = useScreenDimensions();
+
+  const [width, setWidth] = useState<number | null>(null);
+
   return (
     <XStack
       backgroundColor={"$background"}
@@ -32,6 +34,7 @@ export const TabBar = ({
       justifyContent={"space-evenly"}
       alignItems={"center"}
       elevation={25}
+      onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
     >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
@@ -58,9 +61,11 @@ export const TabBar = ({
             target: route.key,
           });
         };
+
+        if (!width) return null;
         return (
           <YStack
-            width={screenWidth / state.routes.length}
+            width={width / state.routes.length}
             key={index}
             onPress={onPress}
             onLongPress={onLongPress}

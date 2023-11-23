@@ -10,6 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, SizableText, XStack, YStack } from "tamagui";
 import { DatePicker } from "../components/calendar/DatePicker";
 import { transform } from "@babel/core";
+import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
 
 export interface IStackHeaderProps extends NativeStackHeaderProps {
   headerLeft: () => JSX.Element;
@@ -40,8 +41,7 @@ export interface IHeaderProps {
 }
 
 export const Header = ({ title, headerLeft, headerRight }: IHeaderProps) => {
-  const { top: topInset } = useSafeAreaInsets();
-  const headerHeight = 70;
+  const {topInset, headerHeight, headerTotalHeight} = useScreenDimensions();
 
   return (
     <XStack
@@ -56,7 +56,13 @@ export const Header = ({ title, headerLeft, headerRight }: IHeaderProps) => {
         {headerLeft && headerLeft()}
       </XStack>
       <XStack flexGrow={1}>
-        <SizableText textAlign={"center"}>{title}</SizableText>
+        {typeof title === "string" ? (
+          <SizableText size="$6" flexGrow={1} textAlign={"center"}>
+            {title}
+          </SizableText>
+        ) : (
+          title
+        )}
       </XStack>
       <XStack flexGrow={1} flexShrink={1} justifyContent="flex-end">
         {headerRight && headerRight()}
@@ -81,9 +87,8 @@ export const DatePickerStackHeader = ({
   onClose,
   initialDay,
 }: DatePickerStackHeaderProps) => {
-  const { top: topInset } = useSafeAreaInsets();
-  const headerHeight = 70;
-  const datePickerHeight = 340;
+  const {topInset, headerHeight, headerTotalHeight} = useScreenDimensions();
+  const datePickerHeight = 330;
 
   const [open, setOpen] = useState(false);
   const height = useSharedValue(0);
