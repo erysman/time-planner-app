@@ -5,7 +5,7 @@ import { useApiHealth } from "../../core/debug/UseApiHealth";
 
 export const SettingsScreen = () => {
   const {
-    auth, actions: { logout },
+    user, actions: { logout },
   } = useAuth();
   const { isServerAlive } = useApiHealth();
   return (
@@ -15,7 +15,7 @@ export const SettingsScreen = () => {
           {"Logout"}
         </Button>
         <H6>{`Server connected: ${isServerAlive}`}</H6>
-            <Button variant="outlined" size="$3"  onPress={async () => console.log(await auth.user?.getIdToken())}>
+            <Button variant="outlined" size="$3"  onPress={async () => console.log(await user?.getIdToken())}>
                 {"Log auth token"}
             </Button>
             
