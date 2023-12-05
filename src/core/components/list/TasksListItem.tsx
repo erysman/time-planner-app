@@ -1,21 +1,19 @@
 import React from "react";
 import { Checkbox, SizableText, StackProps, XStack } from "tamagui";
-import { ITask } from "../../../../features/dailyPlanner/model/model";
-import { ExpoIcon } from "../../ExpoIcon";
+import { ITask } from "../../../features/dailyPlanner/model/model";
+import { ExpoIcon } from "../ExpoIcon";
 
 export interface TasksListItemProps extends StackProps {
   task: ITask;
   first?: boolean;
   isEdited: boolean;
-  height: number;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 export default function TasksListItem({
   task,
   first,
   isEdited,
-  height,
   onPress,
   ...props
 }: TasksListItemProps) {
@@ -23,7 +21,7 @@ export default function TasksListItem({
   return (
 
     <XStack
-      h={height}
+      h={"100%"}
       w={"100%"}
       alignItems="center"
       borderColor={isEdited ? "$blue8" : "$borderColor"}
