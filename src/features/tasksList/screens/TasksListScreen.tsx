@@ -12,9 +12,14 @@ import Animated, {
 import { H6, Separator, Spinner, YStack } from "tamagui";
 import { DAY_FORMAT } from "../../../../config/constants";
 import {
+  getDayTasks,
+  getGetTasksDayOrderQueryKey,
   getGetTasksQueryKey,
+  useGetDayTasks,
   useGetTasks,
+  useGetTasksDayOrder,
   useUpdateTask,
+  useUpdateTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
 import TasksListItem from "../../../core/components/tasks/list/TasksListItem";
 import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
@@ -24,65 +29,50 @@ import { TaskDTO } from "../../../clients/time-planner-server/model";
 
 const AnimatedSeparator = Animated.createAnimatedComponent(Separator);
 
-/*
-    TODO:
-        * design better endpoint for updating tasks positions (all tasks positions at once)
-        * refresh data on swipe up, auto refresh every minute
-        * do not remove moving task from the list, just mark it as visible=false
-*/
-
 export const TasksListScreen = () => {
   const day = dayjs().format(DAY_FORMAT);
+  const { data: tasks, isError, isLoading } = useGetDayTasks(day, {query: {refetchInterval: 1000}});
   const {
-    data: tasks,
-    isError,
-    isLoading,
-  } = useGetTasks({ day }, { query: { refetchInterval: 5000 } });
-
+    data: tasksOrder,
+    isError: isErrorOrder,
+    isLoading: isLoadingOrder,
+  } = useGetTasksDayOrder(day,  {query: {refetchInterval: 1000}});
   const queryClient = useQueryClient();
-  const updateTask = useUpdateTask(
-//     {
-//     mutation: {
-//       onSuccess: (newTask) => {
-//         queryClient.setQueryData<TaskDTO[]>(
-//           getGetTasksQueryKey({ day }),
-//           (prev) =>
-//             prev?.map((task) => (task.id === newTask.id ? newTask : task))
-//         );
-//       },
-//     },
-//   }
-);
+  const updateTasksDayOrder = useUpdateTasksDayOrder({
+    mutation: {
+      onMutate: async ({data, day}) => {
+        const queryKey = getGetTasksDayOrderQueryKey(day);
+        console.log("optimistic cache update for key:", queryKey);
+        await queryClient.cancelQueries({queryKey});
+        const previousData = queryClient.getQueryData<string[]>(queryKey);
+        queryClient.setQueryData<string[]>(queryKey, () => data)
+        return {previousData};
+      },
+      onError: (error, {day}, context) => {
+        queryClient.setQueryData<string[]>(getGetTasksDayOrderQueryKey(day), context?.previousData)
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({queryKey: getGetTasksDayOrderQueryKey(day)})
+      }
+    },
+  });
 
-  useEffect(() => {
-    const tasksWithPosition =
-      (tasks?.filter(
-        (t) => !t.startTime || !t.durationMin
-      ) as ITaskWithPosition[]) ?? [];
-      console.log(`fetched tasks changed, updating tasks: `, tasksWithPosition)
-    setTasksList(tasksWithPosition);
-  }, [JSON.stringify(tasks)]);
-
-  const [tasksList, setTasksList] = useState<ITaskWithPosition[]>([]);
-  if (isLoading) {
+  if (isLoading || isLoadingOrder) {
     return <Spinner />;
   }
-  if (isError) {
+  if (isError || isErrorOrder) {
     return <H6>{"Error during loading tasks, try again"}</H6>; //TODO: this should be toast!
   }
   return (
     <DraggableList
-      items={tasksList}
-      setItems={(items) => {
-        console.log(`setItems: `, items);
-        setTasksList(items);
-        items.forEach((item) =>
-          updateTask.mutateAsync({
-            id: item.id,
-            data: { listPosition: item.listPosition },
-          })
-        );
-        console.log(`setItems: updated positions async`);
+      items={tasks as ITaskWithPosition[]}
+      itemsOrder={tasksOrder}
+      setItemsOrder={(itemsOrder) => {
+        updateTasksDayOrder.mutateAsync({
+          day,
+          data: itemsOrder,
+        });
+        console.log(`setItemsOrder: updated order async`);
       }}
     />
   );
@@ -90,13 +80,19 @@ export const TasksListScreen = () => {
 
 type DraggableListProps = {
   items: ITaskWithPosition[];
-  setItems: (items: ITaskWithPosition[]) => void;
+  itemsOrder: string[];
+  setItemsOrder: (itemsOrder: string[]) => void;
 };
 
-export const DraggableList = ({ items, setItems }: DraggableListProps) => {
+export const DraggableList = ({
+  items,
+  itemsOrder,
+  setItemsOrder,
+}: DraggableListProps) => {
   const itemHeight = 55;
-  const { panGesture, sortedItems, movingItem, dragY, pointerIndex } =
-    useDraggableList(itemHeight, items, setItems);
+  const { panGesture, movingItemsOrder, movingItemId, dragY, pointerIndex } =
+    useDraggableList(itemHeight, itemsOrder, setItemsOrder);
+  console.log(movingItemsOrder.value);
   return (
     <YStack>
       <GestureDetector gesture={panGesture}>
@@ -108,115 +104,103 @@ export const DraggableList = ({ items, setItems }: DraggableListProps) => {
             },
           ]}
         >
-          {sortedItems.map((task) => {
+          {items.map((task) => {
             return (
-              <MovableItem key={task.id} task={task} itemHeight={itemHeight} />
+              <MovableItem
+                key={task.id}
+                task={task}
+                itemHeight={itemHeight}
+                itemsOrder={movingItemsOrder}
+              />
             );
           })}
         </Animated.View>
       </GestureDetector>
-      <MovingItem dragY={dragY} task={movingItem} itemHeight={itemHeight} />
+      <MovingItem
+        dragY={dragY}
+        task={items.find((task) => task.id === movingItemId) ?? null}
+        itemHeight={itemHeight}
+      />
       <MovingItemPointer
         itemHeight={itemHeight}
-        movingItemState={movingItem}
+        visible={!!movingItemId}
         pointerIndex={pointerIndex}
       />
     </YStack>
   );
 };
 
-function removeItemWorklet(
-  item: ITaskWithPosition,
-  movingTasksList: SharedValue<ITaskWithPosition[]>
+function unsetItemOrderWorklet(
+  indexToRemove: number,
+  movingTasksOrder: SharedValue<string[]>
 ) {
   "worklet";
-  const prev = movingTasksList.value;
+  const prev = movingTasksOrder.value;
   const newList = [...prev];
-  const indexToRemove = prev.findIndex((item1) => item1.id === item.id);
-  if (indexToRemove !== -1) {
-    newList.splice(indexToRemove, 1);
-  }
-  newList.forEach((item1, i) => {
-    if (item1.listPosition !== i) {
-      item1.listPosition = i;
-    }
-  });
-  movingTasksList.value = newList;
+  newList.splice(indexToRemove, 1);
+  console.log("unsetItemOrderWorklet: prev: ", prev, "newList: ", newList);
+  movingTasksOrder.value = newList;
 }
 
-function addItemWorklet(
-  newItem: ITaskWithPosition,
-  index: number,
-  movingTasksList: SharedValue<ITaskWithPosition[]>
+function setItemOrderWorklet(
+  indexToAdd: number,
+  itemId: string,
+  movingTasksOrder: SharedValue<string[]>
 ) {
   "worklet";
-  const prev = movingTasksList.value;
+  const prev = movingTasksOrder.value;
   const newList = [...prev];
-  newList.splice(index, 0, newItem);
-  newList.forEach((item, i) => {
-    if (item.listPosition !== i) {
-      item.listPosition = i;
-    }
-  });
-  movingTasksList.value = newList;
+  newList.splice(indexToAdd, 0, itemId);
+  console.log("setItemOrderWorklet: prev: ", prev, "newList: ", newList);
+  movingTasksOrder.value = newList;
 }
 
 const useDraggableList = (
   itemHeight: number,
-  items: ITaskWithPosition[],
-  setItems: (items: ITaskWithPosition[]) => void
+  itemsOrder: string[],
+  setItemsOrder: (itemsOrder: string[]) => void
 ) => {
-  //   const [itemsList, setItemsList] = useState<ITaskWithPosition[]>([]);
-  const [movingItemState, setMovingItemState] =
-    useState<ITaskWithPosition | null>(null);
   const { headerHeight } = useScreenDimensions();
-
-  //   useEffect(() => {
-  //     setItemsList(items);
-  //   }, [items]);
-
-  const sortedItems = useMemo(() => {
-    const sortedItems = items.sort((a, b) => a.listPosition - b.listPosition);
-    console.log(`items changes, sorted: `, sortedItems);
-    return sortedItems;
-  }, [JSON.stringify(items)]);
-
   const dragY = useSharedValue<number>(0);
   const pointerIndex = useSharedValue<number | null>(null);
-  const movingItemsList = useSharedValue<ITaskWithPosition[]>([]);
-  const movingItem = useSharedValue<ITaskWithPosition | null>(null);
+  const movingItemsOrder = useSharedValue<string[]>(itemsOrder);
+  const movingItemId = useSharedValue<string | null>(null);
+  const [movingItemIdState, setMovingItemIdState] = useState<string | null>(null);
+
+  useEffect(() => {
+    console.log("use effect, itemsOrder changed,", itemsOrder);
+    movingItemsOrder.value = itemsOrder;
+  }, [JSON.stringify(itemsOrder)]);
 
   useAnimatedReaction(
-    () => movingItem.value,
+    () => movingItemId.value,
     (current, prev) => {
       if (prev !== current) {
-        runOnJS(setMovingItemState)(current);
+        runOnJS(setMovingItemIdState)(current);
       }
     }
   );
 
   const panGesture = Gesture.Pan()
     .onStart((e) => {
-      movingItemsList.value = items;
       dragY.value = e.absoluteY - headerHeight;
       const pressedItemIndex = Math.floor(e.y / itemHeight);
-      const pressedItem = movingItemsList.value[pressedItemIndex];
-      if (!pressedItem) {
+      const pressedItemId = movingItemsOrder.value[pressedItemIndex];
+      if (!pressedItemId) {
         return;
       }
-      console.log(`pressed item: `, pressedItem)
+      console.log(`pressed item id: `, pressedItemId);
       pointerIndex.value = pressedItemIndex;
-      movingItem.value = pressedItem;
-      removeItemWorklet(pressedItem, movingItemsList);
-      runOnJS(setItems)(movingItemsList.value);
+      movingItemId.value = pressedItemId;
+      unsetItemOrderWorklet(pressedItemIndex, movingItemsOrder);
     })
     .onChange((e) => {
-      if (!movingItem.value) {
+      if (!movingItemId.value) {
         return;
       }
       dragY.value = e.absoluteY - headerHeight;
       const newPointer = Math.min(
-        movingItemsList.value.length,
+        movingItemsOrder.value.length,
         Math.max(0, Math.floor(dragY.value / itemHeight))
       );
       if (pointerIndex.value === newPointer) {
@@ -225,19 +209,24 @@ const useDraggableList = (
       pointerIndex.value = newPointer;
     })
     .onEnd(() => {
-      if (!movingItem.value || pointerIndex.value === null) {
+      if (!movingItemId.value || pointerIndex.value === null) {
         return;
       }
-      console.log(`press released`)
-      addItemWorklet(movingItem.value, pointerIndex.value, movingItemsList);
-      movingItem.value = null;
+      console.log(`press released`);
+      dragY.value=withTiming(pointerIndex.value*itemHeight)
+      setItemOrderWorklet(
+        pointerIndex.value,
+        movingItemId.value,
+        movingItemsOrder
+      );
+      movingItemId.value = null;
       pointerIndex.value = null;
-      runOnJS(setItems)(movingItemsList.value);
+      runOnJS(setItemsOrder)(movingItemsOrder.value);
     });
   return {
     panGesture,
-    sortedItems,
-    movingItem: movingItemState,
+    movingItemsOrder,
+    movingItemId: movingItemIdState,
     dragY,
     pointerIndex,
   };
@@ -246,11 +235,29 @@ const useDraggableList = (
 const MovableItem = (props: {
   task: ITaskWithPosition;
   itemHeight: number;
+  itemsOrder: SharedValue<string[]>;
 }) => {
-  const { task, itemHeight } = props;
+  const { task, itemHeight, itemsOrder } = props;
+  const style = useAnimatedStyle(() => {
+    const index = itemsOrder.value.findIndex((id) => id === task.id);
+    if (index === -1) {
+      return {
+        display: "none",
+      };
+    }
+    return {
+      display: "flex",
+      top: withTiming(index * itemHeight, { duration: 100 }),
+    };
+  });
 
   return (
-    <Animated.View>
+    <Animated.View
+      style={[
+        { position: "absolute", width: "100%", height: itemHeight },
+        style,
+      ]}
+    >
       <TasksListItem
         task={task}
         isEdited={false}
@@ -298,13 +305,13 @@ const MovingItem = (props: {
 };
 
 type MovingItemPointerProps = {
-  movingItemState: ITaskWithPosition | null;
+  visible: boolean;
   pointerIndex: SharedValue<number | null>;
   itemHeight: number;
 };
 
 const MovingItemPointer = ({
-  movingItemState,
+  visible,
   pointerIndex,
   itemHeight,
 }: MovingItemPointerProps) => {
@@ -312,7 +319,7 @@ const MovingItemPointer = ({
     top: withTiming((pointerIndex.value || 0) * itemHeight, { duration: 50 }),
     display: pointerIndex.value === null ? "none" : "flex",
   }));
-  if (!movingItemState) {
+  if (!visible) {
     return null;
   }
   return (

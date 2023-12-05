@@ -20,7 +20,7 @@ export const useTaskVerticalCalendarMovement = (
   isEnabled: boolean,
   top: number,
   minuteInPixels: number,
-  { id, name, startDate: day, startTime }: ITaskWithTime
+  { id, name, startDay: day, startTime }: ITaskWithTime
 ) => {
   const stepHeight = minuteInPixels * 15;
   const queryClient = useQueryClient();

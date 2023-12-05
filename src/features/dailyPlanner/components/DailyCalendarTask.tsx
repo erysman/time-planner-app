@@ -38,7 +38,7 @@ export const DailyCalendarTask = ({
   isEdited,
   onPress,
 }: DailyCalendarTaskProps) => {
-  const { name, durationMin, startDate, startTime } = task;
+  const { name, durationMin, startDay: startDate, startTime } = task;
   const top = mapTimeToCalendarPosition(
     mapToDayjs(startDate, startTime),
     minuteInPixels

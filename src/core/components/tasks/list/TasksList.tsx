@@ -25,7 +25,7 @@ export default function TasksList({ tasks, viewMode }: TasksListProps) {
   const style = useHeightByViewMode(viewMode, getListHeight);
 
   const positions = useSharedValue(
-    Object.fromEntries(tasks.map((task) => [task.id, task.listPosition]))
+    Object.fromEntries(tasks.map((task) => [task.id, task.dayOrder]))
   );
 
   const taskHeight = 55;

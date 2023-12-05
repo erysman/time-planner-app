@@ -2,18 +2,18 @@
 export interface ITask {
   id: string;
   name: string;
-  startDate?: string;
+  startDay?: string;
   startTime?: string;
   durationMin?: number;
-  listPosition?: number;
+  dayOrder?: number;
 }
 
 export interface ITaskWithTime extends ITask{
-  startDate: string;
+  startDay: string;
   startTime: string;
   durationMin: number;
 }
 
 export interface ITaskWithPosition extends ITask {
-  listPosition: number;
+  dayOrder: number;
 }

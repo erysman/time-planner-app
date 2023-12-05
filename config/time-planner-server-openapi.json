@@ -21,6 +21,208 @@
     }
   ],
   "paths": {
+    "/day/{day}/tasks/order": {
+      "get": {
+        "tags": [
+          "day-tasks-controller"
+        ],
+        "summary": "Get tasks order",
+        "operationId": "getTasksDayOrder",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "day-tasks-controller"
+        ],
+        "summary": "Update tasks order",
+        "operationId": "updateTasksDayOrder",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Data conflict",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "tags": [
+          "tasks-controller"
+        ],
+        "summary": "Get tasks",
+        "operationId": "getTasks",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskDTO"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tasks-controller"
+        ],
+        "operationId": "createTask",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tasks/{id}": {
       "get": {
         "tags": [
@@ -48,6 +250,28 @@
                 }
               }
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tasks-controller"
+        ],
+        "operationId": "deleteTask",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
@@ -111,17 +335,17 @@
         }
       }
     },
-    "/tasks": {
+    "/day/{day}/tasks": {
       "get": {
         "tags": [
-          "tasks-controller"
+          "day-tasks-controller"
         ],
-        "summary": "Get tasks",
-        "operationId": "getTasks",
+        "summary": "Get day\u0027s tasks",
+        "operationId": "getDayTasks",
         "parameters": [
           {
             "name": "day",
-            "in": "query",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string",
@@ -273,13 +497,13 @@
   },
   "components": {
     "schemas": {
-      "TaskUpdateDTO": {
+      "CreateTaskDTO": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string"
           },
-          "startDate": {
+          "startDay": {
             "type": "string",
             "format": "date"
           },
@@ -288,10 +512,6 @@
             "type": "string"
           },
           "durationMin": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "listPosition": {
             "type": "integer",
             "format": "int32"
           }
@@ -307,7 +527,7 @@
           "name": {
             "type": "string"
           },
-          "startDate": {
+          "startDay": {
             "type": "string",
             "format": "date"
           },
@@ -318,8 +538,31 @@
           "durationMin": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "JsonNullableLocalDate": {
+        "type": "object",
+        "properties": {
+          "present": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TaskUpdateDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          "listPosition": {
+          "startDay": {
+            "$ref": "#/components/schemas/JsonNullableLocalDate"
+          },
+          "startTime": {
+            "pattern": "HH:mm:SS",
+            "type": "string"
+          },
+          "durationMin": {
             "type": "integer",
             "format": "int32"
           }

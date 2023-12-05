@@ -14,10 +14,10 @@ import tamaguiConfig from "../config/tamagui.config";
 import { ScreenDimensionsProvider } from "../src/core/dimensions/UseScreenDimensions";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "../src/features/auth/hooks/UseAuth";
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
+// export {
+//   // Catch any errors thrown by the Layout component.
+//   ErrorBoundary,
+// } from "expo-router";
 import { UseThemeResult } from "@tamagui/web"
 import { useSetupReactQuery } from "../config/react-query";
 
