@@ -11,6 +11,7 @@ import {
 import { DraggableList } from "../../../core/components/list/DraggableList";
 import TasksListItem from "../../../core/components/list/TasksListItem";
 import { ITask } from "../../dailyPlanner/model/model";
+import { getRefreshInterval } from "../../../core/config/utils";
 
 export const TasksListScreen = () => {
   const day = dayjs().format(DAY_FORMAT);
@@ -18,12 +19,12 @@ export const TasksListScreen = () => {
     data: tasks,
     isError,
     isLoading,
-  } = useGetDayTasks(day, { query: { refetchInterval: 5000 } });
+  } = useGetDayTasks(day, { query: { refetchInterval: getRefreshInterval() } });
   const {
     data: tasksOrder,
     isError: isErrorOrder,
     isLoading: isLoadingOrder,
-  } = useGetTasksDayOrder(day, { query: { refetchInterval: 5000 } });
+  } = useGetTasksDayOrder(day, { query: { refetchInterval: getRefreshInterval() } });
   const queryClient = useQueryClient();
   const updateTasksDayOrder = useUpdateTasksDayOrder({
     mutation: {

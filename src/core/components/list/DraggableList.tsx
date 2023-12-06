@@ -93,7 +93,7 @@ function setItemOrderWorklet(
   movingTasksOrder.value = newList;
 }
 
-const useDraggableList = (
+export const useDraggableList = (
   itemHeight: number,
   itemsOrder: string[],
   setItemsOrder: (itemsOrder: string[]) => void
@@ -172,7 +172,7 @@ const useDraggableList = (
   };
 };
 
-const MovableItem = (props: {
+export const MovableItem = (props: {
   id: string;
   itemHeight: number;
   itemsOrder: SharedValue<string[]>;
@@ -204,7 +204,7 @@ const MovableItem = (props: {
   );
 };
 
-const MovingItem = (props: {
+export const MovingItem = (props: {
   id: string | null;
   itemHeight: number;
   dragY: SharedValue<number>;
@@ -227,6 +227,8 @@ const MovingItem = (props: {
       style={[
         {
           position: "absolute",
+          width: "100%",
+          height: itemHeight
         },
         style,
       ]}
@@ -236,7 +238,7 @@ const MovingItem = (props: {
   );
 };
 
-const AnimatedSeparator = Animated.createAnimatedComponent(Separator);
+export const AnimatedSeparator = Animated.createAnimatedComponent(Separator);
 
 type MovingItemPointerProps = {
   visible: boolean;
@@ -244,7 +246,7 @@ type MovingItemPointerProps = {
   itemHeight: number;
 };
 
-const MovingItemPointer = ({
+export const MovingItemPointer = ({
   visible,
   pointerIndex,
   itemHeight,

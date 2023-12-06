@@ -6,7 +6,13 @@ import {
   useGetTasksDayOrder,
   useUpdateTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
-import { DraggableList } from "../../../core/components/list/DraggableList";
+import {
+  DraggableList,
+  MovableItem,
+  MovingItem,
+  MovingItemPointer,
+  useDraggableList,
+} from "../../../core/components/list/DraggableList";
 import TasksListItem from "../../../core/components/list/TasksListItem";
 import { DailyCalendar } from "../components/DailyCalendar";
 import {
@@ -16,6 +22,8 @@ import {
 import { ITask, ITaskWithTime } from "../model/model";
 import Animated from "react-native-reanimated";
 import { DimensionInPercent } from "../../../core/model/types";
+import { GestureDetector } from "react-native-gesture-handler";
+import { getRefreshInterval } from "../../../core/config/utils";
 
 export interface DailyPlannerScreenProps {
   day: string;
@@ -30,12 +38,14 @@ export const DailyPlannerScreen = ({
     data: tasks,
     isError,
     isLoading,
-  } = useGetDayTasks(day, { query: { refetchInterval: 5000 } });
+  } = useGetDayTasks(day, { query: { refetchInterval: getRefreshInterval() } });
   const {
     data: tasksOrder,
     isError: isErrorOrder,
     isLoading: isLoadingOrder,
-  } = useGetTasksDayOrder(day, { query: { refetchInterval: 5000 } });
+  } = useGetTasksDayOrder(day, {
+    query: { refetchInterval: getRefreshInterval() },
+  });
   const queryClient = useQueryClient();
   const updateTasksDayOrder = useUpdateTasksDayOrder({
     mutation: {
@@ -63,6 +73,15 @@ export const DailyPlannerScreen = ({
 
   const listStyle = useHeightByViewMode(viewMode, getListHeight);
 
+  const itemHeight = 55;
+  const { panGesture, movingItemsOrder, movingItemId, dragY, pointerIndex } =
+    useDraggableList(itemHeight, tasksOrder ?? [], (itemsOrder) => {
+      updateTasksDayOrder.mutateAsync({
+        day,
+        data: itemsOrder,
+      });
+    });
+
   if (isLoading || isLoadingOrder) {
     return <Spinner />;
   }
@@ -70,34 +89,64 @@ export const DailyPlannerScreen = ({
     return <H6>{"Error during loading tasks, try again"}</H6>; //TODO: this should be toast!
   }
 
-  const tasksWithSameDay = tasks.filter((task) => task.startDay === day);
-  const tasksWithoutStartTime = tasksWithSameDay.filter(
+  const tasksWithoutStartTime = tasks.filter(
     (t) => !t.startTime || !t.durationMin
-  );
-  const tasksWithStartTime = tasksWithSameDay.filter(
+  ) as ITask[];
+  const tasksWithStartTime = tasks.filter(
     (t) => !!t.startTime && !!t.durationMin
   ) as ITaskWithTime[];
+
+  const renderItem = (id: string) => (
+    <TasksListItem
+      task={(tasks.find((task) => task.id === id) as ITask) ?? null}
+      isEdited={false}
+    />
+  );
+
   return (
     <YStack fullscreen backgroundColor={"$background"}>
-      <Animated.View style={[listStyle]}>
-        <DraggableList
-          items={tasks as ITask[]}
-          itemsOrder={tasksOrder}
-          setItemsOrder={(itemsOrder) => {
-            updateTasksDayOrder.mutateAsync({
-              day,
-              data: itemsOrder,
-            });
-          }}
-          renderItem={(id) => (
-            <TasksListItem
-              task={(tasks.find((task) => task.id === id) as ITask) ?? null}
-              isEdited={false}
-            />
-          )}
-        />
-      </Animated.View>
-      <DailyCalendar tasks={tasksWithStartTime} day={day} viewMode={viewMode} />
+      <GestureDetector gesture={panGesture}>
+        <Animated.View
+          collapsable={false}
+          style={[
+            {
+              flexDirection: "column",
+            },
+          ]}
+        >
+          <Animated.View style={[listStyle]}>
+            <YStack>
+              {tasksWithoutStartTime.map((task) => {
+                return (
+                  <MovableItem
+                    key={task.id}
+                    id={task.id}
+                    itemHeight={itemHeight}
+                    itemsOrder={movingItemsOrder}
+                    renderItem={renderItem}
+                  />
+                );
+              })}
+              <MovingItemPointer
+                itemHeight={itemHeight}
+                visible={!!movingItemId}
+                pointerIndex={pointerIndex}
+              />
+            </YStack>
+          </Animated.View>
+          <DailyCalendar
+            tasks={tasksWithStartTime}
+            day={day}
+            viewMode={viewMode}
+          />
+        </Animated.View>
+      </GestureDetector>
+      <MovingItem
+        dragY={dragY}
+        id={movingItemId}
+        renderItem={renderItem}
+        itemHeight={itemHeight}
+      />
     </YStack>
   );
 };
