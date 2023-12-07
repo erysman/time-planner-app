@@ -508,7 +508,7 @@
             "format": "date"
           },
           "startTime": {
-            "pattern": "HH:mm:SS",
+            "pattern": "HH:mm",
             "type": "string"
           },
           "durationMin": {
@@ -532,20 +532,12 @@
             "format": "date"
           },
           "startTime": {
-            "pattern": "HH:mm:SS",
+            "pattern": "HH:mm",
             "type": "string"
           },
           "durationMin": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "JsonNullableLocalDate": {
-        "type": "object",
-        "properties": {
-          "present": {
-            "type": "boolean"
           }
         }
       },
@@ -556,10 +548,11 @@
             "type": "string"
           },
           "startDay": {
-            "$ref": "#/components/schemas/JsonNullableLocalDate"
+            "pattern": "yyyy-MM-dd",
+            "type": "string"
           },
           "startTime": {
-            "pattern": "HH:mm:SS",
+            "pattern": "HH:mm",
             "type": "string"
           },
           "durationMin": {

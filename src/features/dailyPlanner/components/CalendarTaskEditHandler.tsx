@@ -8,11 +8,10 @@ import { Circle, Stack } from "tamagui";
 import { useTaskHeightDrag } from "../logic/UseTaskHeightDrag";
 import { useTaskVerticalCalendarMovement } from "../logic/UseTaskVerticalCalendarMovement";
 import { ITaskWithTime } from "../model/model";
+import { mapDurationToHeight, mapTimeToCalendarPosition, mapToDayjs } from "../logic/utils";
 
 export interface CalendarTaskEditHandlerProps {
   isEdited: boolean;
-  top: number;
-  height: number;
   minuteInPixels: number;
   task: ITaskWithTime;
   children: any;
@@ -24,18 +23,18 @@ export interface CalendarTaskEditHandlerProps {
 */
 export const CalendarTaskEditHandler = ({
   isEdited,
-  top,
-  height,
   minuteInPixels,
   task,
   children,
 }: CalendarTaskEditHandlerProps) => {
-  const { verticalMovementPan, newTop } = useTaskVerticalCalendarMovement(
-    isEdited,
-    top,
-    minuteInPixels,
-    task
-  );
+  const heightTmp = mapDurationToHeight(task.durationMin, minuteInPixels);
+  const height = isEdited ? heightTmp : heightTmp - 2;
+  // const { verticalMovementPan, newTop } = useTaskVerticalCalendarMovement(
+  //   isEdited,
+  //   top,
+  //   minuteInPixels,
+  //   task
+  // );
 
   const { heightDragPan, newHeight } = useTaskHeightDrag(
     isEdited,
@@ -49,19 +48,19 @@ export const CalendarTaskEditHandler = ({
   }));
 
   return (
-    <Stack zIndex={isEdited ? 300 : 100}>
-      <GestureDetector gesture={verticalMovementPan}>
+    // <Stack>
+      // {/* <GestureDetector gesture={verticalMovementPan}> */}
         <Animated.View
           style={[
             {
-              position: "absolute",
-              top,
+              // position: "absolute",
+              // top,
               height,
               width: "100%",
             },
-            {
-              top: newTop,
-            },
+            // {
+            //   top: newTop,
+            // },
             style,
           ]}
         >
@@ -80,8 +79,8 @@ export const CalendarTaskEditHandler = ({
             </GestureDetector>
           )}
         </Animated.View>
-      </GestureDetector>
-    </Stack>
+      // {/* </GestureDetector> */}
+    // </Stack>
   );
 };
 

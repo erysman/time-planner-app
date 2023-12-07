@@ -4,11 +4,10 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { JsonNullableLocalDate } from './jsonNullableLocalDate';
 
 export interface TaskUpdateDTO {
   name?: string;
-  startDay?: JsonNullableLocalDate;
+  startDay?: string;
   startTime?: string;
   durationMin?: number;
 }

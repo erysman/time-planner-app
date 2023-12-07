@@ -120,9 +120,11 @@ export const useDraggableList = (
       }
     }
   );
-
+  
   const panGesture = Gesture.Pan()
+    .activateAfterLongPress(250)
     .onStart((e) => {
+      console.log("calendarList gesture handler start");
       dragY.value = e.absoluteY - headerHeight;
       const pressedItemIndex = Math.floor(e.y / itemHeight);
       const pressedItemId = movingItemsOrder.value[pressedItemIndex];
@@ -162,7 +164,7 @@ export const useDraggableList = (
       movingItemId.value = null;
       pointerIndex.value = null;
       runOnJS(setItemsOrder)(movingItemsOrder.value);
-    });
+    })
   return {
     panGesture,
     movingItemsOrder,
@@ -228,7 +230,7 @@ export const MovingItem = (props: {
         {
           position: "absolute",
           width: "100%",
-          height: itemHeight
+          height: itemHeight,
         },
         style,
       ]}

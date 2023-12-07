@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import Animated, {
   Extrapolation,
+  SharedValue,
   interpolate,
   useAnimatedProps,
 } from "react-native-reanimated";
-import { Checkbox, SizableText, XStack } from "tamagui";
+import { Checkbox, SizableText, Stack, XStack } from "tamagui";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
 import {
   mapDurationToHeight,
@@ -19,7 +20,7 @@ import {
 
 export interface DailyCalendarTaskProps {
   minuteInPixels: number;
-  task: ITaskWithTime;
+  task: ITaskWithTime | null;
   isEdited: boolean;
   onPress: (task: ITaskWithTime) => void;
 }
@@ -38,31 +39,74 @@ export const DailyCalendarTask = ({
   isEdited,
   onPress,
 }: DailyCalendarTaskProps) => {
-  const { name, durationMin, startDay: startDate, startTime } = task;
+  if (!task) {
+    return null;
+  }
   const top = mapTimeToCalendarPosition(
-    mapToDayjs(startDate, startTime),
+    mapToDayjs(task.startDay, task.startTime),
     minuteInPixels
   );
-  const height = useMemo(
-    () => mapDurationToHeight(durationMin, minuteInPixels),
-    [durationMin]
-  );
-
   return (
-    <CalendarTaskEditHandler
-      isEdited={isEdited}
-      top={top}
-      height={isEdited ? height : height - 2} //2px margin to see boundry between tasks
-      minuteInPixels={minuteInPixels}
-      task={task}
-    >
-      <CalendarTaskView
-        hourSlotHeight={minuteInPixels * 60}
-        task={task}
+    <Stack position="absolute" top={top} width="100%" marginLeft={60}>
+      <CalendarTaskEditHandler
         isEdited={isEdited}
-        onPress={onPress}
-      />
-    </CalendarTaskEditHandler>
+        minuteInPixels={minuteInPixels}
+        task={task}
+      >
+        <CalendarTaskView
+          hourSlotHeight={minuteInPixels * 60}
+          task={task}
+          isEdited={isEdited}
+          onPress={onPress}
+        />
+      </CalendarTaskEditHandler>
+    </Stack>
+  );
+};
+
+export interface MovingCalendarTaskProps {
+  minuteInPixels: number;
+  task: ITaskWithTime | null;
+  isEdited: boolean;
+  onPress: (task: ITaskWithTime) => void;
+  movingTop: SharedValue<number>;
+}
+
+export const MovingCalendarTask = ({
+  minuteInPixels,
+  task,
+  isEdited,
+  onPress,
+  movingTop
+}: MovingCalendarTaskProps) => {
+  if (!task) {
+    return null;
+  }
+  return (
+    <Animated.View
+      style={[
+        {
+          position: "absolute",
+          width: "75%",
+          marginLeft: 60,
+          marginRight: 10,
+          top: movingTop,
+        },
+      ]}
+    >
+      <CalendarTaskEditHandler
+        isEdited={isEdited}
+        minuteInPixels={minuteInPixels}
+        task={task}
+      >
+        <CalendarTaskView
+          hourSlotHeight={minuteInPixels * 60}
+          task={task}
+          isEdited={isEdited}
+          onPress={onPress}
+        />
+      </CalendarTaskEditHandler>
+    </Animated.View>
   );
 };
 

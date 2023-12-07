@@ -8,6 +8,7 @@ import {
   useSharedValue
 } from "react-native-reanimated";
 import {
+  getGetDayTasksQueryKey,
   getGetTasksQueryKey,
   useUpdateTask,
 } from "../../../clients/time-planner-server/client";
@@ -29,7 +30,7 @@ export const useTaskVerticalCalendarMovement = (
     mutation: {
       onSuccess: (newTask) => {
         queryClient.setQueryData<TaskDTO[]>(
-          getGetTasksQueryKey({ day }),
+          getGetDayTasksQueryKey(day),
           (prev) =>
             prev?.map((task) => (task.id === newTask.id ? newTask : task))
         );

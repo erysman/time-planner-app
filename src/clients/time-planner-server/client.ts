@@ -81,7 +81,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
     
       
       
-   return  { queryKey, queryFn, enabled: !!(day),  refetchInterval: 5000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTasksDayOrder>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(day), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTasksDayOrder>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetTasksDayOrderQueryResult = NonNullable<Awaited<ReturnType<typeof getTasksDayOrder>>>
@@ -200,7 +200,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
     
       
       
-   return  { queryKey, queryFn,   refetchInterval: 5000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetTasksQueryResult = NonNullable<Awaited<ReturnType<typeof getTasks>>>
@@ -308,7 +308,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
     
       
       
-   return  { queryKey, queryFn, enabled: !!(id),  refetchInterval: 5000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTask>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTask>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetTaskQueryResult = NonNullable<Awaited<ReturnType<typeof getTask>>>
@@ -461,7 +461,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
     
       
       
-   return  { queryKey, queryFn,   refetchInterval: 5000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof validate>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof validate>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type ValidateQueryResult = NonNullable<Awaited<ReturnType<typeof validate>>>
@@ -520,7 +520,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
     
       
       
-   return  { queryKey, queryFn, enabled: !!(day),  refetchInterval: 5000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDayTasks>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(day), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDayTasks>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type GetDayTasksQueryResult = NonNullable<Awaited<ReturnType<typeof getDayTasks>>>
@@ -582,7 +582,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
     
       
       
-   return  { queryKey, queryFn,   refetchInterval: 5000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof links>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof links>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type LinksQueryResult = NonNullable<Awaited<ReturnType<typeof links>>>
@@ -644,7 +644,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
     
       
       
-   return  { queryKey, queryFn,   refetchInterval: 5000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof health>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof health>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type HealthQueryResult = NonNullable<Awaited<ReturnType<typeof health>>>
@@ -706,7 +706,7 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
     
       
       
-   return  { queryKey, queryFn,   refetchInterval: 5000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof healthPath>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof healthPath>>, TError, TData> & { queryKey: QueryKey }
 }
 
 export type HealthPathQueryResult = NonNullable<Awaited<ReturnType<typeof healthPath>>>
