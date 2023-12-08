@@ -68,7 +68,7 @@ export const DraggableList = <T extends ListItem>({
   );
 };
 
-function unsetItemOrderWorklet(
+export function unsetItemOrderWorklet(
   indexToRemove: number,
   movingTasksOrder: SharedValue<string[]>
 ) {
@@ -80,7 +80,7 @@ function unsetItemOrderWorklet(
   movingTasksOrder.value = newList;
 }
 
-function setItemOrderWorklet(
+export function setItemOrderWorklet(
   indexToAdd: number,
   itemId: string,
   movingTasksOrder: SharedValue<string[]>

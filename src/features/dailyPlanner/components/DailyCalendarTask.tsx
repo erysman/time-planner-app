@@ -12,7 +12,7 @@ import {
   mapTimeToCalendarPosition,
   mapToDayjs,
 } from "../logic/utils";
-import { ITaskWithTime } from "../model/model";
+import { ITask, ITaskWithTime } from "../model/model";
 import {
   CalendarTaskEditHandler,
   useAnimatedHeight,
@@ -22,7 +22,7 @@ export interface DailyCalendarTaskProps {
   minuteInPixels: number;
   task: ITaskWithTime | null;
   isEdited: boolean;
-  onPress: (task: ITaskWithTime) => void;
+  onPress: (taskId: string) => void;
 }
 
 /*
@@ -51,11 +51,15 @@ export const DailyCalendarTask = ({
       <CalendarTaskEditHandler
         isEdited={isEdited}
         minuteInPixels={minuteInPixels}
-        task={task}
+        id={task.id}
+        name={task.name}
+        durationMin={task.durationMin}
+        day={task.startDay}
       >
         <CalendarTaskView
           hourSlotHeight={minuteInPixels * 60}
-          task={task}
+          id={task.id}
+          name={task.name}
           isEdited={isEdited}
           onPress={onPress}
         />
@@ -66,9 +70,9 @@ export const DailyCalendarTask = ({
 
 export interface MovingCalendarTaskProps {
   minuteInPixels: number;
-  task: ITaskWithTime | null;
+  task: ITask;
   isEdited: boolean;
-  onPress: (task: ITaskWithTime) => void;
+  onPress: (taskId: string) => void;
   movingTop: SharedValue<number>;
 }
 
@@ -79,9 +83,9 @@ export const MovingCalendarTask = ({
   onPress,
   movingTop
 }: MovingCalendarTaskProps) => {
-  if (!task) {
-    return null;
-  }
+
+  const durationMin = task.durationMin ?? 60;
+
   return (
     <Animated.View
       style={[
@@ -97,11 +101,15 @@ export const MovingCalendarTask = ({
       <CalendarTaskEditHandler
         isEdited={isEdited}
         minuteInPixels={minuteInPixels}
-        task={task}
+        id={task.id}
+        name={task.name}
+        durationMin={durationMin}
+        day={task.startDay}
       >
         <CalendarTaskView
           hourSlotHeight={minuteInPixels * 60}
-          task={task}
+          id={task.id}
+          name={task.name}
           isEdited={isEdited}
           onPress={onPress}
         />
@@ -111,9 +119,10 @@ export const MovingCalendarTask = ({
 };
 
 interface CalendarTaskViewProps {
-  task: ITaskWithTime;
+  id: string;
+  name: string;
   isEdited: boolean;
-  onPress: (task: ITaskWithTime) => void;
+  onPress: (taskId: string) => void;
   hourSlotHeight: number;
 }
 
@@ -122,7 +131,8 @@ const AnimatedSizableText = Animated.createAnimatedComponent(SizableText);
 
 const CalendarTaskView = ({
   hourSlotHeight,
-  task,
+  id,
+  name,
   isEdited,
   onPress,
 }: CalendarTaskViewProps) => {
@@ -149,7 +159,7 @@ const CalendarTaskView = ({
       backgroundColor={"$background"}
       borderRadius={"$4"}
       height={"100%"}
-      onPress={() => onPress(task)}
+      onPress={() => onPress(id)}
       animatedProps={xstackProps}
     >
       <XStack width={60}>
@@ -171,10 +181,10 @@ const CalendarTaskView = ({
         flexShrink={1}
         size={"$5"}
         ellipsizeMode="tail"
-        onPress={() => onPress(task)}
+        onPress={() => onPress(id)}
         animatedProps={nameProps}
       >
-        {task.name}
+        {name}
       </AnimatedSizableText>
       <SizableText size={"$3"} marginHorizontal={16}>
         Important

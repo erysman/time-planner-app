@@ -20,7 +20,10 @@ export const useTaskHeightDrag = (
   isEdited: boolean,
   height: number,
   minuteInPixels: number,
-  { id, name, startDay: day, durationMin }: ITaskWithTime
+  id: string,
+  name: string,
+  durationMin: number,
+  day: string,
 ) => {
   const stepHeight = minuteInPixels * 15;
   const pressed = useSharedValue(false);

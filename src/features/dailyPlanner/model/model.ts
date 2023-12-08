@@ -2,7 +2,7 @@
 export interface ITask {
   id: string;
   name: string;
-  startDay?: string;
+  startDay: string;
   startTime?: string;
   durationMin?: number;
 }

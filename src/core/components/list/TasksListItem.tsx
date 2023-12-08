@@ -4,14 +4,14 @@ import { ITask } from "../../../features/dailyPlanner/model/model";
 import { ExpoIcon } from "../ExpoIcon";
 
 export interface TasksListItemProps extends StackProps {
-  task: ITask;
+  name: string;
   first?: boolean;
   isEdited: boolean;
   onPress?: () => void;
 }
 
 export default function TasksListItem({
-  task,
+  name,
   first,
   isEdited,
   onPress,
@@ -47,7 +47,7 @@ export default function TasksListItem({
         numberOfLines={1}
         ellipsizeMode="tail"
       >
-        {task.name}
+        {name}
       </SizableText>
       <SizableText size={"$3"} marginHorizontal={16}>
         Important

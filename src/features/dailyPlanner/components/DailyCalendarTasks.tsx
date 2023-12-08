@@ -7,7 +7,7 @@ export interface DailyCalendarItemsProps {
   day: string;
   tasks: ITaskWithTime[];
   pressedTaskId: string | null;
-  onTaskPress: (task: ITaskWithTime) => void;
+  onTaskPress: (taskId: string) => void;
   editedTaskId: string|null;
 }
 

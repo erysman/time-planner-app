@@ -11,7 +11,7 @@ import {
   minutesToTime,
   timeToMinutes,
 } from "../logic/utils";
-import { ITaskWithTime } from "../model/model";
+import { ITask, ITaskWithTime } from "../model/model";
 import Animated, {
   AnimatableValue,
   SharedValue,
@@ -44,7 +44,6 @@ import { produce } from "immer";
 export interface DailyCalendarProps {
   day: string;
   tasks: ITaskWithTime[];
-  viewMode: DailyPlannerViewMode;
 }
 
 /*
@@ -53,14 +52,105 @@ export interface DailyCalendarProps {
     * handle overlapping tasks (?)
     * when navigating, scroll down calendar to first task
 */
-export const DailyCalendar = ({ tasks, day, viewMode }: DailyCalendarProps) => {
+export const DailyCalendar = ({ tasks, day }: DailyCalendarProps) => {
   const hourSlotHeight = 55;
   const minuteInPixels = hourSlotHeight / 60;
   const stepHeight = minuteInPixels * 15;
   const calendarHeight = 24 * hourSlotHeight;
   const isToday = dayjs().format(DAY_FORMAT) === day;
+
+  // const style = useHeightByViewMode(viewMode, getCalendarHeight);
+
+  const {
+    scrollRef,
+    editedTaskId,
+    pressedTaskIdState,
+    onTaskPress,
+    movingCalendarItemTop,
+  } = useDailyCalendar(day, minuteInPixels, stepHeight, tasks);
+
+  const movingTask =
+    tasks.find((task) => task.id === pressedTaskIdState) ?? null;
+  return (
+    // <GestureDetector gesture={verticalMovementPan}>
+    <Animated.View collapsable={false}>
+      <Animated.ScrollView
+        ref={scrollRef}
+        alwaysBounceHorizontal={false}
+        alwaysBounceVertical={false}
+        bounces={false}
+        overScrollMode="never"
+        scrollEventThrottle={16}
+        contentContainerStyle={{
+          height: 24 * hourSlotHeight,
+        }}
+      >
+        <YStack backgroundColor="$backgroundFocus" height={calendarHeight}>
+          <DailyCalendarSlots hourSlotHeight={hourSlotHeight} />
+          <DailyCalendarTasks
+            editedTaskId={editedTaskId}
+            day={day}
+            minuteInPixels={minuteInPixels}
+            tasks={tasks}
+            pressedTaskId={pressedTaskIdState}
+            onTaskPress={onTaskPress}
+          />
+          {isToday ? <CurrentTime minuteInPixels={minuteInPixels} /> : null}
+        </YStack>
+        {!movingTask ? null : (
+          <MovingCalendarTask
+            movingTop={movingCalendarItemTop}
+            isEdited={true}
+            minuteInPixels={minuteInPixels}
+            task={movingTask}
+            onPress={onTaskPress}
+          />
+        )}
+      </Animated.ScrollView>
+    </Animated.View>
+    // </GestureDetector>
+  );
+};
+
+export const CurrentTime = (props: { minuteInPixels: number }) => {
+  const [time, setTime] = useState<Dayjs>(dayjs());
+  useEffect(() => {
+    const interval = setInterval(() => setTime(dayjs()), 5000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+  const top = mapTimeToCalendarPosition(time, props.minuteInPixels);
+  return (
+    <Separator
+      marginLeft={60}
+      position="absolute"
+      top={top}
+      width="100%"
+      borderColor={"red"}
+      borderBottomWidth={2}
+    />
+  );
+};
+
+function getCalendarHeight(viewMode: DailyPlannerViewMode): DimensionInPercent {
+  switch (viewMode) {
+    case "both":
+      return "50%";
+    case "calendar":
+      return "100%";
+    case "list":
+      return "0%";
+  }
+}
+
+export const useDailyCalendar = (
+  day: string,
+  minuteInPixels: number,
+  stepHeight: number,
+  tasks: ITaskWithTime[]
+) => {
   const [editedTaskId, setEditedTaskId] = useState<string | null>(null);
-  const style = useHeightByViewMode(viewMode, getCalendarHeight);
 
   const queryClient = useQueryClient();
 
@@ -102,10 +192,10 @@ export const DailyCalendar = ({ tasks, day, viewMode }: DailyCalendarProps) => {
     },
   });
 
-  const onTaskPress = (task: ITaskWithTime) => {
+  const onTaskPress = (taskId: string) => {
     setEditedTaskId((prevTaskId) => {
-      if (prevTaskId === task.id) return null;
-      return task.id;
+      if (prevTaskId === taskId) return null;
+      return taskId;
     });
   };
 
@@ -116,8 +206,8 @@ export const DailyCalendar = ({ tasks, day, viewMode }: DailyCalendarProps) => {
     null
   );
   const movedItemOffset = useSharedValue(0);
-  const aref = useAnimatedRef<Animated.ScrollView>();
-  const scrollHandler = useScrollViewOffset(aref);
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const scrollHandler = useScrollViewOffset(scrollRef);
 
   useAnimatedReaction(
     () => pressedTaskId.value,
@@ -196,74 +286,12 @@ export const DailyCalendar = ({ tasks, day, viewMode }: DailyCalendarProps) => {
       offsetFromPressedToTaskStart.value = 0;
     });
 
-  return (
-    <GestureDetector gesture={verticalMovementPan}>
-      <Animated.View collapsable={false} style={[style]}>
-        <Animated.ScrollView
-          ref={aref}
-          alwaysBounceHorizontal={false}
-          alwaysBounceVertical={false}
-          bounces={false}
-          overScrollMode="never"
-          scrollEventThrottle={16}
-          contentContainerStyle={{
-            height: 24 * hourSlotHeight,
-          }}
-        >
-          <YStack backgroundColor="$backgroundFocus" height={calendarHeight}>
-            
-              <DailyCalendarSlots hourSlotHeight={hourSlotHeight} />
-              <DailyCalendarTasks
-                editedTaskId={editedTaskId}
-                day={day}
-                minuteInPixels={minuteInPixels}
-                tasks={tasks}
-                pressedTaskId={pressedTaskIdState}
-                onTaskPress={onTaskPress}
-              />
-              {isToday ? <CurrentTime minuteInPixels={minuteInPixels} /> : null}
-          </YStack>
-          <MovingCalendarTask
-            movingTop={movingCalendarItemTop}
-            isEdited={true}
-            minuteInPixels={minuteInPixels}
-            task={tasks.find((task) => task.id === pressedTaskIdState) ?? null}
-            onPress={onTaskPress}
-          />
-        </Animated.ScrollView>
-      </Animated.View>
-    </GestureDetector>
-  );
+  return {
+    verticalMovementPan,
+    scrollRef,
+    editedTaskId,
+    pressedTaskIdState,
+    onTaskPress,
+    movingCalendarItemTop,
+  };
 };
-
-export const CurrentTime = (props: { minuteInPixels: number }) => {
-  const [time, setTime] = useState<Dayjs>(dayjs());
-  useEffect(() => {
-    const interval = setInterval(() => setTime(dayjs()), 5000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-  const top = mapTimeToCalendarPosition(time, props.minuteInPixels);
-  return (
-    <Separator
-      marginLeft={60}
-      position="absolute"
-      top={top}
-      width="100%"
-      borderColor={"red"}
-      borderBottomWidth={2}
-    />
-  );
-};
-
-function getCalendarHeight(viewMode: DailyPlannerViewMode): DimensionInPercent {
-  switch (viewMode) {
-    case "both":
-      return "50%";
-    case "calendar":
-      return "100%";
-    case "list":
-      return "0%";
-  }
-}

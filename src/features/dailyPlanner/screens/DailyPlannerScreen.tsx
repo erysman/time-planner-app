@@ -1,4 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  SharedValue,
+  runOnJS,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { H6, Spinner, YStack } from "tamagui";
 import {
   getGetTasksDayOrderQueryKey,
@@ -7,23 +17,22 @@ import {
   useUpdateTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
 import {
-  DraggableList,
   MovableItem,
   MovingItem,
   MovingItemPointer,
-  useDraggableList,
+  setItemOrderWorklet,
+  unsetItemOrderWorklet,
 } from "../../../core/components/list/DraggableList";
 import TasksListItem from "../../../core/components/list/TasksListItem";
-import { DailyCalendar } from "../components/DailyCalendar";
+import { getRefreshInterval } from "../../../core/config/utils";
+import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
+import { DailyCalendar, useDailyCalendar } from "../components/DailyCalendar";
+import { MovingCalendarTask } from "../components/DailyCalendarTask";
 import {
   DailyPlannerViewMode,
-  useHeightByViewMode,
+  useDimensionsByViewMode,
 } from "../logic/UseDailyPlannerViewMode";
 import { ITask, ITaskWithTime } from "../model/model";
-import Animated from "react-native-reanimated";
-import { DimensionInPercent } from "../../../core/model/types";
-import { GestureDetector } from "react-native-gesture-handler";
-import { getRefreshInterval } from "../../../core/config/utils";
 
 export interface DailyPlannerScreenProps {
   day: string;
@@ -71,16 +80,58 @@ export const DailyPlannerScreen = ({
     },
   });
 
-  const listStyle = useHeightByViewMode(viewMode, getListHeight);
+  // const listStyle = useHeightByViewMode(viewMode, getListHeight);
+  const [layout, setLayout] = useState({ height: 0, width: 0 });
+  const { calendarViewHeight, listViewHeight } = useDimensionsByViewMode(
+    viewMode,
+    layout
+  );
+  const calendarStyle = useAnimatedStyle(() => ({
+    height: withTiming(calendarViewHeight.value),
+  }));
+  const listStyle = useAnimatedStyle(() => ({
+    height: withTiming(listViewHeight.value),
+  }));
 
   const itemHeight = 55;
-  const { panGesture, movingItemsOrder, movingItemId, dragY, pointerIndex } =
-    useDraggableList(itemHeight, tasksOrder ?? [], (itemsOrder) => {
+  const {
+    panGesture,
+    movingItemsOrder,
+    movingItemId,
+    dragY,
+    pointerIndex,
+    movingItemType,
+  } = useDraggableListCalendar(
+    itemHeight,
+    tasksOrder ?? [],
+    calendarViewHeight,
+    listViewHeight,
+    (itemsOrder) => {
       updateTasksDayOrder.mutateAsync({
         day,
         data: itemsOrder,
       });
-    });
+    }
+  );
+
+  const hourSlotHeight = 55;
+  const minuteInPixels = hourSlotHeight / 60;
+  const stepHeight = minuteInPixels * 15;
+
+  const tasksWithoutStartTime =
+    (tasks?.filter((t) => !t.startTime || !t.durationMin) as ITask[]) ?? [];
+  const tasksWithStartTime =
+    (tasks?.filter(
+      (t) => !!t.startTime && !!t.durationMin
+    ) as ITaskWithTime[]) ?? [];
+
+  const {
+    scrollRef,
+    editedTaskId,
+    pressedTaskIdState,
+    onTaskPress,
+    movingCalendarItemTop,
+  } = useDailyCalendar(day, minuteInPixels, stepHeight, tasksWithStartTime);
 
   if (isLoading || isLoadingOrder) {
     return <Spinner />;
@@ -89,22 +140,44 @@ export const DailyPlannerScreen = ({
     return <H6>{"Error during loading tasks, try again"}</H6>; //TODO: this should be toast!
   }
 
-  const tasksWithoutStartTime = tasks.filter(
-    (t) => !t.startTime || !t.durationMin
-  ) as ITask[];
-  const tasksWithStartTime = tasks.filter(
-    (t) => !!t.startTime && !!t.durationMin
-  ) as ITaskWithTime[];
+  const renderItem = (id: string): React.ReactNode => {
+    const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
+    if (!task) return null;
+    return <TasksListItem name={task.name} isEdited={false} />;
+  };
 
-  const renderItem = (id: string) => (
-    <TasksListItem
-      task={(tasks.find((task) => task.id === id) as ITask) ?? null}
-      isEdited={false}
-    />
-  );
+  const renderMovingItem = (id: string) => {
+    const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
+    if (!task) return null;
+    switch (movingItemType) {
+      case null:
+        return null;
+      case "calendar":
+        return (
+          <MovingCalendarTask
+            movingTop={movingCalendarItemTop}
+            isEdited={true}
+            minuteInPixels={minuteInPixels}
+            task={task}
+            onPress={onTaskPress}
+          />
+        );
+      case "list":
+        return <TasksListItem name={task.name} isEdited={false} />;
+    }
+  };
 
   return (
-    <YStack fullscreen backgroundColor={"$background"}>
+    <YStack
+      fullscreen
+      backgroundColor={"$background"}
+      onLayout={(e) =>
+        setLayout({
+          height: e.nativeEvent.layout.height,
+          width: e.nativeEvent.layout.width,
+        })
+      }
+    >
       <GestureDetector gesture={panGesture}>
         <Animated.View
           collapsable={false}
@@ -115,7 +188,7 @@ export const DailyPlannerScreen = ({
           ]}
         >
           <Animated.View style={[listStyle]}>
-            <YStack>
+            <YStack w={"100%"} h={"100%"}>
               {tasksWithoutStartTime.map((task) => {
                 return (
                   <MovableItem
@@ -134,30 +207,134 @@ export const DailyPlannerScreen = ({
               />
             </YStack>
           </Animated.View>
-          <DailyCalendar
-            tasks={tasksWithStartTime}
-            day={day}
-            viewMode={viewMode}
-          />
+          <Animated.View style={[calendarStyle]}>
+            <DailyCalendar tasks={tasksWithStartTime} day={day} />
+          </Animated.View>
         </Animated.View>
       </GestureDetector>
       <MovingItem
         dragY={dragY}
         id={movingItemId}
-        renderItem={renderItem}
+        renderItem={renderMovingItem}
         itemHeight={itemHeight}
       />
     </YStack>
   );
 };
 
-function getListHeight(viewMode: DailyPlannerViewMode): DimensionInPercent {
-  switch (viewMode) {
-    case "both":
-      return "50%";
-    case "calendar":
-      return "0%";
-    case "list":
-      return "100%";
-  }
-}
+export const useDraggableListCalendar = (
+  itemHeight: number,
+  itemsOrder: string[],
+  calendarViewHeight: SharedValue<number>,
+  listViewHeight: SharedValue<number>,
+  setItemsOrder: (itemsOrder: string[]) => void
+) => {
+  const { headerHeight } = useScreenDimensions();
+  const dragY = useSharedValue<number>(0);
+  const pointerIndex = useSharedValue<number | null>(null);
+  const movingItemsOrder = useSharedValue<string[]>(itemsOrder);
+  const movingItemId = useSharedValue<string | null>(null);
+  const [movingItemType, setMovingItemType] = useState<
+    "calendar" | "list" | null
+  >(null);
+  const [movingItemIdState, setMovingItemIdState] = useState<string | null>(
+    null
+  );
+
+  useEffect(() => {
+    console.log("use effect, itemsOrder changed,", itemsOrder);
+    movingItemsOrder.value = itemsOrder;
+  }, [JSON.stringify(itemsOrder)]);
+
+  useAnimatedReaction(
+    () => movingItemId.value,
+    (current, prev) => {
+      if (prev !== current) {
+        runOnJS(setMovingItemIdState)(current);
+      }
+    }
+  );
+
+  const panGesture = Gesture.Pan()
+    .activateAfterLongPress(250)
+    .onStart((e) => {
+      console.log("useDraggableListCalendar gesture handler start");
+      //TODO: we need dimensions of list view and calendar view.
+      //  if absoluteY is in list area, then
+      //    set movingItemType as list
+      //    do everything that now is done with list item (identifying id, pointerIndex, etc.)
+      //  if absoluteY is in calendar area, then:
+      //    set movingItemType as calendar
+      const pressedY = e.absoluteY - headerHeight;
+      if (pressedY < listViewHeight.value) {
+        runOnJS(setMovingItemType)("list");
+      } else if (
+        pressedY > listViewHeight.value &&
+        pressedY < listViewHeight.value + calendarViewHeight.value
+      ) {
+        runOnJS(setMovingItemType)("calendar");
+      } else {
+        console.log("cant say if calendar or list");
+        return;
+      }
+      dragY.value = pressedY;
+      const pressedItemIndex = Math.floor(e.y / itemHeight);
+      const pressedItemId = movingItemsOrder.value[pressedItemIndex];
+      if (!pressedItemId) {
+        return;
+      }
+      console.log(`pressed item id: `, pressedItemId);
+      pointerIndex.value = pressedItemIndex;
+      movingItemId.value = pressedItemId;
+      unsetItemOrderWorklet(pressedItemIndex, movingItemsOrder);
+    })
+    .onChange((e) => {
+      if (!movingItemId.value) {
+        return;
+      }
+      const pressedY = e.absoluteY - headerHeight;
+      if (pressedY < listViewHeight.value) {
+        runOnJS(setMovingItemType)("list");
+      } else if (
+        pressedY > listViewHeight.value &&
+        pressedY < listViewHeight.value + calendarViewHeight.value
+      ) {
+        runOnJS(setMovingItemType)("calendar");
+      } else {
+        console.log("cant say if calendar or list");
+        return;
+      }
+      dragY.value = pressedY;
+      const newPointer = Math.min(
+        movingItemsOrder.value.length,
+        Math.max(0, Math.floor(dragY.value / itemHeight))
+      );
+      if (pointerIndex.value === newPointer) {
+        return;
+      }
+      pointerIndex.value = newPointer;
+    })
+    .onEnd(() => {
+      if (!movingItemId.value || pointerIndex.value === null) {
+        return;
+      }
+      console.log(`press released`);
+      dragY.value = withTiming(pointerIndex.value * itemHeight);
+      setItemOrderWorklet(
+        pointerIndex.value,
+        movingItemId.value,
+        movingItemsOrder
+      );
+      movingItemId.value = null;
+      pointerIndex.value = null;
+      runOnJS(setItemsOrder)(movingItemsOrder.value);
+    });
+  return {
+    panGesture,
+    movingItemsOrder,
+    movingItemId: movingItemIdState,
+    dragY,
+    pointerIndex,
+    movingItemType,
+  };
+};

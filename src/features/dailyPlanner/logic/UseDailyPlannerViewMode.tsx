@@ -6,7 +6,7 @@ import {
 } from "react-native-reanimated";
 import { Button } from "tamagui";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
-import { DimensionInPercent } from "../../../core/model/types";
+import { DimensionInPercent, Layout } from "../../../core/model/types";
 
 export type DailyPlannerViewMode = "list" | "calendar" | "both";
 
@@ -73,3 +73,32 @@ export const useHeightByViewMode = (
 
   return style;
 };
+
+export const useDimensionsByViewMode = (viewMode: DailyPlannerViewMode, layout: Layout) => {
+  const {height} = layout;
+  const [calendarProportion, listProportion] = getViewsProportions(viewMode);
+  const listViewHeight = useSharedValue(height * listProportion);
+  const calendarViewHeight = useSharedValue(height * calendarProportion);
+
+  useEffect(() => {
+    console.log(`useDimensionsByViewMode: viewMode or height changed`)
+    listViewHeight.value = height * listProportion;
+    calendarViewHeight.value = height * calendarProportion;
+  }, [viewMode, layout.height]);
+
+  return {
+    calendarViewHeight,
+    listViewHeight
+  }
+} 
+
+function getViewsProportions(viewMode: DailyPlannerViewMode): [number, number] {
+  switch (viewMode) {
+    case "both":
+      return [0.5, 0.5];
+    case "calendar":
+      return [1, 0];
+    case "list":
+      return [0, 1];
+  }
+}

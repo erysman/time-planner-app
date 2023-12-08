@@ -56,6 +56,13 @@ export const TasksListScreen = () => {
   if (isError || isErrorOrder) {
     return <H6>{"Error during loading tasks, try again"}</H6>; //TODO: this should be toast!
   }
+
+  const renderItem = (id: string) => {
+    const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
+    if (!task) return null;
+    return <TasksListItem name={task.name} isEdited={false} />;
+  };
+
   return (
     <DraggableList
       items={tasks as ITask[]}
@@ -66,12 +73,7 @@ export const TasksListScreen = () => {
           data: itemsOrder,
         });
       }}
-      renderItem={(id) => (
-        <TasksListItem
-          task={(tasks.find((task) => task.id === id) as ITask) ?? null}
-          isEdited={false}
-        />
-      )}
+      renderItem={renderItem}
     />
   );
 };
