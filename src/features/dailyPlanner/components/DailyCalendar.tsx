@@ -1,45 +1,35 @@
-import { ScrollView, Separator, Stack, YStack } from "tamagui";
-import { DailyCalendarTasks } from "./DailyCalendarTasks";
-import { DailyCalendarSlots } from "./DailyCalendarSlots";
-import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import dayjs, { Dayjs } from "dayjs";
-import { DAY_FORMAT } from "../../../../config/constants";
-import {
-  mapCalendarPositionToMinutes,
-  mapCalendarPositionToTime,
-  mapTimeToCalendarPosition,
-  minutesToTime,
-  timeToMinutes,
-} from "../logic/utils";
-import { ITask, ITaskWithTime } from "../model/model";
+import { produce } from "immer";
+import { useEffect, useState } from "react";
+import { Gesture } from "react-native-gesture-handler";
 import Animated, {
-  AnimatableValue,
-  SharedValue,
   runOnJS,
   useAnimatedReaction,
   useAnimatedRef,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
   useDerivedValue,
   useScrollViewOffset,
   useSharedValue,
-  withTiming,
 } from "react-native-reanimated";
-import {
-  DailyPlannerViewMode,
-  useHeightByViewMode,
-} from "../logic/UseDailyPlannerViewMode";
-import { DimensionValue } from "react-native";
-import { DimensionInPercent } from "../../../core/model/types";
-import { DailyCalendarTask, MovingCalendarTask } from "./DailyCalendarTask";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { useQueryClient } from "@tanstack/react-query";
+import { Separator, YStack } from "tamagui";
+import { DAY_FORMAT } from "../../../../config/constants";
 import {
   getGetDayTasksQueryKey,
   useUpdateTask,
 } from "../../../clients/time-planner-server/client";
 import { TaskDTO } from "../../../clients/time-planner-server/model";
-import { produce } from "immer";
+import { DimensionInPercent } from "../../../core/model/types";
+import { DailyPlannerViewMode } from "../logic/UseDailyPlannerViewMode";
+import {
+  mapCalendarPositionToMinutes,
+  mapTimeToCalendarPosition,
+  minutesToTime,
+  timeToMinutes,
+} from "../logic/utils";
+import { ITaskWithTime } from "../model/model";
+import { DailyCalendarSlots } from "./DailyCalendarSlots";
+import { MovingCalendarTask } from "./DailyCalendarTask";
+import { DailyCalendarTasks } from "./DailyCalendarTasks";
 
 export interface DailyCalendarProps {
   day: string;

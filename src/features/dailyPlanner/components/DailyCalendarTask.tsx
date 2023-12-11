@@ -17,6 +17,7 @@ import {
   CalendarTaskEditHandler,
   useAnimatedHeight,
 } from "./CalendarTaskEditHandler";
+import { DEFAULT_DURATION_MIN } from "../screens/DailyPlannerScreen";
 
 export interface DailyCalendarTaskProps {
   minuteInPixels: number;
@@ -72,34 +73,32 @@ export interface MovingCalendarTaskProps {
   minuteInPixels: number;
   task: ITask;
   isEdited: boolean;
-  onPress: (taskId: string) => void;
-  movingTop: SharedValue<number>;
+  // onPress: (taskId: string) => void;
+  // movingTop: SharedValue<number>;
 }
 
 export const MovingCalendarTask = ({
   minuteInPixels,
   task,
-  isEdited,
-  onPress,
-  movingTop
+  // movingTop
 }: MovingCalendarTaskProps) => {
 
-  const durationMin = task.durationMin ?? 60;
+  const durationMin = task.durationMin ?? DEFAULT_DURATION_MIN;
 
   return (
-    <Animated.View
-      style={[
-        {
-          position: "absolute",
-          width: "75%",
-          marginLeft: 60,
-          marginRight: 10,
-          top: movingTop,
-        },
-      ]}
-    >
+    // <Animated.View
+    //   style={[
+    //     {
+    //       position: "absolute",
+    //       width: "75%",
+    //       marginLeft: 60,
+    //       marginRight: 10,
+    //       top: movingTop,
+    //     },
+    //   ]}
+    // >
       <CalendarTaskEditHandler
-        isEdited={isEdited}
+        isEdited={true}
         minuteInPixels={minuteInPixels}
         id={task.id}
         name={task.name}
@@ -110,11 +109,10 @@ export const MovingCalendarTask = ({
           hourSlotHeight={minuteInPixels * 60}
           id={task.id}
           name={task.name}
-          isEdited={isEdited}
-          onPress={onPress}
+          isEdited={true}
         />
       </CalendarTaskEditHandler>
-    </Animated.View>
+    // </Animated.View>
   );
 };
 
@@ -122,7 +120,7 @@ interface CalendarTaskViewProps {
   id: string;
   name: string;
   isEdited: boolean;
-  onPress: (taskId: string) => void;
+  onPress?: (taskId: string) => void;
   hourSlotHeight: number;
 }
 
@@ -159,7 +157,7 @@ const CalendarTaskView = ({
       backgroundColor={"$background"}
       borderRadius={"$4"}
       height={"100%"}
-      onPress={() => onPress(id)}
+      onPress={() => onPress?.(id)}
       animatedProps={xstackProps}
     >
       <XStack width={60}>
@@ -181,7 +179,7 @@ const CalendarTaskView = ({
         flexShrink={1}
         size={"$5"}
         ellipsizeMode="tail"
-        onPress={() => onPress(id)}
+        onPress={() => onPress?.(id)}
         animatedProps={nameProps}
       >
         {name}

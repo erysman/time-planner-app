@@ -54,7 +54,7 @@ export const DraggableList = <T extends ListItem>({
         </Animated.View>
       </GestureDetector>
       <MovingItem
-        dragY={dragY}
+        movingItemWindowTop={dragY}
         id={movingItemId}
         renderItem={renderItem}
         itemHeight={itemHeight}
@@ -209,14 +209,14 @@ export const MovableItem = (props: {
 export const MovingItem = (props: {
   id: string | null;
   itemHeight: number;
-  dragY: SharedValue<number>;
+  movingItemWindowTop: SharedValue<number>;
   renderItem: (id: string) => React.ReactNode;
 }) => {
-  const { dragY, id, itemHeight, renderItem } = props;
+  const { movingItemWindowTop, id, itemHeight, renderItem } = props;
 
   const style = useAnimatedStyle(() => {
     return {
-      top: dragY.value - itemHeight / 2,
+      top: movingItemWindowTop.value - itemHeight / 2,
     };
   });
 

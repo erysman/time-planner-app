@@ -549,11 +549,13 @@
           },
           "startDay": {
             "pattern": "yyyy-MM-dd",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "startTime": {
             "pattern": "HH:mm",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "durationMin": {
             "type": "integer",
