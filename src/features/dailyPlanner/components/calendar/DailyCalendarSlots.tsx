@@ -1,9 +1,10 @@
 import { useCallback, useMemo } from "react";
 import * as Localization from "expo-localization";
 import { Separator, SizableText, YStack } from "tamagui";
+import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 
-export const DailyCalendarSlots = (props: {hourSlotHeight: number}) => {
-
+export const DailyCalendarSlots = () => {
+  const {itemHeight} = useDraggableCalendarListContext();
     const listAllHours = useCallback((locale: string): string[] => {
         return [...Array(24).keys()].map((i) => {
           const date = new Date(2000, 0, 1, i, 0, 0); // January is used just for reference, you can use any month
@@ -19,7 +20,7 @@ export const DailyCalendarSlots = (props: {hourSlotHeight: number}) => {
     return (
         <>
         {hoursInLocale.map((hour) => (
-            <DailyCalendarSlot key={hour} hour={hour} height={props.hourSlotHeight} />
+            <DailyCalendarSlot key={hour} hour={hour} height={itemHeight} />
           ))}
         </>
     )

@@ -32,7 +32,6 @@ export function mapCalendarPositionToTime(
   minuteInPixels: number
 ): string {
   const minutes = mapCalendarPositionToMinutes(position, minuteInPixels);
-  // console.log(`total: ${totalHeight}, top: ${position}, minutes ${minutes}`)
   return dayjs.utc(dayjs.duration({minutes}).asMilliseconds()).format(TIME_FORMAT)
 }
 
@@ -48,8 +47,8 @@ export function mapHeightToDurationMin(
   height: number,
   minuteInPixels: number
 ): number {
+  'worklet'
   const durationMin = height / minuteInPixels;
-  // console.log(`height: ${height}, minToPx: ${minuteInPixels}, durationMin: ${durationMin}`)
   return durationMin || 0;
 }
 

@@ -13,22 +13,22 @@ import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
 
 type ListItem = { id: string };
 
-type DraggableListProps<T extends ListItem> = {
+type DragAndDropListProps<T extends ListItem> = {
   items: T[];
   itemsOrder: string[];
   setItemsOrder: (itemsOrder: string[]) => void;
   renderItem: (id: string) => React.ReactNode;
 };
 
-export const DraggableList = <T extends ListItem>({
+export const DragAndDropList = <T extends ListItem>({
   items,
   itemsOrder,
   setItemsOrder,
   renderItem,
-}: DraggableListProps<T>) => {
+}: DragAndDropListProps<T>) => {
   const itemHeight = 55;
   const { panGesture, movingItemsOrder, movingItemId, dragY, pointerIndex } =
-    useDraggableList(itemHeight, itemsOrder, setItemsOrder);
+    useDragAndDropList(itemHeight, itemsOrder, setItemsOrder);
   return (
     <YStack>
       <GestureDetector gesture={panGesture}>
@@ -46,7 +46,7 @@ export const DraggableList = <T extends ListItem>({
                 key={task.id}
                 id={task.id}
                 itemHeight={itemHeight}
-                itemsOrder={movingItemsOrder}
+                listOrder={movingItemsOrder}
                 renderItem={renderItem}
               />
             );
@@ -68,7 +68,7 @@ export const DraggableList = <T extends ListItem>({
   );
 };
 
-export function unsetItemOrderWorklet(
+export function removeItemFromList(
   indexToRemove: number,
   movingTasksOrder: SharedValue<string[]>
 ) {
@@ -80,7 +80,7 @@ export function unsetItemOrderWorklet(
   movingTasksOrder.value = newList;
 }
 
-export function setItemOrderWorklet(
+export function setItemOrder(
   indexToAdd: number,
   itemId: string,
   movingTasksOrder: SharedValue<string[]>
@@ -93,7 +93,7 @@ export function setItemOrderWorklet(
   movingTasksOrder.value = newList;
 }
 
-export const useDraggableList = (
+export const useDragAndDropList = (
   itemHeight: number,
   itemsOrder: string[],
   setItemsOrder: (itemsOrder: string[]) => void
@@ -134,7 +134,7 @@ export const useDraggableList = (
       console.log(`pressed item id: `, pressedItemId);
       pointerIndex.value = pressedItemIndex;
       movingItemId.value = pressedItemId;
-      unsetItemOrderWorklet(pressedItemIndex, movingItemsOrder);
+      removeItemFromList(pressedItemIndex, movingItemsOrder);
     })
     .onChange((e) => {
       if (!movingItemId.value) {
@@ -156,7 +156,7 @@ export const useDraggableList = (
       }
       console.log(`press released`);
       dragY.value = withTiming(pointerIndex.value * itemHeight);
-      setItemOrderWorklet(
+      setItemOrder(
         pointerIndex.value,
         movingItemId.value,
         movingItemsOrder
@@ -177,10 +177,10 @@ export const useDraggableList = (
 export const MovableItem = (props: {
   id: string;
   itemHeight: number;
-  itemsOrder: SharedValue<string[]>;
+  listOrder: SharedValue<string[]>;
   renderItem: (id: string) => React.ReactNode;
 }) => {
-  const { id, itemHeight, itemsOrder, renderItem } = props;
+  const { id, itemHeight, listOrder: itemsOrder, renderItem } = props;
   const style = useAnimatedStyle(() => {
     const index = itemsOrder.value.findIndex((currentId) => currentId === id);
     if (index === -1) {

@@ -4,35 +4,36 @@ import {Dimensions} from "react-native";
 
 interface ScreenDimensions {
     // screenWidth: number,
-    // screenHeight: number,
-    // tabBarHeight: number,
+    screenHeight: number,
+    tabBarHeight: number,
     headerHeight: number,
     headerTotalHeight: number,
     topInset: number,
 }
 
 const ScreenDimensionsContext = React.createContext<ScreenDimensions>({
-    // screenHeight: 0,
+    screenHeight: 0,
     // screenWidth: 0,
-    // tabBarHeight: 0,
+    tabBarHeight: 0,
     headerHeight: 0,
     headerTotalHeight: 0,
     topInset: 0
 });
 
 export const ScreenDimensionsProvider = (props: any) => {
-    // const {height, width: screenWidth} = Dimensions.get("screen");
+    const {height, width: screenWidth} = Dimensions.get("screen");
     const {top: topInset} = useSafeAreaInsets();
-    // const screenHeight = height - topInset;
+    
 
     const headerHeight = 60;
     const headerTotalHeight = headerHeight + topInset;
-    // const tabBarHeight = screenHeight * 0.1
+    const tabBarHeight = height * 0.1;
+    const screenHeight = height - headerTotalHeight - tabBarHeight;
     return (
         <ScreenDimensionsContext.Provider value={{
-            // screenHeight,
+            screenHeight,
             // screenWidth,
-            // tabBarHeight,
+            tabBarHeight,
             headerHeight,
             headerTotalHeight,
             topInset

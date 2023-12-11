@@ -1,45 +1,34 @@
-import { useMemo } from "react";
 import Animated, {
   Extrapolation,
-  SharedValue,
   interpolate,
-  useAnimatedProps,
+  useAnimatedProps
 } from "react-native-reanimated";
 import { Checkbox, SizableText, Stack, XStack } from "tamagui";
-import { ExpoIcon } from "../../../core/components/ExpoIcon";
+import { DEFAULT_DURATION_MIN } from "../../../../../config/constants";
+import { ExpoIcon } from "../../../../core/components/ExpoIcon";
+import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import {
-  mapDurationToHeight,
   mapTimeToCalendarPosition,
-  mapToDayjs,
-} from "../logic/utils";
-import { ITask, ITaskWithTime } from "../model/model";
+  mapToDayjs
+} from "../../logic/utils";
+import { ITask, ITaskWithTime } from "../../model/model";
 import {
   CalendarTaskEditHandler,
   useAnimatedHeight,
 } from "./CalendarTaskEditHandler";
-import { DEFAULT_DURATION_MIN } from "../screens/DailyPlannerScreen";
 
 export interface DailyCalendarTaskProps {
-  minuteInPixels: number;
   task: ITaskWithTime | null;
   isEdited: boolean;
   onPress: (taskId: string) => void;
 }
 
-/*
-  
-    TODO:
-    * move scrollview, when pan gesture is moving towards calendar top or bottom
-    * add another gesture handler for bottom border, that will affect height
-    * update task.durationMin based on newHeight 
-  */
-
 export const DailyCalendarTask = ({
-  minuteInPixels,
   task,
   isEdited,
   onPress,
 }: DailyCalendarTaskProps) => {
+  const {minuteInPixels, itemHeight} = useDraggableCalendarListContext();
   if (!task) {
     return null;
   }
@@ -51,14 +40,13 @@ export const DailyCalendarTask = ({
     <Stack position="absolute" top={top} width="100%" marginLeft={60}>
       <CalendarTaskEditHandler
         isEdited={isEdited}
-        minuteInPixels={minuteInPixels}
         id={task.id}
         name={task.name}
         durationMin={task.durationMin}
         day={task.startDay}
       >
         <CalendarTaskView
-          hourSlotHeight={minuteInPixels * 60}
+          hourSlotHeight={itemHeight}
           id={task.id}
           name={task.name}
           isEdited={isEdited}
@@ -73,33 +61,18 @@ export interface MovingCalendarTaskProps {
   minuteInPixels: number;
   task: ITask;
   isEdited: boolean;
-  // onPress: (taskId: string) => void;
-  // movingTop: SharedValue<number>;
 }
 
 export const MovingCalendarTask = ({
   minuteInPixels,
   task,
-  // movingTop
 }: MovingCalendarTaskProps) => {
 
   const durationMin = task.durationMin ?? DEFAULT_DURATION_MIN;
 
   return (
-    // <Animated.View
-    //   style={[
-    //     {
-    //       position: "absolute",
-    //       width: "75%",
-    //       marginLeft: 60,
-    //       marginRight: 10,
-    //       top: movingTop,
-    //     },
-    //   ]}
-    // >
       <CalendarTaskEditHandler
         isEdited={true}
-        minuteInPixels={minuteInPixels}
         id={task.id}
         name={task.name}
         durationMin={durationMin}
@@ -112,7 +85,6 @@ export const MovingCalendarTask = ({
           isEdited={true}
         />
       </CalendarTaskEditHandler>
-    // </Animated.View>
   );
 };
 

@@ -4,19 +4,13 @@ import Animated, {
   SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { Circle, Stack } from "tamagui";
-import { useTaskHeightDrag } from "../logic/UseTaskHeightDrag";
-import { useTaskVerticalCalendarMovement } from "../logic/UseTaskVerticalCalendarMovement";
-import { ITaskWithTime } from "../model/model";
-import {
-  mapDurationToHeight,
-  mapTimeToCalendarPosition,
-  mapToDayjs,
-} from "../logic/utils";
+import { Circle } from "tamagui";
+import { useTaskHeightDrag } from "../../logic/UseTaskHeightDrag";
+import { mapDurationToHeight } from "../../logic/utils";
+import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 
 export interface CalendarTaskEditHandlerProps {
   isEdited: boolean;
-  minuteInPixels: number;
   id: string;
   name: string;
   durationMin: number;
@@ -30,21 +24,16 @@ export interface CalendarTaskEditHandlerProps {
 */
 export const CalendarTaskEditHandler = ({
   isEdited,
-  minuteInPixels,
   id,
   name,
   durationMin,
   day,
   children,
 }: CalendarTaskEditHandlerProps) => {
+  const { minuteInPixels, calendarStepHeight } =
+    useDraggableCalendarListContext();
   const heightTmp = mapDurationToHeight(durationMin, minuteInPixels);
   const height = isEdited ? heightTmp : heightTmp - 2;
-  // const { verticalMovementPan, newTop } = useTaskVerticalCalendarMovement(
-  //   isEdited,
-  //   top,
-  //   minuteInPixels,
-  //   task
-  // );
 
   const { heightDragPan, newHeight } = useTaskHeightDrag(
     isEdited,
@@ -53,29 +42,18 @@ export const CalendarTaskEditHandler = ({
     id,
     name,
     durationMin,
-    day
+    day,
+    calendarStepHeight
   );
-  const style = useAnimatedStyle(() => ({
-    height: newHeight.value, //- 2
-  }));
+  const style = useAnimatedStyle(() => {
+    return {
+      height: newHeight.value ?? height, //- 2
+      width: "100%",
+    };
+  });
 
   return (
-    // <Stack>
-    // {/* <GestureDetector gesture={verticalMovementPan}> */}
-    <Animated.View
-      style={[
-        {
-          // position: "absolute",
-          // top,
-          height,
-          width: "100%",
-        },
-        // {
-        //   top: newTop,
-        // },
-        style,
-      ]}
-    >
+    <Animated.View style={[style]}>
       <HeightContext.Provider value={{ newHeight }}>
         {children}
       </HeightContext.Provider>
@@ -91,8 +69,6 @@ export const CalendarTaskEditHandler = ({
         </GestureDetector>
       )}
     </Animated.View>
-    // {/* </GestureDetector> */}
-    // </Stack>
   );
 };
 

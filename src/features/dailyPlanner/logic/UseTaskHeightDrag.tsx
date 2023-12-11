@@ -2,19 +2,16 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Gesture } from "react-native-gesture-handler";
 import {
-  SharedValue,
   runOnJS,
   useDerivedValue,
-  useSharedValue,
+  useSharedValue
 } from "react-native-reanimated";
 import {
   getGetDayTasksQueryKey,
-  getGetTasksQueryKey,
-  useUpdateTask,
+  useUpdateTask
 } from "../../../clients/time-planner-server/client";
 import { TaskDTO } from "../../../clients/time-planner-server/model";
 import { mapHeightToDurationMin } from "../logic/utils";
-import { ITaskWithTime } from "../model/model";
 
 export const useTaskHeightDrag = (
   isEdited: boolean,
@@ -24,9 +21,8 @@ export const useTaskHeightDrag = (
   name: string,
   durationMin: number,
   day: string,
+  stepHeight: number
 ) => {
-  const stepHeight = minuteInPixels * 15;
-  const pressed = useSharedValue(false);
   const durationOffset = useSharedValue(0);
   const newHeight = useDerivedValue(() => {
     const numberOfSteps = Math.trunc(durationOffset.value / stepHeight);
@@ -51,26 +47,25 @@ export const useTaskHeightDrag = (
       },
     },
   });
-  const updateTaskDurationFn = (newHeight: SharedValue<number>) => {
-    const duration = mapHeightToDurationMin(newHeight.value, minuteInPixels);
+  const updateTaskDuration = (durationMin: number) => {
     console.log(
-      `updating task ${name}, id: ${id}, new durationMin: ${duration}`
+      `updating task ${name}, id: ${id}, new durationMin: ${durationMin}`
     );
-    updateTask.mutate({ id, data: { durationMin: duration } });
+    updateTask.mutate({ id, data: { durationMin } });
   };
 
   const heightDragPan = Gesture.Pan()
     .enabled(isEdited)
     .onBegin(() => {
-      pressed.value = true;
+      durationOffset.value = 0;
     })
     .onChange((event) => {
       durationOffset.value = event.translationY;
     })
     .onFinalize(() => {
-      pressed.value = false;
-      if (height !== newHeight.value) {
-        runOnJS(updateTaskDurationFn)(newHeight);
+      const newDurationMin = mapHeightToDurationMin(newHeight.value, minuteInPixels);
+      if (newDurationMin !== durationMin) {
+        runOnJS(updateTaskDuration)(newDurationMin);
       }
     });
 

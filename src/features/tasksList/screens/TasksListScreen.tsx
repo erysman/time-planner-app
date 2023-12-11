@@ -8,7 +8,7 @@ import {
   useGetTasksDayOrder,
   useUpdateTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
-import { DraggableList } from "../../../core/components/list/DraggableList";
+import { DragAndDropList } from "../../../core/components/list/DraggableList";
 import TasksListItem from "../../../core/components/list/TasksListItem";
 import { ITask } from "../../dailyPlanner/model/model";
 import { getRefreshInterval } from "../../../core/config/utils";
@@ -64,7 +64,7 @@ export const TasksListScreen = () => {
   };
 
   return (
-    <DraggableList
+    <DragAndDropList
       items={tasks as ITask[]}
       itemsOrder={tasksOrder}
       setItemsOrder={(itemsOrder) => {

@@ -8,7 +8,7 @@
 export interface TaskDTO {
   id?: string;
   name?: string;
-  startDay?: string;
-  startTime?: string;
+  startDay?: string | null;
+  startTime?: string | null;
   durationMin?: number;
 }

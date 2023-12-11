@@ -9,6 +9,7 @@ import {
   XStack,
   YStack,
 } from "tamagui";
+import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
 
 type StackProps = GetProps<typeof Stack>;
 
@@ -21,6 +22,7 @@ export const TabBar = ({
   navigation,
 }: TabBarProps) => {
   const { color } = useTheme();
+  const {tabBarHeight} = useScreenDimensions();
 
   const [width, setWidth] = useState<number | null>(null);
 
@@ -28,7 +30,7 @@ export const TabBar = ({
     <XStack
       backgroundColor={"$background"}
       width={"100%"}
-      height={"10%"}
+      height={tabBarHeight}
       borderTopWidth={1}
       borderColor={"$backgroundFocus"}
       justifyContent={"space-evenly"}

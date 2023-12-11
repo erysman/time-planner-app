@@ -528,12 +528,15 @@
             "type": "string"
           },
           "startDay": {
+            "pattern": "yyyy-MM-dd",
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "nullable": true
           },
           "startTime": {
             "pattern": "HH:mm",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "durationMin": {
             "type": "integer",

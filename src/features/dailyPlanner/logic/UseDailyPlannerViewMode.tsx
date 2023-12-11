@@ -80,15 +80,23 @@ export const useDimensionsByViewMode = (viewMode: DailyPlannerViewMode, layout: 
   const listViewHeight = useSharedValue(height * listProportion);
   const calendarViewHeight = useSharedValue(height * calendarProportion);
 
+  // const itemHeight = 0.082 * height;
+  // const minuteInPixels = itemHeight/60;
+  // const calendarStepHeight = minuteInPixels * 15;
+  // const calendarHeight = 24 * itemHeight;
+
   useEffect(() => {
-    console.log(`useDimensionsByViewMode: viewMode or height changed`)
     listViewHeight.value = height * listProportion;
     calendarViewHeight.value = height * calendarProportion;
   }, [viewMode, layout.height]);
 
   return {
     calendarViewHeight,
-    listViewHeight
+    listViewHeight,
+    // itemHeight,
+    // calendarStepHeight,
+    // minuteInPixels,
+    // calendarHeight
   }
 } 
 

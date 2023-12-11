@@ -1,10 +1,8 @@
 import { YStack } from "tamagui";
-import { ITaskWithTime } from "../model/model";
+import { ITaskWithTime } from "../../model/model";
 import { DailyCalendarTask } from "./DailyCalendarTask";
 
 export interface DailyCalendarItemsProps {
-  minuteInPixels: number;
-  day: string;
   tasks: ITaskWithTime[];
   pressedTaskId: string | null;
   onTaskPress: (taskId: string) => void;
@@ -12,11 +10,9 @@ export interface DailyCalendarItemsProps {
 }
 
 export const DailyCalendarTasks = ({
-  minuteInPixels,
   tasks,
   pressedTaskId,
   onTaskPress,
-  day,
   editedTaskId,
 }: DailyCalendarItemsProps) => {
   return (
@@ -29,7 +25,6 @@ export const DailyCalendarTasks = ({
           <DailyCalendarTask
             key={task.id}
             isEdited={editedTaskId === task.id}
-            minuteInPixels={minuteInPixels}
             task={task}
             onPress={onTaskPress}
           />
