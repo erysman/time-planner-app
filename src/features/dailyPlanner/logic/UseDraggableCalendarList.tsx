@@ -4,8 +4,8 @@ import { useAnimatedStyle, withTiming } from "react-native-reanimated";
 import {
   DailyPlannerViewMode,
   useDimensionsByViewMode,
-} from "../../logic/UseDailyPlannerViewMode";
-import { ITask, ITaskWithTime } from "../../model/model";
+} from "./UseDailyPlannerViewMode";
+import { ITask, ITaskWithTime } from "../model/model";
 import { useDraggableCalendarListGesture } from "./UseDraggableCalendarListGesture";
 
 export const useDraggableCalendarList = (
@@ -41,6 +41,7 @@ export const useDraggableCalendarList = (
     movingItemType,
     movingItemViewY,
     listPointerIndex,
+    movingTimeAndDurationOfTasks
   } = useDraggableCalendarListGesture(
     day,
     itemsOrder,
@@ -48,13 +49,6 @@ export const useDraggableCalendarList = (
     listViewHeight,
     tasks
   );
-
-  const tasksWithoutStartTime =
-    (tasks.filter((t) => !t.startTime || !t.durationMin) as ITask[]) ?? [];
-  const tasksWithStartTime =
-    (tasks.filter(
-      (t) => !!t.startTime && !!t.durationMin
-    ) as ITaskWithTime[]) ?? [];
 
   const movingTask: ITask = useMemo(
     () => (tasks.find((task) => task.id === movingItemId) as ITask) ?? null,
@@ -65,10 +59,11 @@ export const useDraggableCalendarList = (
     dragGesture,
     movingItem: {
       id: movingItemId,
-      listOrder: movingItemsOrder,
+      itemsOrder: movingItemsOrder,
       viewY: movingItemViewY,
       type: movingItemType,
       listPointerIndex,
+      movingTimeAndDurationOfTasks
     },
     calendarScrollRef,
     layout: {
@@ -76,8 +71,6 @@ export const useDraggableCalendarList = (
       listStyle,
       calendarStyle,
     },
-    tasksWithoutStartTime,
-    tasksWithStartTime,
     movingTask,
   };
 };

@@ -20,6 +20,9 @@ import { AuthProvider } from "../src/features/auth/hooks/UseAuth";
 // } from "expo-router";
 import { UseThemeResult } from "@tamagui/web"
 import { useSetupReactQuery } from "../config/react-query";
+import {enableMapSet} from "immer"
+
+enableMapSet()
 
 export const unstable_settings = {
   initialRouteName: "(auth)",

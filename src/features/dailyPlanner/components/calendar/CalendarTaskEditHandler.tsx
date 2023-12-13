@@ -8,13 +8,14 @@ import { Circle } from "tamagui";
 import { useTaskHeightDrag } from "../../logic/UseTaskHeightDrag";
 import { mapDurationToHeight } from "../../logic/utils";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
+import { TimeAndDurationMap } from "../../model/model";
 
 export interface CalendarTaskEditHandlerProps {
   isEdited: boolean;
   id: string;
   name: string;
-  durationMin: number;
   day: string;
+  movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
   children: any;
 }
 
@@ -22,39 +23,31 @@ export interface CalendarTaskEditHandlerProps {
   TODO:
     * in editMode bottom circle should be animated
 */
-export const CalendarTaskEditHandler = ({
+export const DailyCalendarTaskHeightEditHandler = ({
   isEdited,
   id,
   name,
-  durationMin,
   day,
+  movingTimeAndDurationOfTasks,
   children,
 }: CalendarTaskEditHandlerProps) => {
-  const { minuteInPixels, calendarStepHeight } =
-    useDraggableCalendarListContext();
-  const heightTmp = mapDurationToHeight(durationMin, minuteInPixels);
-  const height = isEdited ? heightTmp : heightTmp - 2;
-
-  const { heightDragPan, newHeight } = useTaskHeightDrag(
+  const { heightDragPan, height: height } = useTaskHeightDrag(
     isEdited,
-    height,
-    minuteInPixels,
     id,
     name,
-    durationMin,
     day,
-    calendarStepHeight
+    movingTimeAndDurationOfTasks
   );
   const style = useAnimatedStyle(() => {
     return {
-      height: newHeight.value ?? height, //- 2
+      height: height.value,
       width: "100%",
     };
   });
 
   return (
     <Animated.View style={[style]}>
-      <HeightContext.Provider value={{ newHeight }}>
+      <HeightContext.Provider value={{ height }}>
         {children}
       </HeightContext.Provider>
       {!isEdited ? null : (
@@ -73,10 +66,10 @@ export const CalendarTaskEditHandler = ({
 };
 
 interface IHeightContext {
-  newHeight: SharedValue<number> | null;
+  height: SharedValue<number> | null;
 }
 
-const HeightContext = createContext<IHeightContext>({ newHeight: null });
+const HeightContext = createContext<IHeightContext>({ height: null });
 
 export function useAnimatedHeight(): IHeightContext {
   const context = useContext(HeightContext);

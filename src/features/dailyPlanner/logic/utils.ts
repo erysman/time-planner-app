@@ -39,6 +39,7 @@ export function mapDurationToHeight(
   durationMin: number,
   minuteInPixels: number
 ): number {
+  'worklet'
   const durationPx = durationMin * minuteInPixels;
   return durationPx || 0;
 }

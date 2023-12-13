@@ -46,7 +46,7 @@ export const DragAndDropList = <T extends ListItem>({
                 key={task.id}
                 id={task.id}
                 itemHeight={itemHeight}
-                listOrder={movingItemsOrder}
+                itemsOrder={movingItemsOrder}
                 renderItem={renderItem}
               />
             );
@@ -177,10 +177,10 @@ export const useDragAndDropList = (
 export const MovableItem = (props: {
   id: string;
   itemHeight: number;
-  listOrder: SharedValue<string[]>;
+  itemsOrder: SharedValue<string[]>;
   renderItem: (id: string) => React.ReactNode;
 }) => {
-  const { id, itemHeight, listOrder: itemsOrder, renderItem } = props;
+  const { id, itemHeight, itemsOrder, renderItem } = props;
   const style = useAnimatedStyle(() => {
     const index = itemsOrder.value.findIndex((currentId) => currentId === id);
     if (index === -1) {

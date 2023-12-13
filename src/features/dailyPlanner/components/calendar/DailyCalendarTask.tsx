@@ -1,49 +1,66 @@
 import Animated, {
   Extrapolation,
+  SharedValue,
   interpolate,
-  useAnimatedProps
+  useAnimatedProps,
+  useAnimatedStyle,
 } from "react-native-reanimated";
 import { Checkbox, SizableText, Stack, XStack } from "tamagui";
 import { DEFAULT_DURATION_MIN } from "../../../../../config/constants";
 import { ExpoIcon } from "../../../../core/components/ExpoIcon";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
+import { mapDurationToHeight, mapTimeToCalendarPosition, mapToDayjs } from "../../logic/utils";
+import { ITask, ITaskWithTime, TimeAndDuration, TimeAndDurationMap } from "../../model/model";
 import {
-  mapTimeToCalendarPosition,
-  mapToDayjs
-} from "../../logic/utils";
-import { ITask, ITaskWithTime } from "../../model/model";
-import {
-  CalendarTaskEditHandler,
+  DailyCalendarTaskHeightEditHandler,
   useAnimatedHeight,
 } from "./CalendarTaskEditHandler";
 
 export interface DailyCalendarTaskProps {
-  task: ITaskWithTime | null;
+  task: ITask;
   isEdited: boolean;
   onPress: (taskId: string) => void;
+  movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
 }
 
 export const DailyCalendarTask = ({
   task,
   isEdited,
   onPress,
+  movingTimeAndDurationOfTasks,
 }: DailyCalendarTaskProps) => {
-  const {minuteInPixels, itemHeight} = useDraggableCalendarListContext();
-  if (!task) {
-    return null;
-  }
-  const top = mapTimeToCalendarPosition(
-    mapToDayjs(task.startDay, task.startTime),
-    minuteInPixels
-  );
+  const { minuteInPixels, itemHeight } = useDraggableCalendarListContext();
+
+  const topStyle = useAnimatedStyle(() => {
+    const timeAndDuration = movingTimeAndDurationOfTasks.value[task.id];
+    if(!timeAndDuration || timeAndDuration.startTimeMinutes === null) {
+      return {
+        display: 'none',
+      }
+    }
+    return {
+      display: 'flex',
+      top: mapDurationToHeight(timeAndDuration.startTimeMinutes, minuteInPixels)
+    };
+  });
+
   return (
-    <Stack position="absolute" top={top} width="100%" marginLeft={60}>
-      <CalendarTaskEditHandler
+    <Animated.View
+      style={[
+        {
+          position: "absolute",
+          width: "100%",
+          marginLeft: 60,
+        },
+        topStyle,
+      ]}
+    >
+      <DailyCalendarTaskHeightEditHandler
         isEdited={isEdited}
         id={task.id}
         name={task.name}
-        durationMin={task.durationMin}
         day={task.startDay}
+        movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
       >
         <CalendarTaskView
           hourSlotHeight={itemHeight}
@@ -52,8 +69,8 @@ export const DailyCalendarTask = ({
           isEdited={isEdited}
           onPress={onPress}
         />
-      </CalendarTaskEditHandler>
-    </Stack>
+      </DailyCalendarTaskHeightEditHandler>
+    </Animated.View>
   );
 };
 
@@ -61,30 +78,33 @@ export interface MovingCalendarTaskProps {
   minuteInPixels: number;
   task: ITask;
   isEdited: boolean;
+  movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
 }
 
 export const MovingCalendarTask = ({
   minuteInPixels,
   task,
+  movingTimeAndDurationOfTasks,
 }: MovingCalendarTaskProps) => {
-
-  const durationMin = task.durationMin ?? DEFAULT_DURATION_MIN;
+  // const durationMin = task.durationMin ?? DEFAULT_DURATION_MIN;
+  // const height = mapDurationToHeight(durationMin, minuteInPixels)
 
   return (
-      <CalendarTaskEditHandler
-        isEdited={true}
+    <DailyCalendarTaskHeightEditHandler
+      isEdited={true}
+      id={task.id}
+      name={task.name}
+      day={task.startDay}
+      movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
+    >
+      <CalendarTaskView
+        hourSlotHeight={minuteInPixels * 60}
         id={task.id}
         name={task.name}
-        durationMin={durationMin}
-        day={task.startDay}
-      >
-        <CalendarTaskView
-          hourSlotHeight={minuteInPixels * 60}
-          id={task.id}
-          name={task.name}
-          isEdited={true}
-        />
-      </CalendarTaskEditHandler>
+        isEdited={true}
+        // height={height}
+      />
+    </DailyCalendarTaskHeightEditHandler>
   );
 };
 
@@ -94,6 +114,7 @@ interface CalendarTaskViewProps {
   isEdited: boolean;
   onPress?: (taskId: string) => void;
   hourSlotHeight: number;
+  height?: number
 }
 
 const AnimatedXStack = Animated.createAnimatedComponent(XStack);
@@ -104,16 +125,16 @@ const CalendarTaskView = ({
   id,
   name,
   isEdited,
-  onPress,
+  onPress
 }: CalendarTaskViewProps) => {
-  const { newHeight } = useAnimatedHeight();
+  const { height } = useAnimatedHeight();
   const nameProps = useAnimatedProps(() => {
-    const numberOfLines = Math.max(Math.trunc((newHeight?.value || 0) / 30), 1);
+    const numberOfLines = Math.max(Math.trunc((height?.value || 0) / 30), 1);
     return { numberOfLines };
   });
   const xstackProps = useAnimatedProps(() => {
     const paddingTop = interpolate(
-      newHeight?.value || 0,
+      height?.value || 0,
       [hourSlotHeight / 2, hourSlotHeight],
       [0, 10],
       Extrapolation.CLAMP

@@ -1,6 +1,6 @@
 import Animated, { SharedValue } from "react-native-reanimated";
 import { YStack } from "tamagui";
-import { MovableItem, MovingItemPointer } from "../../../../core/components/list/DraggableList";
+import { MovableItem, MovingItemPointer } from "../../../../core/components/list/DragAndDropList";
 import { ITask } from "../../model/model";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import TasksListItem from "../../../../core/components/list/TasksListItem";
@@ -8,7 +8,7 @@ import TasksListItem from "../../../../core/components/list/TasksListItem";
 interface DraggableListProps {
     listStyle: { height: number };
     tasks: ITask[];
-    listOrder: SharedValue<string[]>;
+    itemsOrder: SharedValue<string[]>;
     renderItem?: (id: string) => React.ReactNode;
     listPointerIndex: SharedValue<number | null>;
     movingItemId: string | null;
@@ -17,8 +17,7 @@ interface DraggableListProps {
   export const DraggableList = ({
     listStyle,
     tasks,
-    // renderItem,
-    listOrder,
+    itemsOrder,
     listPointerIndex,
     movingItemId,
   }: DraggableListProps) => {
@@ -37,7 +36,7 @@ interface DraggableListProps {
                 key={task.id}
                 id={task.id}
                 itemHeight={itemHeight}
-                listOrder={listOrder}
+                itemsOrder={itemsOrder}
                 renderItem={renderItem}
               />
             );

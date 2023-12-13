@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import Animated, { SharedValue, useAnimatedStyle, useAnimatedReaction, runOnJS } from "react-native-reanimated";
 import TasksListItem from "../../../../core/components/list/TasksListItem";
-import { ITask } from "../../model/model";
+import { ITask, TimeAndDurationMap } from "../../model/model";
 import { MovingCalendarTask } from "../calendar/DailyCalendarTask";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 
@@ -9,6 +9,7 @@ export const MovingCalendarListItem = (props: {
     viewY: SharedValue<number>;
     movingItemType: SharedValue<"calendar" | "list" | null>;
     task: ITask | null;
+    movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
   }) => {
     const {
       viewY,
@@ -58,6 +59,7 @@ export const MovingCalendarListItem = (props: {
             isEdited={true}
             minuteInPixels={minuteInPixels}
             task={task}
+            movingTimeAndDurationOfTasks={props.movingTimeAndDurationOfTasks}
           />
         );
       }

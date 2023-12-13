@@ -8,7 +8,7 @@ import {
   useGetTasksDayOrder,
   useUpdateTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
-import { DragAndDropList } from "../../../core/components/list/DraggableList";
+import { DragAndDropList } from "../../../core/components/list/DragAndDropList";
 import TasksListItem from "../../../core/components/list/TasksListItem";
 import { ITask } from "../../dailyPlanner/model/model";
 import { getRefreshInterval } from "../../../core/config/utils";

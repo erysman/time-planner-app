@@ -7,7 +7,7 @@ import { ITask } from "../../model/model";
 import { DraggableCalendar } from "../calendar/DailyCalendar";
 import { DraggableList } from "./DraggableList";
 import { MovingCalendarListItem } from "./MovingCalendarListItem";
-import { useDraggableCalendarList } from "./UseDraggableCalendarList";
+import { useDraggableCalendarList } from "../../logic/UseDraggableCalendarList";
 
 export interface DraggableCalendarListProps {
   day: string;
@@ -26,47 +26,31 @@ export const DraggableCalendarList = ({
     dragGesture,
     movingItem,
     calendarScrollRef,
-    layout: {
-      calendarStyle,
-      listStyle,
-      onChange,
-    },
-    tasksWithoutStartTime,
-    tasksWithStartTime,
+    layout: { calendarStyle, listStyle, onChange },
     movingTask,
   } = useDraggableCalendarList(day, viewMode, tasksOrder, tasks);
-
-  // const renderItem = (id: string): React.ReactNode => {
-  //   const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
-  //   if (!task) return null;
-  //   return <TasksListItem name={task.name} isEdited={false} />;
-  // };
 
   return (
     <YStack fullscreen backgroundColor={"$background"} onLayout={onChange}>
       <GestureDetector gesture={dragGesture}>
         <Animated.View
           collapsable={false}
-          style={[
-            {
-              flexDirection: "column",
-            },
-          ]}
+          style={[{ flexDirection: "column" }]}
         >
           <DraggableList
-            tasks={tasksWithoutStartTime}
-            listOrder={movingItem.listOrder}
+            tasks={tasks}
+            itemsOrder={movingItem.itemsOrder}
             listPointerIndex={movingItem.listPointerIndex}
             listStyle={listStyle}
             movingItemId={movingItem.id}
-            // renderItem={renderItem}
           />
           <DraggableCalendar
             day={day}
-            tasksWithStartTime={tasksWithStartTime}
+            tasks={tasks}
             movingItemId={movingItem.id}
             calendarScrollRef={calendarScrollRef}
             calendarStyle={calendarStyle}
+            movingTimeAndDurationOfTasks={movingItem.movingTimeAndDurationOfTasks}
           />
         </Animated.View>
       </GestureDetector>
@@ -74,6 +58,7 @@ export const DraggableCalendarList = ({
         viewY={movingItem.viewY}
         movingItemType={movingItem.type}
         task={movingTask}
+        movingTimeAndDurationOfTasks={movingItem.movingTimeAndDurationOfTasks}
       />
     </YStack>
   );

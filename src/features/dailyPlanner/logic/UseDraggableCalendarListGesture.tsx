@@ -15,22 +15,40 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { DEFAULT_DURATION_MIN } from "../../../../../config/constants";
-import { TaskUpdateDTO } from "../../../../clients/time-planner-server/model";
+import { DEFAULT_DURATION_MIN } from "../../../../config/constants";
+import { TaskUpdateDTO } from "../../../clients/time-planner-server/model";
 import {
   removeItemFromList,
   setItemOrder,
-} from "../../../../core/components/list/DraggableList";
-import { useScreenDimensions } from "../../../../core/dimensions/UseScreenDimensions";
-import { useUpdateTaskWrapper } from "../../logic/UseUpdateTask";
-import { useUpdateTasksDayOrderWrapper } from "../../logic/UseUpdateTasksDayOrder";
+} from "../../../core/components/list/DragAndDropList";
+import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
+import { ITask, ITaskWithTime, TimeAndDurationMap } from "../model/model";
+import { useDraggableCalendarListContext } from "./UseCalendarListContext";
+import { useUpdateTaskWrapper } from "./UseUpdateTask";
+import { useUpdateTasksDayOrderWrapper } from "./UseUpdateTasksDayOrder";
 import {
   mapCalendarPositionToMinutes,
   minutesToTime,
   timeToMinutes,
-} from "../../logic/utils";
-import { ITask, ITaskWithTime } from "../../model/model";
-import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
+} from "./utils";
+
+function buildTasksTimeAndDurationMap(tasks: ITask[]): TimeAndDurationMap {
+  const map = Object.fromEntries(
+    tasks.map((task) => [
+      task.id,
+      {
+        startTimeMinutes:
+          task.startTime !== undefined && task.startTime !== null
+            ? timeToMinutes(task.startTime)
+            : null,
+        durationMinutes:
+          task.durationMin !== undefined ? task.durationMin : null,
+      },
+    ])
+  );
+  console.log(`build new object:`, map);
+  return map;
+}
 
 export const useDraggableCalendarListGesture = (
   day: string,
@@ -39,17 +57,25 @@ export const useDraggableCalendarListGesture = (
   listViewHeight: SharedValue<number>,
   tasks: ITask[]
 ) => {
-  const {itemHeight, minuteInPixels} = useDraggableCalendarListContext();
+  const { itemHeight, minuteInPixels } = useDraggableCalendarListContext();
   const { headerHeight } = useScreenDimensions();
-  const listPointerIndex = useSharedValue<number | null>(null);
-  const movingItemsOrder = useSharedValue<string[]>(itemsOrder);
   const movingItemId = useSharedValue<string | null>(null);
-  const movingItemType = useSharedValue<"calendar" | "list" | null>(null);
   const [movingItemIdState, setMovingItemIdState] = useState<string | null>(
     null
   );
-  const pressedTaskOffset = useSharedValue<number>(0);
+  const movingItemType = useSharedValue<"calendar" | "list" | null>(null);
   const movingItemViewY = useSharedValue(0);
+  const pressedTaskOffset = useSharedValue<number>(0);
+  const listPointerIndex = useSharedValue<number | null>(null);
+  const movingItemsOrder = useSharedValue<string[]>(itemsOrder);
+  const movingTimeAndDurationOfTasks = useSharedValue<TimeAndDurationMap>(
+    buildTasksTimeAndDurationMap(tasks)
+  );
+
+  useEffect(() => {
+    movingTimeAndDurationOfTasks.value = buildTasksTimeAndDurationMap(tasks);
+  }, [JSON.stringify(tasks)]);
+
   const calendarScrollRef = useAnimatedRef<Animated.ScrollView>();
   const calendarScrollHandler = useScrollViewOffset(calendarScrollRef);
 
@@ -74,7 +100,9 @@ export const useDraggableCalendarListGesture = (
     time: string | null,
     durationMin: number | undefined
   ) => {
-    console.log(`updating task with id: ${itemId}, new time: ${time}`);
+    console.log(
+      `updating task with id: ${itemId}, new time: ${time}, duration: ${durationMin}`
+    );
     let data: TaskUpdateDTO = { startTime: time };
     if (!durationMin) {
       data.durationMin = DEFAULT_DURATION_MIN;
@@ -91,8 +119,8 @@ export const useDraggableCalendarListGesture = (
     if (pressedWindowY < listViewHeight) {
       return "list";
     } else if (
-      pressedWindowY > listViewHeight &&
-      pressedWindowY < listViewHeight + calendarViewHeight
+      pressedWindowY > listViewHeight 
+      //&& pressedWindowY < listViewHeight + calendarViewHeight
     ) {
       return "calendar";
     } else {
@@ -202,11 +230,32 @@ export const useDraggableCalendarListGesture = (
     movingItemViewY.value = pressedViewY - pressedTaskOffset.value;
   }
 
+  function updateTasksMap(
+    itemId: string,
+    minutes: number | null,
+    durationMin: number | undefined
+  ) {
+    "worklet";
+    let newMap = { ...movingTimeAndDurationOfTasks.value };
+    newMap[itemId] = {
+      startTimeMinutes: minutes,
+      durationMinutes: durationMin ?? DEFAULT_DURATION_MIN,
+    };
+    console.log(
+      `prev: `,
+      movingTimeAndDurationOfTasks.value,
+      ` newMap: `,
+      newMap
+    );
+    movingTimeAndDurationOfTasks.value = newMap;
+  }
+
   function onListDragEnd() {
     "worklet";
     if (listPointerIndex.value === null || movingItemId.value === null) return;
     const task = tasks.find((task) => task.id === movingItemId.value);
     if (task?.startTime) {
+      updateTasksMap(task.id, null, task.durationMin);
       runOnJS(setTaskTime)(task.id, null, task.durationMin);
     }
     movingItemViewY.value = withTiming(listPointerIndex.value * itemHeight);
@@ -230,6 +279,7 @@ export const useDraggableCalendarListGesture = (
     const time = minutesToTime(minutes);
     const task = tasks.find((task) => task.id === movingItemId.value);
     if (task && time !== task.startTime) {
+      updateTasksMap(task.id, minutes, task.durationMin);
       runOnJS(setTaskTime)(task.id, time, task.durationMin);
     }
     movingItemId.value = null;
@@ -263,5 +313,6 @@ export const useDraggableCalendarListGesture = (
     listPointerIndex,
     movingItemType,
     calendarScrollRef,
+    movingTimeAndDurationOfTasks,
   };
 };
