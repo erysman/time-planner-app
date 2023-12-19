@@ -76,7 +76,7 @@ export function removeItemFromList(
   const prev = movingTasksOrder.value;
   const newList = [...prev];
   newList.splice(indexToRemove, 1);
-  console.log("unsetItemOrderWorklet: prev: ", prev, "newList: ", newList);
+  // console.log("unsetItemOrderWorklet: prev: ", prev, "newList: ", newList);
   movingTasksOrder.value = newList;
 }
 
@@ -89,7 +89,7 @@ export function setItemOrder(
   const prev = movingTasksOrder.value;
   const newList = [...prev];
   newList.splice(indexToAdd, 0, itemId);
-  console.log("setItemOrderWorklet: prev: ", prev, "newList: ", newList);
+  // console.log("setItemOrderWorklet: prev: ", prev, "newList: ", newList);
   movingTasksOrder.value = newList;
 }
 
@@ -108,7 +108,7 @@ export const useDragAndDropList = (
   );
 
   useEffect(() => {
-    console.log("use effect, itemsOrder changed,", itemsOrder);
+    // console.log("itemsOrder changed,", itemsOrder);
     movingItemsOrder.value = itemsOrder;
   }, [JSON.stringify(itemsOrder)]);
 
@@ -124,7 +124,7 @@ export const useDragAndDropList = (
   const panGesture = Gesture.Pan()
     .activateAfterLongPress(250)
     .onStart((e) => {
-      console.log("calendarList gesture handler start");
+      console.log("useDragAndDropList gesture handler start");
       dragY.value = e.absoluteY - headerHeight;
       const pressedItemIndex = Math.floor(e.y / itemHeight);
       const pressedItemId = movingItemsOrder.value[pressedItemIndex];

@@ -1,19 +1,32 @@
 import { useState } from "react";
-import Animated, { SharedValue } from "react-native-reanimated";
+import Animated, {
+  SharedValue,
+  useAnimatedProps,
+  useScrollViewOffset,
+  withTiming,
+} from "react-native-reanimated";
 import { YStack } from "tamagui";
-import { ITask, ITaskWithTime, TimeAndDuration, TimeAndDurationMap } from "../../model/model";
+import {
+  ITask,
+  ITaskWithTime,
+  TimeAndDuration,
+  TimeAndDurationMap,
+} from "../../model/model";
 import { CalendarCurrentTime } from "./CalendarCurrentTime";
 import { DailyCalendarSlots } from "./DailyCalendarSlots";
 import { DailyCalendarTasks } from "./DailyCalendarTasks";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
+import { range } from "lodash";
 
 interface DraggableCalendarProps {
   day: string;
   tasks: ITask[];
   calendarScrollRef: React.RefObject<Animated.ScrollView>;
+  scrollTargetY: SharedValue<number | null>;
+  scrollDuration: SharedValue<number>;
   calendarStyle: { height: number };
   movingItemId: string | null;
-  movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>
+  movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
 }
 
 export const DraggableCalendar = ({
@@ -22,9 +35,11 @@ export const DraggableCalendar = ({
   movingItemId,
   calendarScrollRef,
   calendarStyle,
-  movingTimeAndDurationOfTasks
+  movingTimeAndDurationOfTasks,
+  scrollTargetY,
+  scrollDuration,
 }: DraggableCalendarProps) => {
-  const { calendarHeight } = useDraggableCalendarListContext();
+  const { calendarHeight, itemHeight } = useDraggableCalendarListContext();
   const [editedTaskId, setEditedTaskId] = useState<string | null>(null);
   const onTaskPress = (taskId: string) => {
     setEditedTaskId((prevTaskId) => {
@@ -32,6 +47,20 @@ export const DraggableCalendar = ({
       return taskId;
     });
   };
+
+  const scrollOffset = useScrollViewOffset(calendarScrollRef);
+
+  const animatedScrollProps = useAnimatedProps(() => {
+    if (scrollTargetY.value === null) {
+      return { contentOffset: { x: 0, y: scrollOffset.value } };
+    }
+    return {
+      contentOffset: {
+        x: 0,
+        y: withTiming(scrollTargetY.value, { duration: scrollDuration.value }),
+      },
+    };
+  });
 
   return (
     <Animated.View style={[calendarStyle]}>
@@ -45,6 +74,7 @@ export const DraggableCalendar = ({
         contentContainerStyle={{
           height: calendarHeight,
         }}
+        animatedProps={animatedScrollProps}
       >
         <YStack backgroundColor="$backgroundFocus" height={calendarHeight}>
           <DailyCalendarSlots />

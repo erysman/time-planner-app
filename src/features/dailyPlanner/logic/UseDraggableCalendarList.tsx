@@ -37,6 +37,8 @@ export const useDraggableCalendarList = (
     dragGesture,
     movingItemsOrder,
     calendarScrollRef,
+    calendarScrollDuration,
+    calendarScrollTargetY,
     movingItemId,
     movingItemType,
     movingItemViewY,
@@ -66,6 +68,8 @@ export const useDraggableCalendarList = (
       movingTimeAndDurationOfTasks
     },
     calendarScrollRef,
+    calendarScrollDuration,
+    calendarScrollTargetY,
     layout: {
       onChange: onLayoutChange,
       listStyle,

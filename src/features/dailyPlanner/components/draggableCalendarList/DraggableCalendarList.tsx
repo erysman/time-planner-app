@@ -4,7 +4,7 @@ import { YStack } from "tamagui";
 import TasksListItem from "../../../../core/components/list/TasksListItem";
 import { DailyPlannerViewMode } from "../../logic/UseDailyPlannerViewMode";
 import { ITask } from "../../model/model";
-import { DraggableCalendar } from "../calendar/DailyCalendar";
+import { DraggableCalendar } from "../calendar/DraggableCalendar";
 import { DraggableList } from "./DraggableList";
 import { MovingCalendarListItem } from "./MovingCalendarListItem";
 import { useDraggableCalendarList } from "../../logic/UseDraggableCalendarList";
@@ -26,6 +26,8 @@ export const DraggableCalendarList = ({
     dragGesture,
     movingItem,
     calendarScrollRef,
+    calendarScrollDuration,
+    calendarScrollTargetY,
     layout: { calendarStyle, listStyle, onChange },
     movingTask,
   } = useDraggableCalendarList(day, viewMode, tasksOrder, tasks);
@@ -49,6 +51,8 @@ export const DraggableCalendarList = ({
             tasks={tasks}
             movingItemId={movingItem.id}
             calendarScrollRef={calendarScrollRef}
+            scrollDuration={calendarScrollDuration}
+            scrollTargetY={calendarScrollTargetY}
             calendarStyle={calendarStyle}
             movingTimeAndDurationOfTasks={movingItem.movingTimeAndDurationOfTasks}
           />

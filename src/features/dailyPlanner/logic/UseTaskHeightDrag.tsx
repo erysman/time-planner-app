@@ -52,12 +52,6 @@ export const useTaskHeightDrag = (
       if(!newMap[itemId]) return;
       const task = {...newMap[itemId], durationMinutes}
       newMap[itemId] = task
-      console.log(
-        `prev: `,
-        movingTimeAndDurationOfTasks.value,
-        ` newMap: `,
-        newMap
-      );
       movingTimeAndDurationOfTasks.value = newMap;
     }
 
