@@ -69,7 +69,6 @@ export const useDraggableCalendarListGesture = (
   const movingItemType = useSharedValue<"calendar" | "list" | null>(null);
   const movingItemViewY = useSharedValue(0);
   const pressedTaskOffsetToTop = useSharedValue<number>(0);
-  const pressedTaskOffsetToBottom = useSharedValue<number>(0);
   const listPointerIndex = useSharedValue<number | null>(null);
   const movingItemsOrder = useSharedValue<string[]>(itemsOrder);
   const movingTimeAndDurationOfTasks = useSharedValue<TimeAndDurationMap>(
@@ -124,14 +123,13 @@ export const useDraggableCalendarListGesture = (
 
   function getPressedAreaType(
     pressedWindowY: number,
-    listViewHeight: number,
-    calendarViewHeight: number
+    listViewHeight: number
   ) {
     "worklet";
     if (pressedWindowY < listViewHeight) {
       return "list";
     } else if (
-      pressedWindowY > listViewHeight
+      pressedWindowY >= listViewHeight
       //&& pressedWindowY < listViewHeight + calendarViewHeight
     ) {
       return "calendar";
@@ -184,8 +182,6 @@ export const useDraggableCalendarListGesture = (
     const pressedTaskStartTimeMinutes = timeToMinutes(pressedTask.startTime);
     const minutesDiffFromStart = pressedMinutes - pressedTaskStartTimeMinutes;
     pressedTaskOffsetToTop.value = minutesDiffFromStart * minuteInPixels;
-    pressedTaskOffsetToBottom.value =
-      (pressedTask.durationMin - minutesDiffFromStart) * minuteInPixels;
     const taskTop = pressedTaskStartTimeMinutes * minuteInPixels;
     const taskHeight = pressedTask.durationMin * minuteInPixels;
     return { top: taskTop, bottom: taskTop + taskHeight };
@@ -199,7 +195,6 @@ export const useDraggableCalendarListGesture = (
     const pressedAreaType = getPressedAreaType(
       pressedViewY,
       listViewHeight.value,
-      calendarViewHeight.value
     );
     movingItemType.value = pressedAreaType;
     if (pressedAreaType === "list") {
@@ -235,14 +230,15 @@ export const useDraggableCalendarListGesture = (
       return;
     }
     const pressedViewY = e.absoluteY - headerHeight;
+    movingItemViewY.value = pressedViewY - pressedTaskOffsetToTop.value;
     const pressedAreaType = getPressedAreaType(
-      pressedViewY,
+      movingItemViewY.value,
       listViewHeight.value,
-      calendarViewHeight.value
     );
     movingItemType.value = pressedAreaType;
     if (pressedAreaType === "list") {
       setNewListPointerIndex(pressedViewY);
+      calendarScrollArea.cancelScroll();
     }
     if (pressedAreaType === "calendar") {
       listPointerIndex.value = null;
@@ -254,7 +250,6 @@ export const useDraggableCalendarListGesture = (
         calendarScrollArea.activateScrollIfItemInsideScrollArea({ top, bottom });
       }
     }
-    movingItemViewY.value = pressedViewY - pressedTaskOffsetToTop.value;
   }
 
   function updateTasksMap(
@@ -304,7 +299,6 @@ export const useDraggableCalendarListGesture = (
     }
     movingItemId.value = null;
     pressedTaskOffsetToTop.value = 0;
-    pressedTaskOffsetToBottom.value = 0;
   }
 
   function onDragEnd() {

@@ -90,7 +90,6 @@ export const useDragScrollArea = (
       itemPosition.bottom,
       downAreaBaseBoundries
     );
-    console.log(`itemPosition: `, itemPosition, ` upAreaBaseBoundries: `, upAreaBaseBoundries, ` downAreaBaseBoundries: `, downAreaBaseBoundries)
     if (!isInsideUpArea && !isInsideDownArea) {
       cancelScroll();
     }
