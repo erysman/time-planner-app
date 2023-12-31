@@ -6,6 +6,8 @@
  */
 
 export * from './createTaskDTO';
+export * from './createTaskDTOPriority';
+export * from './errorMessage';
 export * from './getTasksParams';
 export * from './health200One';
 export * from './health200Three';
@@ -18,5 +20,8 @@ export * from './link';
 export * from './links200One';
 export * from './links200Three';
 export * from './links200Two';
+export * from './scheduleInfoDTO';
 export * from './taskDTO';
+export * from './taskDTOPriority';
 export * from './taskUpdateDTO';
+export * from './taskUpdateDTOPriority';

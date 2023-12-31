@@ -69,7 +69,7 @@ export const MovingCalendarListItem = (props: {
   return (
     <Animated.View style={[outerStyle]}>
       <Animated.View style={[listStyle]}>
-        <TasksListItem name={task.name} isEdited={false} />
+        <TasksListItem name={task.name} isEdited={false} priority={task.priority}/>
       </Animated.View>
       <Animated.View style={[calendarStyle]}>
         <MovingCalendarTask

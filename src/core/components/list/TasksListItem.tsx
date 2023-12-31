@@ -2,9 +2,12 @@ import React from "react";
 import { Checkbox, SizableText, StackProps, XStack } from "tamagui";
 import { ITask } from "../../../features/dailyPlanner/model/model";
 import { ExpoIcon } from "../ExpoIcon";
+import { PriorityIcons } from "../PriorityIcons";
+import { Priority } from "../../model/types";
 
 export interface TasksListItemProps extends StackProps {
   name: string;
+  priority: Priority
   first?: boolean;
   isEdited: boolean;
   onPress?: () => void;
@@ -12,6 +15,7 @@ export interface TasksListItemProps extends StackProps {
 
 export default function TasksListItem({
   name,
+  priority,
   first,
   isEdited,
   onPress,
@@ -49,9 +53,7 @@ export default function TasksListItem({
       >
         {name}
       </SizableText>
-      <SizableText size={"$3"} marginHorizontal={16}>
-        Important
-      </SizableText>
+      <PriorityIcons priority={priority}/>
     </XStack>
   );
 }

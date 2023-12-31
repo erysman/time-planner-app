@@ -7,14 +7,29 @@ import Animated, {
 } from "react-native-reanimated";
 import { Checkbox, SizableText, Stack, XStack } from "tamagui";
 import { DEFAULT_DURATION_MIN } from "../../../../../config/constants";
-import { ExpoIcon } from "../../../../core/components/ExpoIcon";
+import {
+  ExpoIcon,
+  HourglassIcon,
+  StartIcon,
+} from "../../../../core/components/ExpoIcon";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
-import { mapDurationToHeight, mapTimeToCalendarPosition, mapToDayjs } from "../../logic/utils";
-import { ITask, ITaskWithTime, TimeAndDuration, TimeAndDurationMap } from "../../model/model";
+import {
+  mapDurationToHeight,
+  mapTimeToCalendarPosition,
+  mapToDayjs,
+} from "../../logic/utils";
+import {
+  ITask,
+  ITaskWithTime,
+  Priority,
+  TimeAndDuration,
+  TimeAndDurationMap,
+} from "../../model/model";
 import {
   DailyCalendarTaskHeightEditHandler,
   useAnimatedHeight,
 } from "./CalendarTaskEditHandler";
+import { PriorityIcons } from "../../../../core/components/PriorityIcons";
 
 export interface DailyCalendarTaskProps {
   task: ITask;
@@ -33,14 +48,17 @@ export const DailyCalendarTask = ({
 
   const topStyle = useAnimatedStyle(() => {
     const timeAndDuration = movingTimeAndDurationOfTasks.value[task.id];
-    if(!timeAndDuration || timeAndDuration.startTimeMinutes === null) {
+    if (!timeAndDuration || timeAndDuration.startTimeMinutes === null) {
       return {
-        display: 'none',
-      }
+        display: "none",
+      };
     }
     return {
-      display: 'flex',
-      top: mapDurationToHeight(timeAndDuration.startTimeMinutes, minuteInPixels)
+      display: "flex",
+      top: mapDurationToHeight(
+        timeAndDuration.startTimeMinutes,
+        minuteInPixels
+      ),
     };
   });
 
@@ -66,6 +84,7 @@ export const DailyCalendarTask = ({
           hourSlotHeight={itemHeight}
           id={task.id}
           name={task.name}
+          priority={task.priority}
           isEdited={isEdited}
           onPress={onPress}
         />
@@ -102,6 +121,7 @@ export const MovingCalendarTask = ({
         id={task.id}
         name={task.name}
         isEdited={true}
+        priority={task.priority}
         // height={height}
       />
     </DailyCalendarTaskHeightEditHandler>
@@ -114,7 +134,8 @@ interface CalendarTaskViewProps {
   isEdited: boolean;
   onPress?: (taskId: string) => void;
   hourSlotHeight: number;
-  height?: number
+  height?: number;
+  priority: Priority;
 }
 
 const AnimatedXStack = Animated.createAnimatedComponent(XStack);
@@ -124,8 +145,9 @@ const CalendarTaskView = ({
   hourSlotHeight,
   id,
   name,
+  priority,
   isEdited,
-  onPress
+  onPress,
 }: CalendarTaskViewProps) => {
   const { height } = useAnimatedHeight();
   const nameProps = useAnimatedProps(() => {
@@ -153,7 +175,7 @@ const CalendarTaskView = ({
       onPress={() => onPress?.(id)}
       animatedProps={xstackProps}
     >
-      <XStack width={60}>
+      {/* <XStack width={60}>
         {isEdited ? null : (
           <Checkbox size="$1.5" circular marginHorizontal={16}>
             <Checkbox.Indicator>
@@ -166,8 +188,9 @@ const CalendarTaskView = ({
             </Checkbox.Indicator>
           </Checkbox>
         )}
-      </XStack>
+      </XStack> */}
       <AnimatedSizableText
+        marginLeft={16}
         flexGrow={1}
         flexShrink={1}
         size={"$5"}
@@ -177,9 +200,10 @@ const CalendarTaskView = ({
       >
         {name}
       </AnimatedSizableText>
-      <SizableText size={"$3"} marginHorizontal={16}>
+      <PriorityIcons priority={priority}/>
+      {/* <SizableText size={"$3"} marginHorizontal={16}>
         Important
-      </SizableText>
+      </SizableText> */}
     </AnimatedXStack>
   );
 };

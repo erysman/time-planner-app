@@ -25,7 +25,7 @@ interface DraggableListProps {
     const renderItem = (id: string): React.ReactNode => {
       const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
       if (!task) return null;
-      return <TasksListItem name={task.name} isEdited={false} />;
+      return <TasksListItem name={task.name} isEdited={false} priority={task.priority}/>;
     };
     return (
       <Animated.View style={[listStyle]}>

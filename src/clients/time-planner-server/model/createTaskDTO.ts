@@ -4,10 +4,13 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
+import type { CreateTaskDTOPriority } from './createTaskDTOPriority';
 
 export interface CreateTaskDTO {
-  name?: string;
-  startDay?: string;
-  startTime?: string;
-  durationMin?: number;
+  name: string;
+  startDay?: string | null;
+  startTime?: string | null;
+  durationMin?: number | null;
+  priority?: CreateTaskDTOPriority;
+  projectId?: string | null;
 }

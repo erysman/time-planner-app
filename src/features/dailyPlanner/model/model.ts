@@ -1,3 +1,5 @@
+import { Priority } from "../../../core/model/types";
+
 
 export interface ITask {
   id: string;
@@ -5,6 +7,7 @@ export interface ITask {
   startDay: string;
   startTime?: string;
   durationMin?: number;
+  priority: Priority;
 }
 
 export interface ITaskWithTime extends ITask{

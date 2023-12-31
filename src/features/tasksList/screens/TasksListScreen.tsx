@@ -60,7 +60,7 @@ export const TasksListScreen = () => {
   const renderItem = (id: string) => {
     const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
     if (!task) return null;
-    return <TasksListItem name={task.name} isEdited={false} />;
+    return <TasksListItem name={task.name} isEdited={false} priority={task.priority}/>;
   };
 
   return (

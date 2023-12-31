@@ -10,7 +10,13 @@ import { DimensionInPercent, Layout } from "../../../core/model/types";
 
 export type DailyPlannerViewMode = "list" | "calendar" | "both";
 
-export const useDailyPlannerViewMode = () => {
+export type DailyPlannerViewModeProperties = {
+  viewMode: DailyPlannerViewMode;
+  changeViewModeButton: JSX.Element;
+  setViewMode: React.Dispatch<React.SetStateAction<DailyPlannerViewMode>>;
+}
+
+export const useDailyPlannerViewMode = (): DailyPlannerViewModeProperties => {
   const [viewMode, setViewMode] = useState<DailyPlannerViewMode>("both");
 
   function getNextViewMode(
@@ -42,6 +48,7 @@ export const useDailyPlannerViewMode = () => {
   const changeViewModeButton: JSX.Element = useMemo(
     () => (
       <Button
+      paddingHorizontal={12}
         onPress={() => setViewMode((prev) => getNextViewMode(prev))}
         variant="outlined"
       >
@@ -80,11 +87,6 @@ export const useDimensionsByViewMode = (viewMode: DailyPlannerViewMode, layout: 
   const listViewHeight = useSharedValue(height * listProportion);
   const calendarViewHeight = useSharedValue(height * calendarProportion);
 
-  // const itemHeight = 0.082 * height;
-  // const minuteInPixels = itemHeight/60;
-  // const calendarStepHeight = minuteInPixels * 15;
-  // const calendarHeight = 24 * itemHeight;
-
   useEffect(() => {
     listViewHeight.value = height * listProportion;
     calendarViewHeight.value = height * calendarProportion;
@@ -93,10 +95,6 @@ export const useDimensionsByViewMode = (viewMode: DailyPlannerViewMode, layout: 
   return {
     calendarViewHeight,
     listViewHeight,
-    // itemHeight,
-    // calendarStepHeight,
-    // minuteInPixels,
-    // calendarHeight
   }
 } 
 

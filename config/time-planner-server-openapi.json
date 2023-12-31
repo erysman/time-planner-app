@@ -40,6 +40,16 @@
           }
         ],
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -102,6 +112,16 @@
           "required": true
         },
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -166,6 +186,16 @@
           }
         ],
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -210,6 +240,16 @@
           "required": true
         },
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -219,6 +259,126 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/day/{day}/tasks/schedule": {
+      "get": {
+        "tags": [
+          "day-tasks-controller"
+        ],
+        "summary": "Get day\u0027s auto schedule info",
+        "operationId": "getAutoScheduleInfo",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduleInfoDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduleInfoDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "day-tasks-controller"
+        ],
+        "summary": "Run automatically assign startTime to all tasks assigned to selected day",
+        "operationId": "schedule",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "day-tasks-controller"
+        ],
+        "operationId": "revokeSchedule",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -241,6 +401,16 @@
           }
         ],
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -270,6 +440,16 @@
           }
         ],
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK"
           }
@@ -302,6 +482,16 @@
           "required": true
         },
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -322,6 +512,16 @@
         ],
         "operationId": "validate",
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -354,6 +554,16 @@
           }
         ],
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -391,6 +601,16 @@
         "summary": "Actuator root web endpoint",
         "operationId": "links",
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -440,6 +660,16 @@
         "summary": "Actuator web endpoint \u0027health\u0027",
         "operationId": "health",
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -471,6 +701,16 @@
         "summary": "Actuator web endpoint \u0027health-path\u0027",
         "operationId": "health-path",
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -497,27 +737,64 @@
   },
   "components": {
     "schemas": {
+      "ErrorMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
       "CreateTaskDTO": {
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
           "name": {
             "type": "string"
           },
           "startDay": {
+            "pattern": "yyyy-MM-dd",
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "nullable": true
           },
           "startTime": {
             "pattern": "HH:mm",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "durationMin": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
+          },
+          "priority": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "IMPORTANT_URGENT",
+              "IMPORTANT",
+              "URGENT",
+              "NORMAL"
+            ]
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           }
         }
       },
       "TaskDTO": {
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -540,7 +817,21 @@
           },
           "durationMin": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "IMPORTANT_URGENT",
+              "IMPORTANT",
+              "URGENT",
+              "NORMAL"
+            ]
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -562,7 +853,31 @@
           },
           "durationMin": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
+          },
+          "priority": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "IMPORTANT_URGENT",
+              "IMPORTANT",
+              "URGENT",
+              "NORMAL"
+            ]
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        }
+      },
+      "ScheduleInfoDTO": {
+        "type": "object",
+        "properties": {
+          "isScheduled": {
+            "type": "boolean"
           }
         }
       },

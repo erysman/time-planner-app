@@ -17,9 +17,11 @@ import type {
   QueryKey
 } from '@tanstack/react-query'
 import type {
+  ErrorMessage,
   TaskDTO,
   GetTasksParams,
   CreateTaskDTO,
+  ScheduleInfoDTO,
   TaskUpdateDTO,
   Links200One,
   Links200Two,
@@ -66,7 +68,7 @@ export const getGetTasksDayOrderQueryKey = (day: string,) => {
   
 
     
-export const getGetTasksDayOrderQueryOptions = <TData = Awaited<ReturnType<typeof getTasksDayOrder>>, TError = unknown>(day: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTasksDayOrder>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetTasksDayOrderQueryOptions = <TData = Awaited<ReturnType<typeof getTasksDayOrder>>, TError = ErrorMessage>(day: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTasksDayOrder>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -85,12 +87,12 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetTasksDayOrderQueryResult = NonNullable<Awaited<ReturnType<typeof getTasksDayOrder>>>
-export type GetTasksDayOrderQueryError = unknown
+export type GetTasksDayOrderQueryError = ErrorMessage
 
 /**
  * @summary Get tasks order
  */
-export const useGetTasksDayOrder = <TData = Awaited<ReturnType<typeof getTasksDayOrder>>, TError = unknown>(
+export const useGetTasksDayOrder = <TData = Awaited<ReturnType<typeof getTasksDayOrder>>, TError = ErrorMessage>(
  day: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTasksDayOrder>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -124,7 +126,7 @@ export const updateTasksDayOrder = (
   
 
 
-export const getUpdateTasksDayOrderMutationOptions = <TError = unknown,
+export const getUpdateTasksDayOrderMutationOptions = <TError = ErrorMessage,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTasksDayOrder>>, TError,{day: string;data: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof updateTasksDayOrder>>, TError,{day: string;data: string[]}, TContext> => {
@@ -146,12 +148,12 @@ export const getUpdateTasksDayOrderMutationOptions = <TError = unknown,
 
     export type UpdateTasksDayOrderMutationResult = NonNullable<Awaited<ReturnType<typeof updateTasksDayOrder>>>
     export type UpdateTasksDayOrderMutationBody = string[]
-    export type UpdateTasksDayOrderMutationError = unknown
+    export type UpdateTasksDayOrderMutationError = ErrorMessage
 
     /**
  * @summary Update tasks order
  */
-export const useUpdateTasksDayOrder = <TError = unknown,
+export const useUpdateTasksDayOrder = <TError = ErrorMessage,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTasksDayOrder>>, TError,{day: string;data: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
 ) => {
@@ -185,7 +187,7 @@ export const getGetTasksQueryKey = (params: GetTasksParams,) => {
   
 
     
-export const getGetTasksQueryOptions = <TData = Awaited<ReturnType<typeof getTasks>>, TError = unknown>(params: GetTasksParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetTasksQueryOptions = <TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorMessage>(params: GetTasksParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -204,12 +206,12 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetTasksQueryResult = NonNullable<Awaited<ReturnType<typeof getTasks>>>
-export type GetTasksQueryError = unknown
+export type GetTasksQueryError = ErrorMessage
 
 /**
  * @summary Get tasks
  */
-export const useGetTasks = <TData = Awaited<ReturnType<typeof getTasks>>, TError = unknown>(
+export const useGetTasks = <TData = Awaited<ReturnType<typeof getTasks>>, TError = ErrorMessage>(
  params: GetTasksParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -239,7 +241,7 @@ export const createTask = (
   
 
 
-export const getCreateTaskMutationOptions = <TError = unknown,
+export const getCreateTaskMutationOptions = <TError = ErrorMessage,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTask>>, TError,{data: CreateTaskDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof createTask>>, TError,{data: CreateTaskDTO}, TContext> => {
@@ -261,14 +263,176 @@ export const getCreateTaskMutationOptions = <TError = unknown,
 
     export type CreateTaskMutationResult = NonNullable<Awaited<ReturnType<typeof createTask>>>
     export type CreateTaskMutationBody = CreateTaskDTO
-    export type CreateTaskMutationError = unknown
+    export type CreateTaskMutationError = ErrorMessage
 
-    export const useCreateTask = <TError = unknown,
+    export const useCreateTask = <TError = ErrorMessage,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTask>>, TError,{data: CreateTaskDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
       const mutationOptions = getCreateTaskMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+/**
+ * @summary Get day's auto schedule info
+ */
+export const getAutoScheduleInfo = (
+    day: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ScheduleInfoDTO>(
+      {url: `/day/${day}/tasks/schedule`, method: 'get', signal
+    },
+      options);
+    }
+  
+
+export const getGetAutoScheduleInfoQueryKey = (day: string,) => {
+    
+    return [`/day/${day}/tasks/schedule`] as const;
+    }
+  
+
+    
+export const getGetAutoScheduleInfoQueryOptions = <TData = Awaited<ReturnType<typeof getAutoScheduleInfo>>, TError = ErrorMessage>(day: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAutoScheduleInfo>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAutoScheduleInfoQueryKey(day);
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAutoScheduleInfo>>> = ({ signal }) => getAutoScheduleInfo(day, requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, enabled: !!(day), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAutoScheduleInfo>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAutoScheduleInfoQueryResult = NonNullable<Awaited<ReturnType<typeof getAutoScheduleInfo>>>
+export type GetAutoScheduleInfoQueryError = ErrorMessage
+
+/**
+ * @summary Get day's auto schedule info
+ */
+export const useGetAutoScheduleInfo = <TData = Awaited<ReturnType<typeof getAutoScheduleInfo>>, TError = ErrorMessage>(
+ day: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAutoScheduleInfo>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAutoScheduleInfoQueryOptions(day,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+/**
+ * @summary Run automatically assign startTime to all tasks assigned to selected day
+ */
+export const schedule = (
+    day: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/day/${day}/tasks/schedule`, method: 'post'
+    },
+      options);
+    }
+  
+
+
+export const getScheduleMutationOptions = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof schedule>>, TError,{day: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof schedule>>, TError,{day: string}, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof schedule>>, {day: string}> = (props) => {
+          const {day} = props ?? {};
+
+          return  schedule(day,requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type ScheduleMutationResult = NonNullable<Awaited<ReturnType<typeof schedule>>>
+    
+    export type ScheduleMutationError = ErrorMessage
+
+    /**
+ * @summary Run automatically assign startTime to all tasks assigned to selected day
+ */
+export const useSchedule = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof schedule>>, TError,{day: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getScheduleMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+export const revokeSchedule = (
+    day: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/day/${day}/tasks/schedule`, method: 'delete'
+    },
+      options);
+    }
+  
+
+
+export const getRevokeScheduleMutationOptions = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof revokeSchedule>>, TError,{day: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof revokeSchedule>>, TError,{day: string}, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof revokeSchedule>>, {day: string}> = (props) => {
+          const {day} = props ?? {};
+
+          return  revokeSchedule(day,requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type RevokeScheduleMutationResult = NonNullable<Awaited<ReturnType<typeof revokeSchedule>>>
+    
+    export type RevokeScheduleMutationError = ErrorMessage
+
+    export const useRevokeSchedule = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof revokeSchedule>>, TError,{day: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getRevokeScheduleMutationOptions(options);
      
       return useMutation(mutationOptions);
     }
@@ -293,7 +457,7 @@ export const getGetTaskQueryKey = (id: string,) => {
   
 
     
-export const getGetTaskQueryOptions = <TData = Awaited<ReturnType<typeof getTask>>, TError = unknown>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTask>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetTaskQueryOptions = <TData = Awaited<ReturnType<typeof getTask>>, TError = ErrorMessage>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTask>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -312,9 +476,9 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetTaskQueryResult = NonNullable<Awaited<ReturnType<typeof getTask>>>
-export type GetTaskQueryError = unknown
+export type GetTaskQueryError = ErrorMessage
 
-export const useGetTask = <TData = Awaited<ReturnType<typeof getTask>>, TError = unknown>(
+export const useGetTask = <TData = Awaited<ReturnType<typeof getTask>>, TError = ErrorMessage>(
  id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTask>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -342,7 +506,7 @@ export const deleteTask = (
   
 
 
-export const getDeleteTaskMutationOptions = <TError = unknown,
+export const getDeleteTaskMutationOptions = <TError = ErrorMessage,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTask>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteTask>>, TError,{id: string}, TContext> => {
@@ -364,9 +528,9 @@ export const getDeleteTaskMutationOptions = <TError = unknown,
 
     export type DeleteTaskMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTask>>>
     
-    export type DeleteTaskMutationError = unknown
+    export type DeleteTaskMutationError = ErrorMessage
 
-    export const useDeleteTask = <TError = unknown,
+    export const useDeleteTask = <TError = ErrorMessage,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTask>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ) => {
@@ -392,7 +556,7 @@ export const updateTask = (
   
 
 
-export const getUpdateTaskMutationOptions = <TError = unknown,
+export const getUpdateTaskMutationOptions = <TError = ErrorMessage,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext> => {
@@ -414,9 +578,9 @@ export const getUpdateTaskMutationOptions = <TError = unknown,
 
     export type UpdateTaskMutationResult = NonNullable<Awaited<ReturnType<typeof updateTask>>>
     export type UpdateTaskMutationBody = TaskUpdateDTO
-    export type UpdateTaskMutationError = unknown
+    export type UpdateTaskMutationError = ErrorMessage
 
-    export const useUpdateTask = <TError = unknown,
+    export const useUpdateTask = <TError = ErrorMessage,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
 ) => {
@@ -446,7 +610,7 @@ export const getValidateQueryKey = () => {
   
 
     
-export const getValidateQueryOptions = <TData = Awaited<ReturnType<typeof validate>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof validate>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getValidateQueryOptions = <TData = Awaited<ReturnType<typeof validate>>, TError = ErrorMessage>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof validate>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -465,9 +629,9 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type ValidateQueryResult = NonNullable<Awaited<ReturnType<typeof validate>>>
-export type ValidateQueryError = unknown
+export type ValidateQueryError = ErrorMessage
 
-export const useValidate = <TData = Awaited<ReturnType<typeof validate>>, TError = unknown>(
+export const useValidate = <TData = Awaited<ReturnType<typeof validate>>, TError = ErrorMessage>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof validate>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -505,7 +669,7 @@ export const getGetDayTasksQueryKey = (day: string,) => {
   
 
     
-export const getGetDayTasksQueryOptions = <TData = Awaited<ReturnType<typeof getDayTasks>>, TError = unknown>(day: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDayTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetDayTasksQueryOptions = <TData = Awaited<ReturnType<typeof getDayTasks>>, TError = ErrorMessage>(day: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDayTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -524,12 +688,12 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetDayTasksQueryResult = NonNullable<Awaited<ReturnType<typeof getDayTasks>>>
-export type GetDayTasksQueryError = unknown
+export type GetDayTasksQueryError = ErrorMessage
 
 /**
  * @summary Get day's tasks
  */
-export const useGetDayTasks = <TData = Awaited<ReturnType<typeof getDayTasks>>, TError = unknown>(
+export const useGetDayTasks = <TData = Awaited<ReturnType<typeof getDayTasks>>, TError = ErrorMessage>(
  day: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDayTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -567,7 +731,7 @@ export const getLinksQueryKey = () => {
   
 
     
-export const getLinksQueryOptions = <TData = Awaited<ReturnType<typeof links>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof links>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getLinksQueryOptions = <TData = Awaited<ReturnType<typeof links>>, TError = ErrorMessage>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof links>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -586,12 +750,12 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type LinksQueryResult = NonNullable<Awaited<ReturnType<typeof links>>>
-export type LinksQueryError = unknown
+export type LinksQueryError = ErrorMessage
 
 /**
  * @summary Actuator root web endpoint
  */
-export const useLinks = <TData = Awaited<ReturnType<typeof links>>, TError = unknown>(
+export const useLinks = <TData = Awaited<ReturnType<typeof links>>, TError = ErrorMessage>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof links>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -629,7 +793,7 @@ export const getHealthQueryKey = () => {
   
 
     
-export const getHealthQueryOptions = <TData = Awaited<ReturnType<typeof health>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof health>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getHealthQueryOptions = <TData = Awaited<ReturnType<typeof health>>, TError = ErrorMessage>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof health>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -648,12 +812,12 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type HealthQueryResult = NonNullable<Awaited<ReturnType<typeof health>>>
-export type HealthQueryError = unknown
+export type HealthQueryError = ErrorMessage
 
 /**
  * @summary Actuator web endpoint 'health'
  */
-export const useHealth = <TData = Awaited<ReturnType<typeof health>>, TError = unknown>(
+export const useHealth = <TData = Awaited<ReturnType<typeof health>>, TError = ErrorMessage>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof health>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -691,7 +855,7 @@ export const getHealthPathQueryKey = () => {
   
 
     
-export const getHealthPathQueryOptions = <TData = Awaited<ReturnType<typeof healthPath>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof healthPath>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getHealthPathQueryOptions = <TData = Awaited<ReturnType<typeof healthPath>>, TError = ErrorMessage>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof healthPath>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -710,12 +874,12 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type HealthPathQueryResult = NonNullable<Awaited<ReturnType<typeof healthPath>>>
-export type HealthPathQueryError = unknown
+export type HealthPathQueryError = ErrorMessage
 
 /**
  * @summary Actuator web endpoint 'health-path'
  */
-export const useHealthPath = <TData = Awaited<ReturnType<typeof healthPath>>, TError = unknown>(
+export const useHealthPath = <TData = Awaited<ReturnType<typeof healthPath>>, TError = ErrorMessage>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof healthPath>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {

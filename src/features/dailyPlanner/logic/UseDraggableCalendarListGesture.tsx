@@ -82,7 +82,6 @@ export const useDraggableCalendarListGesture = (
   const calendarScrollRef = useAnimatedRef<Animated.ScrollView>();
   const calendarScrollOffset = useScrollViewOffset(calendarScrollRef);
 
-  // const calendarScrollArea = useDragScrollArea();
   const calendarScrollArea = useDragScrollArea(
     listViewHeight,
     calendarViewHeight,
