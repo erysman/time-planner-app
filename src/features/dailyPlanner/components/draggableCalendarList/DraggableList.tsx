@@ -1,9 +1,10 @@
 import Animated, { SharedValue } from "react-native-reanimated";
 import { YStack } from "tamagui";
-import { MovableItem, MovingItemPointer } from "../../../../core/components/list/DragAndDropList";
 import { ITask } from "../../model/model";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
-import TasksListItem from "../../../../core/components/list/TasksListItem";
+import ListItem from "../../../../core/components/list/ListItem";
+import { MovableItem } from "../../../../core/components/list/MovableItem";
+import { MovingItemPointer } from "../../../../core/components/list/MovingItemPointer";
 
 interface DraggableListProps {
     listStyle: { height: number };
@@ -25,7 +26,7 @@ interface DraggableListProps {
     const renderItem = (id: string): React.ReactNode => {
       const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
       if (!task) return null;
-      return <TasksListItem name={task.name} isEdited={false} priority={task.priority}/>;
+      return <ListItem name={task.name} isEdited={false} priority={task.priority}/>;
     };
     return (
       <Animated.View style={[listStyle]}>

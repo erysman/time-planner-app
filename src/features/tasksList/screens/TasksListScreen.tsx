@@ -9,7 +9,7 @@ import {
   useUpdateTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
 import { DragAndDropList } from "../../../core/components/list/DragAndDropList";
-import TasksListItem from "../../../core/components/list/TasksListItem";
+import ListItem from "../../../core/components/list/ListItem";
 import { ITask } from "../../dailyPlanner/model/model";
 import { getRefreshInterval } from "../../../core/config/utils";
 
@@ -60,7 +60,7 @@ export const TasksListScreen = () => {
   const renderItem = (id: string) => {
     const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
     if (!task) return null;
-    return <TasksListItem name={task.name} isEdited={false} priority={task.priority}/>;
+    return <ListItem name={task.name} isEdited={false} priority={task.priority}/>;
   };
 
   return (

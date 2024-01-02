@@ -23,7 +23,7 @@ export interface CalendarTaskEditHandlerProps {
   TODO:
     * in editMode bottom circle should be animated
 */
-export const DailyCalendarTaskHeightEditHandler = ({
+export const CalendarTaskHeightEditHandler = ({
   isEdited,
   id,
   name,

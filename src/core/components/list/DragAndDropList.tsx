@@ -10,6 +10,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { Separator, YStack } from "tamagui";
 import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
+import { MovableItem } from "./MovableItem";
+import { MovingItem } from "./MovingItem";
+import { MovingItemPointer } from "./MovingItemPointer";
 
 type ListItem = { id: string };
 
@@ -174,99 +177,99 @@ export const useDragAndDropList = (
   };
 };
 
-export const MovableItem = (props: {
-  id: string;
-  itemHeight: number;
-  itemsOrder: SharedValue<string[]>;
-  renderItem: (id: string) => React.ReactNode;
-}) => {
-  const { id, itemHeight, itemsOrder, renderItem } = props;
-  const style = useAnimatedStyle(() => {
-    const index = itemsOrder.value.findIndex((currentId) => currentId === id);
-    if (index === -1) {
-      return {
-        display: "none",
-      };
-    }
-    return {
-      display: "flex",
-      top: withTiming(index * itemHeight, { duration: 100 }),
-    };
-  });
+// export const MovableItem = (props: {
+//   id: string;
+//   itemHeight: number;
+//   itemsOrder: SharedValue<string[]>;
+//   renderItem: (id: string) => React.ReactNode;
+// }) => {
+//   const { id, itemHeight, itemsOrder, renderItem } = props;
+//   const style = useAnimatedStyle(() => {
+//     const index = itemsOrder.value.findIndex((currentId) => currentId === id);
+//     if (index === -1) {
+//       return {
+//         display: "none",
+//       };
+//     }
+//     return {
+//       display: "flex",
+//       top: withTiming(index * itemHeight, { duration: 100 }),
+//     };
+//   });
 
-  return (
-    <Animated.View
-      style={[
-        { position: "absolute", width: "100%", height: itemHeight },
-        style,
-      ]}
-    >
-      {renderItem(id)}
-    </Animated.View>
-  );
-};
+//   return (
+//     <Animated.View
+//       style={[
+//         { position: "absolute", width: "100%", height: itemHeight },
+//         style,
+//       ]}
+//     >
+//       {renderItem(id)}
+//     </Animated.View>
+//   );
+// };
 
-export const MovingItem = (props: {
-  id: string | null;
-  itemHeight: number;
-  movingItemWindowTop: SharedValue<number>;
-  renderItem: (id: string) => React.ReactNode;
-}) => {
-  const { movingItemWindowTop, id, itemHeight, renderItem } = props;
+// export const MovingItem = (props: {
+//   id: string | null;
+//   itemHeight: number;
+//   movingItemWindowTop: SharedValue<number>;
+//   renderItem: (id: string) => React.ReactNode;
+// }) => {
+//   const { movingItemWindowTop, id, itemHeight, renderItem } = props;
 
-  const style = useAnimatedStyle(() => {
-    return {
-      top: movingItemWindowTop.value - itemHeight / 2,
-    };
-  });
+//   const style = useAnimatedStyle(() => {
+//     return {
+//       top: movingItemWindowTop.value - itemHeight / 2,
+//     };
+//   });
 
-  if (!id) {
-    return null;
-  }
+//   if (!id) {
+//     return null;
+//   }
 
-  return (
-    <Animated.View
-      style={[
-        {
-          position: "absolute",
-          width: "100%",
-          height: itemHeight,
-        },
-        style,
-      ]}
-    >
-      {renderItem(id)}
-    </Animated.View>
-  );
-};
+//   return (
+//     <Animated.View
+//       style={[
+//         {
+//           position: "absolute",
+//           width: "100%",
+//           height: itemHeight,
+//         },
+//         style,
+//       ]}
+//     >
+//       {renderItem(id)}
+//     </Animated.View>
+//   );
+// };
 
-export const AnimatedSeparator = Animated.createAnimatedComponent(Separator);
+// export const AnimatedSeparator = Animated.createAnimatedComponent(Separator);
 
-type MovingItemPointerProps = {
-  visible: boolean;
-  pointerIndex: SharedValue<number | null>;
-  itemHeight: number;
-};
+// type MovingItemPointerProps = {
+//   visible: boolean;
+//   pointerIndex: SharedValue<number | null>;
+//   itemHeight: number;
+// };
 
-export const MovingItemPointer = ({
-  visible,
-  pointerIndex,
-  itemHeight,
-}: MovingItemPointerProps) => {
-  const separatorStyle = useAnimatedStyle(() => ({
-    top: withTiming((pointerIndex.value || 0) * itemHeight, { duration: 50 }),
-    display: pointerIndex.value === null ? "none" : "flex",
-  }));
-  if (!visible) {
-    return null;
-  }
-  return (
-    <AnimatedSeparator
-      position={"absolute"}
-      borderBottomWidth={2}
-      width={"100%"}
-      borderColor={"red"}
-      style={[separatorStyle]}
-    />
-  );
-};
+// export const MovingItemPointer = ({
+//   visible,
+//   pointerIndex,
+//   itemHeight,
+// }: MovingItemPointerProps) => {
+//   const separatorStyle = useAnimatedStyle(() => ({
+//     top: withTiming((pointerIndex.value || 0) * itemHeight, { duration: 50 }),
+//     display: pointerIndex.value === null ? "none" : "flex",
+//   }));
+//   if (!visible) {
+//     return null;
+//   }
+//   return (
+//     <AnimatedSeparator
+//       position={"absolute"}
+//       borderBottomWidth={2}
+//       width={"100%"}
+//       borderColor={"red"}
+//       style={[separatorStyle]}
+//     />
+//   );
+// };

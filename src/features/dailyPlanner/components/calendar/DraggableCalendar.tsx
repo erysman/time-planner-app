@@ -13,8 +13,8 @@ import {
   TimeAndDurationMap,
 } from "../../model/model";
 import { CalendarCurrentTime } from "./CalendarCurrentTime";
-import { DailyCalendarSlots } from "./DailyCalendarSlots";
-import { DailyCalendarTasks } from "./DailyCalendarTasks";
+import { CalendarSlots } from "./CalendarSlots";
+import { CalendarTasks } from "./CalendarTasks";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import { range } from "lodash";
 
@@ -77,8 +77,8 @@ export const DraggableCalendar = ({
         animatedProps={animatedScrollProps}
       >
         <YStack backgroundColor="$backgroundFocus" height={calendarHeight}>
-          <DailyCalendarSlots />
-          <DailyCalendarTasks
+          <CalendarSlots />
+          <CalendarTasks
             editedTaskId={editedTaskId}
             tasks={tasks}
             pressedTaskId={movingItemId}

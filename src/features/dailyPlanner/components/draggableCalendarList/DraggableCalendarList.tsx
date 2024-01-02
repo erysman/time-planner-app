@@ -1,7 +1,7 @@
 import { GestureDetector } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { YStack } from "tamagui";
-import TasksListItem from "../../../../core/components/list/TasksListItem";
+import ListItem from "../../../../core/components/list/ListItem";
 import { DailyPlannerViewMode } from "../../logic/UseDailyPlannerViewMode";
 import { ITask } from "../../model/model";
 import { DraggableCalendar } from "../calendar/DraggableCalendar";

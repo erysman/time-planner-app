@@ -5,7 +5,7 @@ import { ExpoIcon } from "../ExpoIcon";
 import { PriorityIcons } from "../PriorityIcons";
 import { Priority } from "../../model/types";
 
-export interface TasksListItemProps extends StackProps {
+export interface ListItemProps extends StackProps {
   name: string;
   priority: Priority
   first?: boolean;
@@ -13,14 +13,14 @@ export interface TasksListItemProps extends StackProps {
   onPress?: () => void;
 }
 
-export default function TasksListItem({
+export default function ListItem({
   name,
   priority,
   first,
   isEdited,
   onPress,
   ...props
-}: TasksListItemProps) {
+}: ListItemProps) {
 
   return (
 

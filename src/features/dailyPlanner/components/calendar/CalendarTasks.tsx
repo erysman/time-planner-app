@@ -1,9 +1,9 @@
 import { YStack } from "tamagui";
 import { ITask, ITaskWithTime, TimeAndDuration, TimeAndDurationMap } from "../../model/model";
-import { DailyCalendarTask } from "./DailyCalendarTask";
+import { CalendarTask } from "./CalendarTask";
 import { SharedValue } from "react-native-reanimated";
 
-export interface DailyCalendarItemsProps {
+export interface CalendarItemsProps {
   tasks: ITask[];
   pressedTaskId: string | null;
   onTaskPress: (taskId: string) => void;
@@ -11,13 +11,13 @@ export interface DailyCalendarItemsProps {
   movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>
 }
 
-export const DailyCalendarTasks = ({
+export const CalendarTasks = ({
   tasks,
   pressedTaskId,
   onTaskPress,
   editedTaskId,
   movingTimeAndDurationOfTasks,
-}: DailyCalendarItemsProps) => {
+}: CalendarItemsProps) => {
   return (
     <YStack fullscreen position="absolute" paddingLeft={60} paddingRight={15}>
       {tasks.map((task) => {
@@ -25,7 +25,7 @@ export const DailyCalendarTasks = ({
           return null;
         }
         return (
-          <DailyCalendarTask
+          <CalendarTask
             key={task.id}
             isEdited={editedTaskId === task.id}
             task={task}
