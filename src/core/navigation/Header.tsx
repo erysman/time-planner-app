@@ -181,7 +181,7 @@ export const DatePickerTabHeader = () => {
         setViewMode("both");
       }}
       onDayPress={(newDay) => {
-        navigation.navigate(`/(tabs)/dailyPlanner/${newDay}`, { day: newDay });
+        navigation.navigate(`${newDay}`, { day: newDay });
       }}
       headerLeft={() => <>{viewModeProperties.changeViewModeButton}</>}
       headerRight={() => (
