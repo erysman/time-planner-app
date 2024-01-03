@@ -98,7 +98,7 @@ export const useScheduleDayTasks = (day: string) => {
   const stack = useMemo(
     () => (
       <XStack width={106} height={46} justifyContent="flex-end">
-        {schedule.isLoading ? (
+        {schedule.isLoading || unschedule.isLoading || isInfoLoading ? (
           spinner
         ) : scheduleInfo?.isScheduled ? (
           unscheduleButton
@@ -106,7 +106,7 @@ export const useScheduleDayTasks = (day: string) => {
         {scheduleButton}
       </XStack>
     ),
-    [schedule.isLoading, unscheduleButton, scheduleButton]
+    [schedule.isLoading, unschedule.isLoading, isInfoLoading, unscheduleButton, scheduleButton]
   );
 
   return {
