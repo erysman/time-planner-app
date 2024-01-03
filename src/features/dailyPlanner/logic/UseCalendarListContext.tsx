@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
 
 interface ICalendarListContext {
@@ -16,20 +16,22 @@ const CalendarListContext = React.createContext<ICalendarListContext>({
 });
 
 export const CalendarListDataProvider = (props: any) => {
-  const {screenHeight} = useScreenDimensions();
-  const itemHeight = 0.082 * screenHeight;
-  const minuteInPixels = itemHeight / 60;
-  const calendarStepHeight = minuteInPixels * 15;
-  const calendarHeight = 24 * itemHeight;
+  const { screenHeight } = useScreenDimensions();
+  const value = useMemo(() => {
+    const itemHeight = 0.082 * screenHeight;
+    const minuteInPixels = itemHeight / 60;
+    const calendarStepHeight = minuteInPixels * 15;
+    const calendarHeight = 24 * itemHeight;
+    return {
+      itemHeight,
+      minuteInPixels,
+      calendarStepHeight,
+      calendarHeight,
+    };
+  }, [screenHeight]);
+
   return (
-    <CalendarListContext.Provider
-      value={{
-        itemHeight,
-        minuteInPixels,
-        calendarStepHeight,
-        calendarHeight,
-      }}
-    >
+    <CalendarListContext.Provider value={value}>
       {props.children}
     </CalendarListContext.Provider>
   );

@@ -7,31 +7,14 @@ import {
 } from "./UseDailyPlannerViewMode";
 import { ITask, ITaskWithTime } from "../model/model";
 import { useDraggableCalendarListGesture } from "./UseDraggableCalendarListGesture";
+import { useDailyPlannerContext } from "./UseDailyPlannerContext";
 
 export const useDraggableCalendarList = (
   day: string,
-  viewMode: DailyPlannerViewMode,
   itemsOrder: string[],
   tasks: ITask[]
 ) => {
-  const [layout, setLayout] = useState({ height: 1, width: 0 });
-  const {
-    calendarViewHeight,
-    listViewHeight,
-  } = useDimensionsByViewMode(viewMode, layout);
-  const calendarStyle = useAnimatedStyle(() => ({
-    height: withTiming(calendarViewHeight.value),
-  }));
-  const listStyle = useAnimatedStyle(() => ({
-    height: withTiming(listViewHeight.value),
-  }));
-
-  const onLayoutChange = (e: LayoutChangeEvent) => {
-    setLayout({
-      height: e.nativeEvent.layout.height,
-      width: e.nativeEvent.layout.width,
-    });
-  };
+  const {dimensions, styles} = useDailyPlannerContext();
   
   const {
     dragGesture,
@@ -47,8 +30,8 @@ export const useDraggableCalendarList = (
   } = useDraggableCalendarListGesture(
     day,
     itemsOrder,
-    calendarViewHeight,
-    listViewHeight,
+    dimensions.calendarViewHeight,
+    dimensions.listViewHeight,
     tasks
   );
 
@@ -70,11 +53,7 @@ export const useDraggableCalendarList = (
     calendarScrollRef,
     calendarScrollDuration,
     calendarScrollTargetY,
-    layout: {
-      onChange: onLayoutChange,
-      listStyle,
-      calendarStyle,
-    },
+    styles,
     movingTask,
   };
 };

@@ -30,8 +30,8 @@ export default function TabLayout() {
           options={{
             title: "",
             tabBarLabel: "Daily Plan",
-            headerShown: true,
-            header: (props) => <DatePickerTabHeader {...props}/>, 
+            // headerShown: false,
+            // header: (props) => <DatePickerTabHeader {...props}/>, 
             tabBarIcon: (props) => {
               return <MaterialIcons name={"today"} {...props} />;
             },

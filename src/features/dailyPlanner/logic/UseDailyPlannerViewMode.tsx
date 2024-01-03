@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -14,27 +14,28 @@ export type DailyPlannerViewModeProperties = {
   viewMode: DailyPlannerViewMode;
   changeViewModeButton: JSX.Element;
   setViewMode: React.Dispatch<React.SetStateAction<DailyPlannerViewMode>>;
-}
+};
 
 export const useDailyPlannerViewMode = (): DailyPlannerViewModeProperties => {
   const [viewMode, setViewMode] = useState<DailyPlannerViewMode>("both");
 
-  function getNextViewMode(
-    current: DailyPlannerViewMode
-  ): DailyPlannerViewMode {
-    switch (current) {
-      case "both":
-        return "calendar";
-      case "calendar":
-        return "list";
-      case "list":
-        return "both";
-      default:
-        return "both";
-    }
-  }
+  const getNextViewMode = useCallback(
+    (current: DailyPlannerViewMode): DailyPlannerViewMode => {
+      switch (current) {
+        case "both":
+          return "calendar";
+        case "calendar":
+          return "list";
+        case "list":
+          return "both";
+        default:
+          return "both";
+      }
+    },
+    []
+  );
 
-  function getIconForViewMode(viewMode: DailyPlannerViewMode) {
+  const getIconForViewMode = useCallback((viewMode: DailyPlannerViewMode) => {
     switch (viewMode) {
       case "both":
         return "calendar-minus";
@@ -43,18 +44,24 @@ export const useDailyPlannerViewMode = (): DailyPlannerViewModeProperties => {
       case "list":
         return "calendar-export";
     }
-  }
+  }, []);
+
+  const onPress = useCallback(
+    () => setViewMode((prev) => getNextViewMode(prev)),
+    [setViewMode, getNextViewMode]
+  );
+
+  const name = useMemo(
+    () => getIconForViewMode(getNextViewMode(viewMode)),
+    [getIconForViewMode, getNextViewMode, viewMode]
+  );
 
   const changeViewModeButton: JSX.Element = useMemo(
     () => (
-      <Button
-      paddingHorizontal={12}
-        onPress={() => setViewMode((prev) => getNextViewMode(prev))}
-        variant="outlined"
-      >
+      <Button paddingHorizontal={12} onPress={onPress} variant="outlined">
         <ExpoIcon
           iconSet="MaterialCommunityIcons"
-          name={getIconForViewMode(getNextViewMode(viewMode))}
+          name={name}
           size={24}
           color="color"
         />
@@ -66,37 +73,27 @@ export const useDailyPlannerViewMode = (): DailyPlannerViewModeProperties => {
   return { viewMode, changeViewModeButton, setViewMode };
 };
 
-export const useHeightByViewMode = (
+export const useDimensionsByViewMode = (
   viewMode: DailyPlannerViewMode,
-  getHeight: (viewMode: DailyPlannerViewMode) => DimensionInPercent
+  height: number
 ) => {
-  const height = useSharedValue(getHeight(viewMode));
-  useEffect(() => {
-    height.value = withTiming(getHeight(viewMode));
-  }, [viewMode]);
-  const style = useAnimatedStyle(() => ({
-    height: height.value,
-  }));
-
-  return style;
-};
-
-export const useDimensionsByViewMode = (viewMode: DailyPlannerViewMode, layout: Layout) => {
-  const {height} = layout;
-  const [calendarProportion, listProportion] = getViewsProportions(viewMode);
+  const [calendarProportion, listProportion] = useMemo(
+    () => getViewsProportions(viewMode),
+    [viewMode]
+  );
   const listViewHeight = useSharedValue(height * listProportion);
   const calendarViewHeight = useSharedValue(height * calendarProportion);
 
   useEffect(() => {
     listViewHeight.value = height * listProportion;
     calendarViewHeight.value = height * calendarProportion;
-  }, [viewMode, layout.height]);
+  }, [viewMode, height]);
 
   return {
     calendarViewHeight,
     listViewHeight,
-  }
-} 
+  };
+};
 
 function getViewsProportions(viewMode: DailyPlannerViewMode): [number, number] {
   switch (viewMode) {

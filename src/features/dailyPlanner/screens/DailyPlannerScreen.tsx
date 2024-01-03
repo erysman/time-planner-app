@@ -1,4 +1,4 @@
-import { H6, Spinner } from "tamagui";
+import { H6, Spinner, YStack } from "tamagui";
 import {
   useGetDayTasks,
   useGetTasksDayOrder,
@@ -8,16 +8,16 @@ import { DraggableCalendarList } from "../components/draggableCalendarList/Dragg
 import { DailyPlannerViewMode } from "../logic/UseDailyPlannerViewMode";
 import { ITask } from "../model/model";
 import { CalendarListDataProvider } from "../logic/UseCalendarListContext";
+import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
 
 export interface DailyPlannerScreenProps {
   day: string;
-  viewMode: DailyPlannerViewMode;
 }
 
 export const DailyPlannerScreen = ({
   day,
-  viewMode,
-}: DailyPlannerScreenProps) => {
+}:
+DailyPlannerScreenProps) => {
   const {
     data: tasks,
     isError,
@@ -30,6 +30,7 @@ export const DailyPlannerScreen = ({
   } = useGetTasksDayOrder(day, {
     query: { refetchInterval: getRefreshInterval() },
   });
+  const { screenHeight } = useScreenDimensions();
 
   if (isLoading || isLoadingOrder) {
     return <Spinner />; //TODO: print skeleton, not Spinner
@@ -39,13 +40,14 @@ export const DailyPlannerScreen = ({
   }
 
   return (
-    <CalendarListDataProvider>
-      <DraggableCalendarList
-        viewMode={viewMode}
-        day={day}
-        tasks={tasks as ITask[]}
-        tasksOrder={tasksOrder}
-      />
-    </CalendarListDataProvider>
+    <YStack h={screenHeight} w={"100%"}>
+      <CalendarListDataProvider>
+        <DraggableCalendarList
+          day={day}
+          tasks={tasks as ITask[]}
+          tasksOrder={tasksOrder}
+        />
+      </CalendarListDataProvider>
+    </YStack>
   );
 };

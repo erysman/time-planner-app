@@ -25,7 +25,7 @@ export const ScreenDimensionsProvider = (props: any) => {
     const {top: topInset} = useSafeAreaInsets();
     
 
-    const headerHeight = 60;
+    const headerHeight = 75;
     const headerTotalHeight = headerHeight + topInset;
     const tabBarHeight = height * 0.1;
     const screenHeight = height - headerTotalHeight - tabBarHeight;

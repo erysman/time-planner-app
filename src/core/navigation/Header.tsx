@@ -1,6 +1,6 @@
 import { getHeaderTitle } from "@react-navigation/elements";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Animated, {
   Layout,
   useAnimatedStyle,
@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, SizableText, XStack, YStack } from "tamagui";
+import { Button, SizableText, XStack, YStack, useTheme } from "tamagui";
 import { DatePicker } from "../components/calendar/DatePicker";
 import { transform } from "@babel/core";
 import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
@@ -64,9 +64,11 @@ export const Header = ({ title, headerLeft, headerRight }: IHeaderProps) => {
       width={"100%"}
       backgroundColor={"$background"}
       mt={topInset}
-      height={headerHeight}
+      height={headerHeight-topInset}
       alignItems={"center"}
       justifyContent={"center"}
+      borderBottomWidth={1}
+      borderColor={"$backgroundFocus"}
     >
       <XStack flexGrow={1} flexShrink={1}>
         {headerLeft && headerLeft()}
@@ -104,20 +106,30 @@ export const DatePickerStackHeader = ({
   initialDay,
 }: DatePickerStackHeaderProps) => {
   const { topInset, headerHeight, headerTotalHeight } = useScreenDimensions();
-  const datePickerHeight = 330;
+  const datePickerHeight = 330 + headerHeight;
 
   const [open, setOpen] = useState(false);
-  const height = useSharedValue(0);
+  const height = useSharedValue(headerHeight);
+  const theme = useTheme()
+  const backgroundFocus = theme.backgroundFocus.get()
 
   return (
-    <YStack>
+    <Animated.View
+      style={[
+        {
+          height: headerHeight,
+          overflow: "hidden",
+          display: "flex",
+          borderBottomWidth: 1,
+          borderColor: backgroundFocus
+        },
+        { height },
+      ]}
+    >
       <XStack
-        width={"100%"}
         backgroundColor={"$background"}
         mt={topInset}
-        height={headerHeight}
-        alignItems={"center"}
-        justifyContent={"center"}
+        alignItems={"flex-start"}
       >
         <XStack flexGrow={1} flexShrink={1}>
           {headerLeft && headerLeft()}
@@ -129,7 +141,7 @@ export const DatePickerStackHeader = ({
               setOpen((prev) => {
                 if (prev) {
                   onClose();
-                  height.value = withTiming(0);
+                  height.value = withTiming(headerHeight);
                 } else {
                   onOpen();
                   height.value = withTiming(datePickerHeight);
@@ -147,28 +159,29 @@ export const DatePickerStackHeader = ({
           {headerRight && headerRight()}
         </XStack>
       </XStack>
-
-      <Animated.View style={[{ height: 0, overflow: "hidden" }, { height }]}>
-        <DatePicker onDayPress={onDayPress} initialDay={initialDay} />
-      </Animated.View>
-    </YStack>
+      <DatePicker onDayPress={onDayPress} initialDay={initialDay} />
+    </Animated.View>
   );
 };
 
-export const DatePickerTabHeader = () => {
-  const { selectedDay: day, viewModeProperties } = useDailyPlannerContext();
-  console.log("DatePickerTabHeader", day);
+export const DatePickerTabHeader = (props: { day: string }) => {
+  const { day } = props;
+  const { viewModeProperties } = useDailyPlannerContext();
   const navigation = useNavigation();
-  const isDateValid = day && dayjs(day, DAY_FORMAT).isValid();
-  const {stack} = useScheduleDayTasks(day)
-
-  if (!viewModeProperties) return;
+  const { stack } = useScheduleDayTasks(day);
   const { setViewMode } = viewModeProperties;
-  if (!isDateValid) return;
-  const selectedDay = dayjs(day, DAY_FORMAT);
-  const isCurrentYear: boolean = selectedDay.year() === dayjs().year();
-  const title = selectedDay.format(
-    isCurrentYear ? DAY_SHORT_READ_FORMAT : DAY_LONG_READ_FORMAT
+  const title = useMemo(() => {
+    const selectedDay = dayjs(day, DAY_FORMAT);
+    const isCurrentYear: boolean = selectedDay.year() === dayjs().year();
+    return selectedDay.format(
+      isCurrentYear ? DAY_SHORT_READ_FORMAT : DAY_LONG_READ_FORMAT
+    );
+  }, [day]);
+  const onDayPress = useCallback(
+    (newDay: string) => {
+      navigation.navigate(`${newDay}`, { day: newDay });
+    },
+    [navigation]
   );
   return (
     <DatePickerStackHeader
@@ -180,15 +193,9 @@ export const DatePickerTabHeader = () => {
       onClose={() => {
         setViewMode("both");
       }}
-      onDayPress={(newDay) => {
-        navigation.navigate(`${newDay}`, { day: newDay });
-      }}
+      onDayPress={onDayPress}
       headerLeft={() => <>{viewModeProperties.changeViewModeButton}</>}
-      headerRight={() => (
-        <>
-          {stack}
-        </>
-      )}
+      headerRight={() => <>{stack}</>}
     />
   );
 };

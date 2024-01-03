@@ -11,14 +11,12 @@ import { useDraggableCalendarList } from "../../logic/UseDraggableCalendarList";
 
 export interface DraggableCalendarListProps {
   day: string;
-  viewMode: DailyPlannerViewMode;
   tasks: ITask[];
   tasksOrder: string[];
 }
 
 export const DraggableCalendarList = ({
   day,
-  viewMode,
   tasks,
   tasksOrder,
 }: DraggableCalendarListProps) => {
@@ -28,12 +26,12 @@ export const DraggableCalendarList = ({
     calendarScrollRef,
     calendarScrollDuration,
     calendarScrollTargetY,
-    layout: { calendarStyle, listStyle, onChange },
+    styles: { calendarStyle, listStyle },
     movingTask,
-  } = useDraggableCalendarList(day, viewMode, tasksOrder, tasks);
+  } = useDraggableCalendarList(day, tasksOrder, tasks);
 
   return (
-    <YStack fullscreen backgroundColor={"$background"} onLayout={onChange}>
+    <YStack fullscreen backgroundColor={"$background"}>
       <GestureDetector gesture={dragGesture}>
         <Animated.View
           collapsable={false}

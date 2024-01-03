@@ -4,35 +4,58 @@ import {
   DailyPlannerViewMode,
   DailyPlannerViewModeProperties,
   useDailyPlannerViewMode,
+  useDimensionsByViewMode,
 } from "./UseDailyPlannerViewMode";
 import dayjs from "dayjs";
 import { DAY_FORMAT } from "../../../../config/constants";
 import { useNavigationState } from "@react-navigation/native";
+import { useAnimatedStyle, withTiming } from "react-native-reanimated";
 
 interface IDailyPlannerContext {
-  selectedDay: string;
-  setSelectedDay: React.Dispatch<React.SetStateAction<string>>;
-  viewModeProperties: DailyPlannerViewModeProperties | null;
+  viewModeProperties: DailyPlannerViewModeProperties;
+  dimensions: any;
+  styles: any;
 }
 
 const DailyPlannerContext = React.createContext<IDailyPlannerContext>({
-  selectedDay: dayjs().format(DAY_FORMAT),
-  setSelectedDay: () => {},
-  viewModeProperties: null,
+  viewModeProperties: {
+    changeViewModeButton: <></>,
+    viewMode: "both",
+    setViewMode: () => {},
+  },
+  dimensions: null,
+  styles: null,
 });
 
 export const DailyPlannerContextProvider = (props: any) => {
   const { changeViewModeButton, viewMode, setViewMode } =
     useDailyPlannerViewMode();
 
-  const [selectedDay, setSelectedDay] = useState(dayjs().format(DAY_FORMAT));
+  const { screenHeight } = useScreenDimensions();
+  const { calendarViewHeight, listViewHeight } = useDimensionsByViewMode(
+    viewMode,
+    screenHeight
+  );
+
+  const calendarStyle = useAnimatedStyle(() => ({
+    height: withTiming(calendarViewHeight.value),
+  }));
+  const listStyle = useAnimatedStyle(() => ({
+    height: withTiming(listViewHeight.value),
+  }));
 
   return (
     <DailyPlannerContext.Provider
       value={{
         viewModeProperties: { changeViewModeButton, viewMode, setViewMode },
-        selectedDay,
-        setSelectedDay,
+        dimensions: {
+          calendarViewHeight,
+          listViewHeight,
+        },
+        styles: {
+          listStyle,
+          calendarStyle,
+        },
       }}
     >
       {props.children}

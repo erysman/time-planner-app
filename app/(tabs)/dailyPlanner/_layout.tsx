@@ -48,8 +48,9 @@ export default function DailyPlannerLayout() {
   const today = dayjs();
   const days = useMemo(
     () => [
-      ...getAllDaysOfYearSince(today.subtract(1, "year").startOf("year")),
-      ...getAllDaysOfYearSince(today.startOf("year")),
+      // ...getAllDaysOfYearSince(today.subtract(1, "year").startOf("year")),
+      // ...getAllDaysOfYearSince(today.startOf("year")),
+      ...getAllDaysOfYearSince(today),
       ...getAllDaysOfYearSince(dayjs().add(1, "year").startOf("year")),
     ],
     []
@@ -62,7 +63,7 @@ export default function DailyPlannerLayout() {
           key={day}
           name={day}
           component={DailyPlanner}
-          options={{ tabBarLabel: "index", lazy: true, lazyPreloadDistance: 2 }}
+          options={{ tabBarLabel: "index", lazy: true, lazyPreloadDistance: 0 }}
         />
       );
     });

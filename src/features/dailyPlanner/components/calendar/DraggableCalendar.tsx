@@ -39,7 +39,7 @@ export const DraggableCalendar = ({
   scrollTargetY,
   scrollDuration,
 }: DraggableCalendarProps) => {
-  const { calendarHeight, itemHeight } = useDraggableCalendarListContext();
+  const { calendarHeight } = useDraggableCalendarListContext();
   const [editedTaskId, setEditedTaskId] = useState<string | null>(null);
   const onTaskPress = (taskId: string) => {
     setEditedTaskId((prevTaskId) => {
