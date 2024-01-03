@@ -1,12 +1,11 @@
 import Animated, {
   SharedValue,
-  useAnimatedStyle
+  useAnimatedStyle,
 } from "react-native-reanimated";
 import ListItem from "../../../../core/components/list/ListItem";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import { IProject, ITask, TimeAndDurationMap } from "../../model/model";
 import { MovingCalendarTask } from "../calendar/MovingCalendarTask";
-
 
 export const MovingCalendarListItem = (props: {
   viewY: SharedValue<number>;
@@ -59,7 +58,7 @@ export const MovingCalendarListItem = (props: {
         marginLeft: 60,
         marginRight: 10,
         top: viewY.value,
-        height: 'auto'
+        height: "auto",
       };
     }
   });
@@ -71,7 +70,13 @@ export const MovingCalendarListItem = (props: {
   return (
     <Animated.View style={[outerStyle]}>
       <Animated.View style={[listStyle]}>
-        <ListItem name={task.name} isEdited={false} priority={task.priority} projectColor={project?.color}/>
+        <ListItem
+          name={task.name}
+          isEdited={false}
+          priority={task.priority}
+          durationMin={task.durationMin}
+          projectColor={project?.color}
+        />
       </Animated.View>
       <Animated.View style={[calendarStyle]}>
         <MovingCalendarTask

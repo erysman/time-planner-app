@@ -25,7 +25,9 @@ export const TasksListScreen = () => {
     data: tasksOrder,
     isError: isErrorOrder,
     isLoading: isLoadingOrder,
-  } = useGetTasksDayOrder(day, { query: { refetchInterval: getRefreshInterval() } });
+  } = useGetTasksDayOrder(day, {
+    query: { refetchInterval: getRefreshInterval() },
+  });
   const queryClient = useQueryClient();
   const updateTasksDayOrder = useUpdateTasksDayOrder({
     mutation: {
@@ -67,7 +69,17 @@ export const TasksListScreen = () => {
   const renderItem = (id: string) => {
     const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
     if (!task) return null;
-    return <ListItem name={task.name} isEdited={false} priority={task.priority} projectColor={(projects as IProject[]).find(p => p.id === task.projectId)?.color}/>;
+    return (
+      <ListItem
+        name={task.name}
+        isEdited={false}
+        priority={task.priority}
+        durationMin={task.durationMin}
+        projectColor={
+          (projects as IProject[]).find((p) => p.id === task.projectId)?.color
+        }
+      />
+    );
   };
 
   return (

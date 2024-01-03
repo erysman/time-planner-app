@@ -26,16 +26,30 @@ export const DraggableList = ({
   movingItemId,
 }: DraggableListProps) => {
   const { itemHeight } = useDraggableCalendarListContext();
-  const renderItem = useCallback((id: string): React.ReactNode => {
-    const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
-    if (!task) return null;
-    return (
-      <ListItem name={task.name} isEdited={false} priority={task.priority} projectColor={projects.find(p => p.id === task.projectId)?.color} />
-    );
-  }, [tasks]);
+  const renderItem = useCallback(
+    (id: string): React.ReactNode => {
+      const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
+      if (!task) return null;
+      return (
+        <ListItem
+          name={task.name}
+          isEdited={false}
+          priority={task.priority}
+          durationMin={task.durationMin}
+          projectColor={projects.find((p) => p.id === task.projectId)?.color}
+        />
+      );
+    },
+    [tasks]
+  );
   return (
     <Animated.View style={[listStyle]}>
-      <YStack w={"100%"} h={"100%"} borderBottomWidth={1} borderColor={"$backgroundFocus"}>
+      <YStack
+        w={"100%"}
+        h={"100%"}
+        borderBottomWidth={1}
+        borderColor={"$backgroundFocus"}
+      >
         {tasks.map((task) => {
           return (
             <MovableItem

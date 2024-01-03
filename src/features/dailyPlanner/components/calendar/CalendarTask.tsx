@@ -1,18 +1,11 @@
 import Animated, {
   SharedValue,
-  useAnimatedStyle
+  useAnimatedStyle,
 } from "react-native-reanimated";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
-import {
-  mapDurationToHeight
-} from "../../logic/utils";
-import {
-  ITask,
-  TimeAndDurationMap
-} from "../../model/model";
-import {
-  CalendarTaskHeightEditHandler
-} from "./CalendarTaskHeightEditHandler";
+import { mapDurationToHeight } from "../../logic/utils";
+import { ITask, TimeAndDurationMap } from "../../model/model";
+import { CalendarTaskHeightEditHandler } from "./CalendarTaskHeightEditHandler";
 import { CalendarTaskView } from "./CalendarTaskView";
 
 export interface CalendarTaskProps {
@@ -28,7 +21,7 @@ export const CalendarTask = ({
   isEdited,
   onPress,
   movingTimeAndDurationOfTasks,
-  projectColor
+  projectColor,
 }: CalendarTaskProps) => {
   const { minuteInPixels, itemHeight } = useDraggableCalendarListContext();
 

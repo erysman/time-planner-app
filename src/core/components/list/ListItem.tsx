@@ -1,5 +1,6 @@
 import React from "react";
 import { Checkbox, SizableText, StackProps, XStack } from "tamagui";
+import { minutesToShortTime } from "../../../features/dailyPlanner/logic/utils";
 import { Priority } from "../../model/types";
 import { ExpoIcon } from "../ExpoIcon";
 import { PriorityIcons } from "../PriorityIcons";
@@ -10,11 +11,13 @@ export interface ListItemProps extends StackProps {
   first?: boolean;
   isEdited: boolean;
   onPress?: () => void;
-  projectColor? : string;
+  projectColor?: string;
+  durationMin?: number;
 }
 
 export default function ListItem({
   name,
+  durationMin,
   priority,
   first,
   isEdited,
@@ -60,6 +63,11 @@ export default function ListItem({
           {name}
         </SizableText>
         <PriorityIcons priority={priority} />
+        {durationMin ? (
+          <SizableText size={"$3"} marginLeft={8} marginRight={16}>
+            {minutesToShortTime(durationMin)}
+          </SizableText>
+        ) : null}
       </XStack>
     </XStack>
   );

@@ -75,3 +75,15 @@ export function minutesToTime(minutes: number) {
   // Combine hours and minutes in the "HH:mm" format
   return `${formattedHours}:${formattedMinutes}`;
 }
+
+export function minutesToShortTime(minutes: number) {
+  'worklet'
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  // Ensure leading zeros for single-digit minutes
+  const formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : `${remainingMinutes}`;
+
+  // Combine hours and minutes in the "HH:mm" format
+  return `${hours}:${formattedMinutes}`;
+}

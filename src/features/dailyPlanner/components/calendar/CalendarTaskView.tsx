@@ -7,6 +7,7 @@ import { XStack, SizableText } from "tamagui";
 import { PriorityIcons } from "../../../../core/components/PriorityIcons";
 import { Priority } from "../../../../core/model/types";
 import { useAnimatedHeight } from "./CalendarTaskHeightEditHandler";
+import { minutesToTime } from "../../logic/utils";
 
 interface CalendarTaskViewProps {
   id: string;
@@ -90,9 +91,6 @@ export const CalendarTaskView = ({
           {name}
         </AnimatedSizableText>
         <PriorityIcons priority={priority} />
-        {/* <SizableText size={"$3"} marginHorizontal={16}>
-          Important
-        </SizableText> */}
       </AnimatedXStack>
     </XStack>
   );
