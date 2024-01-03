@@ -13,7 +13,7 @@ export const useDragScrollArea = (
   scrollViewContentHeight: number,
   scrollOffset: SharedValue<number>
 ) => {
-  const areaHeight = viewHeight.value * 0.1;
+  const areaHeight = viewHeight.value * 0.15;
   const upAreaBaseBoundries = {
     top: viewTop.value,
     bottom: viewTop.value + areaHeight,
@@ -61,9 +61,11 @@ export const useDragScrollArea = (
 
   function cancelScroll() {
     "worklet";
+    console.log(`cancel scroll!`);
     currentScrollDirection.value = null;
     activeScrollDirection.value = null;
     scrollTargetY.value = null;
+    console.log("isScrollActive", isScrollActive.value)
   }
 
   function activateScroll() {
@@ -77,6 +79,7 @@ export const useDragScrollArea = (
     );
     scrollDuration.value = (distance / scrollVelocity) * 1000;
     scrollTargetY.value = targetPosition;
+    console.log("isScrollActive", isScrollActive.value)
   }
 
   function activateScrollIfItemInsideScrollArea(

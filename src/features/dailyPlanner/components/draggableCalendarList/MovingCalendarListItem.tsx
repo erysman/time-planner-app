@@ -50,6 +50,7 @@ export const MovingCalendarListItem = (props: {
         marginRight: 0,
         height: itemHeight,
         top: viewY.value,
+        opacity: 0.7
       };
     } else {
       return {
@@ -59,6 +60,7 @@ export const MovingCalendarListItem = (props: {
         marginRight: 10,
         top: viewY.value,
         height: "auto",
+        opacity: 0.7
       };
     }
   });
