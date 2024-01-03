@@ -8,12 +8,14 @@ import { useDraggableCalendarListContext } from "../../logic/UseCalendarListCont
 export interface MovingCalendarTaskProps {
     minuteInPixels: number;
     task: ITask;
+    projectColor?: string;
     movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
   }
   
   export const MovingCalendarTask = ({
     minuteInPixels,
     task,
+    projectColor,
     movingTimeAndDurationOfTasks,
   }: MovingCalendarTaskProps) => {
     return (
@@ -30,6 +32,7 @@ export interface MovingCalendarTaskProps {
           name={task.name}
           isEdited={true}
           priority={task.priority}
+          projectColor={projectColor}
         />
       </CalendarTaskHeightEditHandler>
     );

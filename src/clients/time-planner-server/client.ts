@@ -21,8 +21,11 @@ import type {
   TaskDTO,
   GetTasksParams,
   CreateTaskDTO,
+  ProjectDTO,
+  CreateProjectDTO,
   ScheduleInfoDTO,
-  TaskUpdateDTO,
+  UpdateTaskDTO,
+  UpdateProjectDTO,
   Links200One,
   Links200Two,
   Links200Three,
@@ -271,6 +274,117 @@ export const getCreateTaskMutationOptions = <TError = ErrorMessage,
 ) => {
     
       const mutationOptions = getCreateTaskMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+/**
+ * @summary Get projects
+ */
+export const getProjects = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ProjectDTO[]>(
+      {url: `/projects`, method: 'get', signal
+    },
+      options);
+    }
+  
+
+export const getGetProjectsQueryKey = () => {
+    
+    return [`/projects`] as const;
+    }
+  
+
+    
+export const getGetProjectsQueryOptions = <TData = Awaited<ReturnType<typeof getProjects>>, TError = ErrorMessage>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProjects>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProjectsQueryKey();
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProjects>>> = ({ signal }) => getProjects(requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProjects>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetProjectsQueryResult = NonNullable<Awaited<ReturnType<typeof getProjects>>>
+export type GetProjectsQueryError = ErrorMessage
+
+/**
+ * @summary Get projects
+ */
+export const useGetProjects = <TData = Awaited<ReturnType<typeof getProjects>>, TError = ErrorMessage>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProjects>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetProjectsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+export const createProject = (
+    createProjectDTO: CreateProjectDTO,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ProjectDTO>(
+      {url: `/projects`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createProjectDTO
+    },
+      options);
+    }
+  
+
+
+export const getCreateProjectMutationOptions = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProject>>, TError,{data: CreateProjectDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createProject>>, TError,{data: CreateProjectDTO}, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createProject>>, {data: CreateProjectDTO}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createProject(data,requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type CreateProjectMutationResult = NonNullable<Awaited<ReturnType<typeof createProject>>>
+    export type CreateProjectMutationBody = CreateProjectDTO
+    export type CreateProjectMutationError = ErrorMessage
+
+    export const useCreateProject = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProject>>, TError,{data: CreateProjectDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getCreateProjectMutationOptions(options);
      
       return useMutation(mutationOptions);
     }
@@ -542,14 +656,14 @@ export const getDeleteTaskMutationOptions = <TError = ErrorMessage,
     
 export const updateTask = (
     id: string,
-    taskUpdateDTO: TaskUpdateDTO,
+    updateTaskDTO: UpdateTaskDTO,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<TaskDTO>(
       {url: `/tasks/${id}`, method: 'patch',
       headers: {'Content-Type': 'application/json', },
-      data: taskUpdateDTO
+      data: updateTaskDTO
     },
       options);
     }
@@ -558,14 +672,14 @@ export const updateTask = (
 
 export const getUpdateTaskMutationOptions = <TError = ErrorMessage,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: UpdateTaskDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: UpdateTaskDTO}, TContext> => {
  const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTask>>, {id: string;data: TaskUpdateDTO}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTask>>, {id: string;data: UpdateTaskDTO}> = (props) => {
           const {id,data} = props ?? {};
 
           return  updateTask(id,data,requestOptions)
@@ -577,15 +691,168 @@ export const getUpdateTaskMutationOptions = <TError = ErrorMessage,
    return  { mutationFn, ...mutationOptions }}
 
     export type UpdateTaskMutationResult = NonNullable<Awaited<ReturnType<typeof updateTask>>>
-    export type UpdateTaskMutationBody = TaskUpdateDTO
+    export type UpdateTaskMutationBody = UpdateTaskDTO
     export type UpdateTaskMutationError = ErrorMessage
 
     export const useUpdateTask = <TError = ErrorMessage,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: TaskUpdateDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTask>>, TError,{id: string;data: UpdateTaskDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
 ) => {
     
       const mutationOptions = getUpdateTaskMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+export const getProject = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ProjectDTO>(
+      {url: `/projects/${id}`, method: 'get', signal
+    },
+      options);
+    }
+  
+
+export const getGetProjectQueryKey = (id: string,) => {
+    
+    return [`/projects/${id}`] as const;
+    }
+  
+
+    
+export const getGetProjectQueryOptions = <TData = Awaited<ReturnType<typeof getProject>>, TError = ErrorMessage>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProject>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProjectQueryKey(id);
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProject>>> = ({ signal }) => getProject(id, requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProject>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetProjectQueryResult = NonNullable<Awaited<ReturnType<typeof getProject>>>
+export type GetProjectQueryError = ErrorMessage
+
+export const useGetProject = <TData = Awaited<ReturnType<typeof getProject>>, TError = ErrorMessage>(
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProject>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetProjectQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+export const deleteProject = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/projects/${id}`, method: 'delete'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteProjectMutationOptions = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProject>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteProject>>, TError,{id: string}, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteProject>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteProject(id,requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteProjectMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProject>>>
+    
+    export type DeleteProjectMutationError = ErrorMessage
+
+    export const useDeleteProject = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProject>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getDeleteProjectMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+export const updateProject = (
+    id: string,
+    updateProjectDTO: UpdateProjectDTO,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ProjectDTO>(
+      {url: `/projects/${id}`, method: 'patch',
+      headers: {'Content-Type': 'application/json', },
+      data: updateProjectDTO
+    },
+      options);
+    }
+  
+
+
+export const getUpdateProjectMutationOptions = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProject>>, TError,{id: string;data: UpdateProjectDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateProject>>, TError,{id: string;data: UpdateProjectDTO}, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateProject>>, {id: string;data: UpdateProjectDTO}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateProject(id,data,requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateProjectMutationResult = NonNullable<Awaited<ReturnType<typeof updateProject>>>
+    export type UpdateProjectMutationBody = UpdateProjectDTO
+    export type UpdateProjectMutationError = ErrorMessage
+
+    export const useUpdateProject = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProject>>, TError,{id: string;data: UpdateProjectDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getUpdateProjectMutationOptions(options);
      
       return useMutation(mutationOptions);
     }

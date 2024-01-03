@@ -2,7 +2,7 @@ import { GestureDetector } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { YStack } from "tamagui";
 import { useDraggableCalendarList } from "../../logic/UseDraggableCalendarList";
-import { ITask } from "../../model/model";
+import { IProject, ITask } from "../../model/model";
 import { DraggableCalendar } from "../calendar/DraggableCalendar";
 import { DraggableList } from "./DraggableList";
 import { MovingCalendarListItem } from "./MovingCalendarListItem";
@@ -10,12 +10,14 @@ import { MovingCalendarListItem } from "./MovingCalendarListItem";
 export interface DraggableCalendarListProps {
   day: string;
   tasks: ITask[];
+  projects: IProject[];
   tasksOrder: string[];
 }
 
 export const DraggableCalendarList = ({
   day,
   tasks,
+  projects,
   tasksOrder,
 }: DraggableCalendarListProps) => {
   const {
@@ -37,6 +39,7 @@ export const DraggableCalendarList = ({
         >
           <DraggableList
             tasks={tasks}
+            projects={projects}
             itemsOrder={movingItem.itemsOrder}
             listPointerIndex={movingItem.listPointerIndex}
             listStyle={listStyle}
@@ -44,6 +47,7 @@ export const DraggableCalendarList = ({
           />
           <DraggableCalendar
             day={day}
+            projects={projects}
             tasks={tasks}
             movingItemId={movingItem.id}
             calendarScrollRef={calendarScrollRef}
@@ -58,6 +62,7 @@ export const DraggableCalendarList = ({
         viewY={movingItem.viewY}
         movingItemType={movingItem.type}
         task={movingTask}
+        project={projects.find(p => p.id === movingTask?.projectId)}
         movingTimeAndDurationOfTasks={movingItem.movingTimeAndDurationOfTasks}
       />
     </YStack>

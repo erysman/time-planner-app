@@ -1,35 +1,18 @@
 import Animated, {
-  Extrapolation,
   SharedValue,
-  interpolate,
-  useAnimatedProps,
-  useAnimatedStyle,
+  useAnimatedStyle
 } from "react-native-reanimated";
-import { Checkbox, SizableText, Stack, XStack } from "tamagui";
-import { DEFAULT_DURATION_MIN } from "../../../../../config/constants";
-import {
-  ExpoIcon,
-  HourglassIcon,
-  StartIcon,
-} from "../../../../core/components/ExpoIcon";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import {
-  mapDurationToHeight,
-  mapTimeToCalendarPosition,
-  mapToDayjs,
+  mapDurationToHeight
 } from "../../logic/utils";
 import {
   ITask,
-  ITaskWithTime,
-  TimeAndDuration,
-  TimeAndDurationMap,
+  TimeAndDurationMap
 } from "../../model/model";
 import {
-  CalendarTaskHeightEditHandler,
-  useAnimatedHeight,
+  CalendarTaskHeightEditHandler
 } from "./CalendarTaskHeightEditHandler";
-import { PriorityIcons } from "../../../../core/components/PriorityIcons";
-import { Priority } from "../../../../core/model/types";
 import { CalendarTaskView } from "./CalendarTaskView";
 
 export interface CalendarTaskProps {
@@ -37,6 +20,7 @@ export interface CalendarTaskProps {
   isEdited: boolean;
   onPress: (taskId: string) => void;
   movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
+  projectColor?: string;
 }
 
 export const CalendarTask = ({
@@ -44,6 +28,7 @@ export const CalendarTask = ({
   isEdited,
   onPress,
   movingTimeAndDurationOfTasks,
+  projectColor
 }: CalendarTaskProps) => {
   const { minuteInPixels, itemHeight } = useDraggableCalendarListContext();
 
@@ -88,6 +73,7 @@ export const CalendarTask = ({
           priority={task.priority}
           isEdited={isEdited}
           onPress={onPress}
+          projectColor={projectColor}
         />
       </CalendarTaskHeightEditHandler>
     </Animated.View>

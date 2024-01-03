@@ -1,13 +1,14 @@
 import { H6, Spinner, YStack } from "tamagui";
 import {
   useGetDayTasks,
+  useGetProjects,
   useGetTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
 import { getRefreshInterval } from "../../../core/config/utils";
 import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
 import { DraggableCalendarList } from "../components/draggableCalendarList/DraggableCalendarList";
 import { CalendarListDataProvider } from "../logic/UseCalendarListContext";
-import { ITask } from "../model/model";
+import { IProject, ITask } from "../model/model";
 
 export interface DailyPlannerScreenProps {
   day: string;
@@ -29,13 +30,20 @@ DailyPlannerScreenProps) => {
   } = useGetTasksDayOrder(day, {
     query: { refetchInterval: getRefreshInterval() },
   });
+  console.log(tasks);
+
+  const {
+    data: projects,
+    isError: isErrorProjects,
+    isLoading: isLoadingProjects,
+  } = useGetProjects({ query: { refetchInterval: getRefreshInterval() } });
   const { screenHeight } = useScreenDimensions();
 
-  if (isLoading || isLoadingOrder) {
+  if (isLoading || isLoadingOrder || isLoadingProjects) {
     return <Spinner />; //TODO: print skeleton, not Spinner
   }
-  if (isError || isErrorOrder) {
-    return <H6>{"Error during loading tasks, try again"}</H6>; //TODO: this should be toast!
+  if (isError || isErrorOrder || isErrorProjects) {
+    return <H6>{"Error during loading tasks or projects, try again"}</H6>; //TODO: this should be toast!
   }
 
   return (
@@ -44,6 +52,7 @@ DailyPlannerScreenProps) => {
         <DraggableCalendarList
           day={day}
           tasks={tasks as ITask[]}
+          projects={projects as IProject[]}
           tasksOrder={tasksOrder}
         />
       </CalendarListDataProvider>

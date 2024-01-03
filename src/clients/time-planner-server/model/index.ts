@@ -5,6 +5,7 @@
  * OpenAPI spec version: v0
  */
 
+export * from './createProjectDTO';
 export * from './createTaskDTO';
 export * from './createTaskDTOPriority';
 export * from './errorMessage';
@@ -20,8 +21,12 @@ export * from './link';
 export * from './links200One';
 export * from './links200Three';
 export * from './links200Two';
+export * from './projectDTO';
 export * from './scheduleInfoDTO';
 export * from './taskDTO';
 export * from './taskDTOPriority';
 export * from './taskUpdateDTO';
 export * from './taskUpdateDTOPriority';
+export * from './updateProjectDTO';
+export * from './updateTaskDTO';
+export * from './updateTaskDTOPriority';

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Animated, {
   SharedValue,
   useAnimatedProps,
@@ -6,21 +5,20 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { YStack } from "tamagui";
+import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import {
+  IProject,
   ITask,
-  ITaskWithTime,
-  TimeAndDuration,
-  TimeAndDurationMap,
+  TimeAndDurationMap
 } from "../../model/model";
 import { CalendarCurrentTime } from "./CalendarCurrentTime";
 import { CalendarSlots } from "./CalendarSlots";
 import { CalendarTasks } from "./CalendarTasks";
-import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
-import { range } from "lodash";
 
 interface DraggableCalendarProps {
   day: string;
   tasks: ITask[];
+  projects: IProject[];
   calendarScrollRef: React.RefObject<Animated.ScrollView>;
   scrollTargetY: SharedValue<number | null>;
   scrollDuration: SharedValue<number>;
@@ -32,6 +30,7 @@ interface DraggableCalendarProps {
 export const DraggableCalendar = ({
   day,
   tasks,
+  projects,
   movingItemId,
   calendarScrollRef,
   calendarStyle,
@@ -70,6 +69,7 @@ export const DraggableCalendar = ({
         <YStack backgroundColor="$backgroundFocus" height={calendarHeight}>
           <CalendarSlots />
           <CalendarTasks
+            projects={projects}
             tasks={tasks}
             pressedTaskId={movingItemId}
             movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}

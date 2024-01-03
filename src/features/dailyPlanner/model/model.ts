@@ -8,6 +8,7 @@ export interface ITask {
   startTime?: string;
   durationMin?: number;
   priority: Priority;
+  projectId: string;
 }
 
 export interface ITaskWithTime extends ITask{
@@ -26,4 +27,10 @@ export type TimeAndDurationMap = {
       startTimeMinutes: number | null;
       durationMinutes: number | null;
   };
+}
+
+export interface IProject {
+  id: string;
+  name: string;
+  color: string;
 }

@@ -4,7 +4,7 @@ import Animated, {
 } from "react-native-reanimated";
 import ListItem from "../../../../core/components/list/ListItem";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
-import { ITask, TimeAndDurationMap } from "../../model/model";
+import { IProject, ITask, TimeAndDurationMap } from "../../model/model";
 import { MovingCalendarTask } from "../calendar/MovingCalendarTask";
 
 
@@ -12,9 +12,10 @@ export const MovingCalendarListItem = (props: {
   viewY: SharedValue<number>;
   movingItemType: SharedValue<"calendar" | "list" | null>;
   task: ITask | null;
+  project?: IProject;
   movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
 }) => {
-  const { viewY, movingItemType, task } = props;
+  const { viewY, movingItemType, task, project } = props;
   const { itemHeight, minuteInPixels } = useDraggableCalendarListContext();
 
   const listStyle = useAnimatedStyle(() => {
@@ -70,12 +71,13 @@ export const MovingCalendarListItem = (props: {
   return (
     <Animated.View style={[outerStyle]}>
       <Animated.View style={[listStyle]}>
-        <ListItem name={task.name} isEdited={false} priority={task.priority}/>
+        <ListItem name={task.name} isEdited={false} priority={task.priority} projectColor={project?.color}/>
       </Animated.View>
       <Animated.View style={[calendarStyle]}>
         <MovingCalendarTask
           minuteInPixels={minuteInPixels}
           task={task}
+          projectColor={project?.color}
           movingTimeAndDurationOfTasks={props.movingTimeAndDurationOfTasks}
         />
       </Animated.View>

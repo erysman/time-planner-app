@@ -5,12 +5,13 @@ import { DAY_FORMAT } from "../../../../config/constants";
 import {
   getGetTasksDayOrderQueryKey,
   useGetDayTasks,
+  useGetProjects,
   useGetTasksDayOrder,
   useUpdateTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
 import { DragAndDropList } from "../../../core/components/list/DragAndDropList";
 import ListItem from "../../../core/components/list/ListItem";
-import { ITask } from "../../dailyPlanner/model/model";
+import { IProject, ITask } from "../../dailyPlanner/model/model";
 import { getRefreshInterval } from "../../../core/config/utils";
 
 export const TasksListScreen = () => {
@@ -50,17 +51,23 @@ export const TasksListScreen = () => {
     },
   });
 
-  if (isLoading || isLoadingOrder) {
+  const {
+    data: projects,
+    isError: isErrorProjects,
+    isLoading: isLoadingProjects,
+  } = useGetProjects({ query: { refetchInterval: getRefreshInterval() } });
+
+  if (isLoading || isLoadingOrder || isLoadingProjects) {
     return <Spinner />;
   }
-  if (isError || isErrorOrder) {
+  if (isError || isErrorOrder || isErrorProjects) {
     return <H6>{"Error during loading tasks, try again"}</H6>; //TODO: this should be toast!
   }
 
   const renderItem = (id: string) => {
     const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
     if (!task) return null;
-    return <ListItem name={task.name} isEdited={false} priority={task.priority}/>;
+    return <ListItem name={task.name} isEdited={false} priority={task.priority} projectColor={(projects as IProject[]).find(p => p.id === task.projectId)?.color}/>;
   };
 
   return (

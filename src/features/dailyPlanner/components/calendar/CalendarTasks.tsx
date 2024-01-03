@@ -1,5 +1,5 @@
 import { YStack } from "tamagui";
-import { ITask, ITaskWithTime, TimeAndDuration, TimeAndDurationMap } from "../../model/model";
+import { IProject, ITask, ITaskWithTime, TimeAndDuration, TimeAndDurationMap } from "../../model/model";
 import { CalendarTask } from "./CalendarTask";
 import { SharedValue } from "react-native-reanimated";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
@@ -7,13 +7,15 @@ import { useDraggableCalendarListContext } from "../../logic/UseCalendarListCont
 export interface CalendarItemsProps {
   tasks: ITask[];
   pressedTaskId: string | null;
-  movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>
+  movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
+  projects: IProject[];
 }
 
 export const CalendarTasks = ({
   tasks,
   pressedTaskId,
   movingTimeAndDurationOfTasks,
+  projects
 }: CalendarItemsProps) => {
   const { editedTaskId, setEditedTaskId } = useDraggableCalendarListContext();
   const onTaskPress = (taskId: string) => {
@@ -35,6 +37,7 @@ export const CalendarTasks = ({
             task={task}
             onPress={onTaskPress}
             movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
+            projectColor={projects.find(p => p.id === task.projectId)?.color}
           />
         );
       })}

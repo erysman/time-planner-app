@@ -16,6 +16,7 @@ interface CalendarTaskViewProps {
   hourSlotHeight: number;
   height?: number;
   priority: Priority;
+  projectColor?: string;
 }
 
 const AnimatedXStack = Animated.createAnimatedComponent(XStack);
@@ -28,6 +29,7 @@ export const CalendarTaskView = ({
   priority,
   isEdited,
   onPress,
+  projectColor,
 }: CalendarTaskViewProps) => {
   const { height } = useAnimatedHeight();
   const nameProps = useAnimatedProps(() => {
@@ -45,17 +47,24 @@ export const CalendarTaskView = ({
   });
 
   return (
-    <AnimatedXStack
+    <XStack
       zIndex={100}
       borderColor={isEdited ? "$blue8" : "$borderColor"}
       borderWidth={isEdited ? 2 : 0}
       backgroundColor={"$background"}
       borderRadius={"$4"}
+      overflow="hidden"
       height={"100%"}
       onPress={() => onPress?.(id)}
-      animatedProps={xstackProps}
     >
-      {/* <XStack width={60}>
+      <AnimatedXStack
+        width={"100%"}
+        height={"100%"}
+        borderColor={projectColor ?? "$background"}
+        borderLeftWidth={8}
+        animatedProps={xstackProps}
+      >
+        {/* <XStack width={60}>
           {isEdited ? null : (
             <Checkbox size="$1.5" circular marginHorizontal={16}>
               <Checkbox.Indicator>
@@ -69,21 +78,22 @@ export const CalendarTaskView = ({
             </Checkbox>
           )}
         </XStack> */}
-      <AnimatedSizableText
-        marginLeft={16}
-        flexGrow={1}
-        flexShrink={1}
-        size={"$5"}
-        ellipsizeMode="tail"
-        onPress={() => onPress?.(id)}
-        animatedProps={nameProps}
-      >
-        {name}
-      </AnimatedSizableText>
-      <PriorityIcons priority={priority} />
-      {/* <SizableText size={"$3"} marginHorizontal={16}>
+        <AnimatedSizableText
+          marginLeft={8}
+          flexGrow={1}
+          flexShrink={1}
+          size={"$5"}
+          ellipsizeMode="tail"
+          onPress={() => onPress?.(id)}
+          animatedProps={nameProps}
+        >
+          {name}
+        </AnimatedSizableText>
+        <PriorityIcons priority={priority} />
+        {/* <SizableText size={"$3"} marginHorizontal={16}>
           Important
         </SizableText> */}
-    </AnimatedXStack>
+      </AnimatedXStack>
+    </XStack>
   );
 };
