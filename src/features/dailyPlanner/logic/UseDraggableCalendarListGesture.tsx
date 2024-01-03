@@ -59,9 +59,9 @@ export const useDraggableCalendarListGesture = (
   listViewHeight: SharedValue<number>,
   tasks: ITask[]
 ) => {
-  const { itemHeight, minuteInPixels, calendarHeight, setEditedTaskId } =
+  const { itemHeight, minuteInPixels, calendarHeight, setEditedTaskId, calendarStepHeight } =
     useDraggableCalendarListContext();
-  const { headerHeight } = useScreenDimensions();
+  const { headerHeight, headerTotalHeight, topInset } = useScreenDimensions();
   const movingItemId = useSharedValue<string | null>(null);
   const [movingItemIdState, setMovingItemIdState] = useState<string | null>(
     null
@@ -193,6 +193,7 @@ export const useDraggableCalendarListGesture = (
   ) {
     "worklet";
     const pressedViewY = e.absoluteY - headerHeight;
+    console.log("pressedViewY ", pressedViewY, "absoluteY ", e.absoluteY, "headerTotalHeight ", headerTotalHeight, " ", headerHeight, " ", topInset)
     const pressedAreaType = getPressedAreaType(
       pressedViewY,
       listViewHeight.value,
@@ -249,6 +250,12 @@ export const useDraggableCalendarListGesture = (
         const height = mapDurationToHeight(task.durationMin, minuteInPixels); 
         const bottom = pressedViewY + height - pressedTaskOffsetToTop.value;
         calendarScrollArea.activateScrollIfItemInsideScrollArea({ top, bottom });
+      }
+      //if scroll is not active, pin movingItemViewY.value to 15 minutes multiple
+      if(!calendarScrollArea.isScrollActive.value) {
+        const movingItemCalendarY = calendarScrollOffset.value + movingItemViewY.value - listViewHeight.value;
+        const snappedMovingItemCalendarY = Math.floor(movingItemCalendarY / calendarStepHeight) * calendarStepHeight
+        movingItemViewY.value = snappedMovingItemCalendarY + listViewHeight.value - calendarScrollOffset.value;
       }
     }
   }

@@ -1,6 +1,7 @@
 import React, {useContext, useMemo} from "react";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {Dimensions} from "react-native";
+import { isDevice } from "expo-device";
 
 interface ScreenDimensions {
     // screenWidth: number,
@@ -21,16 +22,17 @@ const ScreenDimensionsContext = React.createContext<ScreenDimensions>({
 });
 
 export const ScreenDimensionsProvider = (props: any) => {
-    const {height, width: screenWidth} = Dimensions.get("screen");
+    const {height, width: screenWidth} = Dimensions.get("window");
     const {top: topInset} = useSafeAreaInsets();
     
 
     
     const value = useMemo(() => {
-        const headerHeight = 0.093*height;
+        const isEmulator = !isDevice;
+        const headerHeight = Math.floor(0.063*height);
         const headerTotalHeight = headerHeight + topInset;
-        const tabBarHeight = height * 0.1;
-        const screenHeight = height - headerTotalHeight - tabBarHeight;
+        const tabBarHeight = Math.floor(height * 0.1);
+        const screenHeight = height - tabBarHeight - (isEmulator ? headerTotalHeight : headerHeight);
         return {
             screenHeight,
             // screenWidth,
@@ -41,7 +43,6 @@ export const ScreenDimensionsProvider = (props: any) => {
         }
     }, [height, topInset]);
 
-    console.log(value.headerHeight/height)
     return (
         <ScreenDimensionsContext.Provider value={value}>
             {props.children}

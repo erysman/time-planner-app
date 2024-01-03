@@ -6,6 +6,8 @@ import { IProject, ITask } from "../../model/model";
 import { DraggableCalendar } from "../calendar/DraggableCalendar";
 import { DraggableList } from "./DraggableList";
 import { MovingCalendarListItem } from "./MovingCalendarListItem";
+import { useScreenDimensions } from "../../../../core/dimensions/UseScreenDimensions";
+import { deviceName } from "expo-device";
 
 export interface DraggableCalendarListProps {
   day: string;
@@ -29,9 +31,9 @@ export const DraggableCalendarList = ({
     styles: { calendarStyle, listStyle },
     movingTask,
   } = useDraggableCalendarList(day, tasksOrder, tasks);
-
+  const { screenHeight } = useScreenDimensions();
   return (
-    <YStack fullscreen backgroundColor={"$background"}>
+    <YStack height={screenHeight} backgroundColor={"$background"}>
       <GestureDetector gesture={dragGesture}>
         <Animated.View
           collapsable={false}

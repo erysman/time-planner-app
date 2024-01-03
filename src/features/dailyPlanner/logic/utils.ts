@@ -50,7 +50,8 @@ export function mapHeightToDurationMin(
 ): number {
   'worklet'
   const durationMin = height / minuteInPixels;
-  return durationMin || 0;
+  const durationMinPinnedToMinStep = Math.floor(durationMin/15)*15
+  return durationMinPinnedToMinStep || 0;
 }
 
 export function mapToDayjs(date: string, time: string): Dayjs {
@@ -65,8 +66,9 @@ export function timeToMinutes(time: string) {
 
 export function minutesToTime(minutes: number) {
   'worklet'
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+  const minutesPinnedToMinStep = Math.floor(minutes/15)*15
+  const hours = Math.floor(minutesPinnedToMinStep / 60);
+  const remainingMinutes = minutesPinnedToMinStep % 60;
 
   // Ensure leading zeros for single-digit hours and minutes
   const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
@@ -78,8 +80,9 @@ export function minutesToTime(minutes: number) {
 
 export function minutesToShortTime(minutes: number) {
   'worklet'
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+  const minutesPinnedToMinStep = Math.floor(minutes/15)*15
+  const hours = Math.floor(minutesPinnedToMinStep / 60);
+  const remainingMinutes = minutesPinnedToMinStep % 60;
 
   // Ensure leading zeros for single-digit minutes
   const formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : `${remainingMinutes}`;

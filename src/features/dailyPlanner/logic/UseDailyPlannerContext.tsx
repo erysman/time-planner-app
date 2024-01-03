@@ -31,7 +31,7 @@ export const DailyPlannerContextProvider = (props: any) => {
   const { changeViewModeButton, viewMode, setViewMode } =
     useDailyPlannerViewMode();
 
-  const { screenHeight } = useScreenDimensions();
+  const { screenHeight, topInset } = useScreenDimensions();
   const { calendarViewHeight, listViewHeight } = useDimensionsByViewMode(
     viewMode,
     screenHeight

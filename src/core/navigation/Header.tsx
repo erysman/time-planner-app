@@ -1,14 +1,9 @@
 import { getHeaderTitle } from "@react-navigation/elements";
-import {
-  useNavigation
-} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import dayjs from "dayjs";
 import React, { useCallback, useMemo, useState } from "react";
-import Animated, {
-  useSharedValue,
-  withTiming
-} from "react-native-reanimated";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { Button, SizableText, XStack, useTheme } from "tamagui";
 import {
   DAY_FORMAT,
@@ -19,6 +14,8 @@ import { useDailyPlannerContext } from "../../features/dailyPlanner/logic/UseDai
 import { useScheduleDayTasks } from "../../features/dailyPlanner/logic/UseScheduleDay";
 import { DatePicker } from "../components/calendar/DatePicker";
 import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export interface IStackHeaderProps extends NativeStackHeaderProps {
   headerLeft: () => JSX.Element;
@@ -52,32 +49,33 @@ export const Header = ({ title, headerLeft, headerRight }: IHeaderProps) => {
   const { topInset, headerHeight, headerTotalHeight } = useScreenDimensions();
 
   return (
-    <XStack
-      width={"100%"}
-      backgroundColor={"$background"}
-      mt={topInset}
-      height={headerHeight-topInset}
-      alignItems={"center"}
-      justifyContent={"center"}
-      borderBottomWidth={1}
-      borderColor={"$backgroundFocus"}
-    >
-      <XStack flexGrow={1} flexShrink={1}>
-        {headerLeft && headerLeft()}
+    <SafeAreaView>
+      <XStack
+        width={"100%"}
+        backgroundColor={"$background"}
+        height={headerHeight}
+        alignItems={"center"}
+        justifyContent={"center"}
+        borderBottomWidth={1}
+        borderColor={"$backgroundFocus"}
+      >
+        <XStack flexGrow={1} flexShrink={1}>
+          {headerLeft && headerLeft()}
+        </XStack>
+        <XStack flexGrow={1}>
+          {typeof title === "string" ? (
+            <SizableText size="$6" flexGrow={1} textAlign={"center"}>
+              {title}
+            </SizableText>
+          ) : (
+            title
+          )}
+        </XStack>
+        <XStack flexGrow={1} flexShrink={1} justifyContent="flex-end">
+          {headerRight && headerRight()}
+        </XStack>
       </XStack>
-      <XStack flexGrow={1}>
-        {typeof title === "string" ? (
-          <SizableText size="$6" flexGrow={1} textAlign={"center"}>
-            {title}
-          </SizableText>
-        ) : (
-          title
-        )}
-      </XStack>
-      <XStack flexGrow={1} flexShrink={1} justifyContent="flex-end">
-        {headerRight && headerRight()}
-      </XStack>
-    </XStack>
+    </SafeAreaView>
   );
 };
 
@@ -102,8 +100,8 @@ export const DatePickerStackHeader = ({
 
   const [open, setOpen] = useState(false);
   const height = useSharedValue(headerHeight);
-  const theme = useTheme()
-  const backgroundFocus = theme.backgroundFocus.get()
+  const theme = useTheme();
+  const backgroundFocus = theme.backgroundFocus.get();
 
   return (
     <Animated.View
@@ -113,15 +111,15 @@ export const DatePickerStackHeader = ({
           overflow: "hidden",
           display: "flex",
           borderBottomWidth: 1,
-          borderColor: backgroundFocus
+          borderColor: backgroundFocus,
         },
         { height },
       ]}
     >
       <XStack
         backgroundColor={"$background"}
-        mt={topInset}
-        alignItems={"flex-start"}
+        height={headerHeight}
+        alignItems={"center"}
       >
         <XStack flexGrow={1} flexShrink={1}>
           {headerLeft && headerLeft()}

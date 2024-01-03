@@ -1,4 +1,4 @@
-import Animated, { SharedValue, useSharedValue } from "react-native-reanimated";
+import Animated, { SharedValue, useDerivedValue, useSharedValue } from "react-native-reanimated";
 
 interface AreaBoundries {
   top: number;
@@ -30,6 +30,7 @@ export const useDragScrollArea = (
   const scrollVelocity = 300; //px/s
   const scrollTargetY = useSharedValue<number | null>(scrollOffset.value);
   const scrollDuration = useSharedValue(0);
+  const isScrollActive = useDerivedValue(() => activeScrollDirection.value !== null)
 
   function isTaskTooLarge(itemPosition: { top: number; bottom: number }) {
     "worklet";
@@ -117,5 +118,6 @@ export const useDragScrollArea = (
     cancelScroll,
     scrollTargetY,
     scrollDuration,
+    isScrollActive,
   };
 };

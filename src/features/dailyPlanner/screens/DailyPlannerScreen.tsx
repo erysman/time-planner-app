@@ -14,10 +14,7 @@ export interface DailyPlannerScreenProps {
   day: string;
 }
 
-export const DailyPlannerScreen = ({
-  day,
-}:
-DailyPlannerScreenProps) => {
+export const DailyPlannerScreen = ({ day }: DailyPlannerScreenProps) => {
   const {
     data: tasks,
     isError,
@@ -36,7 +33,6 @@ DailyPlannerScreenProps) => {
     isError: isErrorProjects,
     isLoading: isLoadingProjects,
   } = useGetProjects({ query: { refetchInterval: getRefreshInterval() } });
-  const { screenHeight } = useScreenDimensions();
 
   if (isLoading || isLoadingOrder || isLoadingProjects) {
     return <Spinner />; //TODO: print skeleton, not Spinner
@@ -46,15 +42,13 @@ DailyPlannerScreenProps) => {
   }
 
   return (
-    <YStack h={screenHeight} w={"100%"}>
-      <CalendarListDataProvider>
-        <DraggableCalendarList
-          day={day}
-          tasks={tasks as ITask[]}
-          projects={projects as IProject[]}
-          tasksOrder={tasksOrder}
-        />
-      </CalendarListDataProvider>
-    </YStack>
+    <CalendarListDataProvider>
+      <DraggableCalendarList
+        day={day}
+        tasks={tasks as ITask[]}
+        projects={projects as IProject[]}
+        tasksOrder={tasksOrder}
+      />
+    </CalendarListDataProvider>
   );
 };
