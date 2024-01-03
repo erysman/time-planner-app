@@ -48,7 +48,7 @@ export const ProjectView = ({ color, name }: ProjectViewProps) => {
   );
 };
 
-export const AddProjectView = ({ color, name }: ProjectViewProps) => {
+export const AddProjectView = () => {
     return (
       <XStack height={52} width="100%" borderRadius={"$6"} alignItems="center" elevation={10} backgroundColor={"$backgroundHover"}>
         <PlusIcon size={24} color={"color"} marginHorizontal={16}/>
