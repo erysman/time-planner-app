@@ -4,8 +4,13 @@ const AuthTranslations = {
     "google_login_text": "Zaloguj się przez Google"
 }
 
+const ProjectsTranslations = {
+    "add_project": "Dodaj projekt"
+}
+
 export const Translations_PL = {
     "pl": {
-        "auth": AuthTranslations
+        "auth": AuthTranslations,
+        "project": ProjectsTranslations
     }
 }
