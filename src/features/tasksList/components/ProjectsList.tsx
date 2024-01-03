@@ -11,7 +11,6 @@ interface ProjectsListProps {
 }
 
 export const ProjectsList = ({ projects }: ProjectsListProps) => {
-    console.log(projects)
   return (
     // <DragAndDropList
     //   items={projects}
