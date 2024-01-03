@@ -36,6 +36,7 @@ export default function ListItem({
         h={"100%"}
         w={"100%"}
         alignItems="center"
+        backgroundColor={"$background"}
         borderColor={projectColor ?? "$background"}
         borderLeftWidth={8}
       >

@@ -35,7 +35,7 @@ export const DraggableList = ({
   }, [tasks]);
   return (
     <Animated.View style={[listStyle]}>
-      <YStack w={"100%"} h={"100%"}>
+      <YStack w={"100%"} h={"100%"} borderBottomWidth={1} borderColor={"$backgroundFocus"}>
         {tasks.map((task) => {
           return (
             <MovableItem

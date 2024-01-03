@@ -30,7 +30,6 @@ DailyPlannerScreenProps) => {
   } = useGetTasksDayOrder(day, {
     query: { refetchInterval: getRefreshInterval() },
   });
-  console.log(tasks);
 
   const {
     data: projects,

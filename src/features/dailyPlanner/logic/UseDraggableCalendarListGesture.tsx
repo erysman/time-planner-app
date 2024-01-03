@@ -100,7 +100,8 @@ export const useDraggableCalendarListGesture = (
     (current, prev) => {
       if (prev !== current) {
         runOnJS(setMovingItemIdState)(current);
-        runOnJS(setEditedTaskId)(current)
+        if (current !== null)
+          runOnJS(setEditedTaskId)(current)
       }
     }
   );
