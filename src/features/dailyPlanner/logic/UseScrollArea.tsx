@@ -61,11 +61,9 @@ export const useDragScrollArea = (
 
   function cancelScroll() {
     "worklet";
-    console.log(`cancel scroll!`);
     currentScrollDirection.value = null;
     activeScrollDirection.value = null;
     scrollTargetY.value = null;
-    console.log("isScrollActive", isScrollActive.value)
   }
 
   function activateScroll() {
@@ -94,7 +92,7 @@ export const useDragScrollArea = (
       itemPosition.bottom,
       downAreaBaseBoundries
     );
-    if (!isInsideUpArea && !isInsideDownArea) {
+    if (!isInsideUpArea && !isInsideDownArea && currentScrollDirection.value) {
       cancelScroll();
     }
     if (isInsideUpArea && currentScrollDirection.value !== "up") {

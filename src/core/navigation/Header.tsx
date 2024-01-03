@@ -3,7 +3,11 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import dayjs from "dayjs";
 import React, { useCallback, useMemo, useState } from "react";
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  useAnimatedReaction,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { Button, SizableText, XStack, useTheme } from "tamagui";
 import {
   DAY_FORMAT,
@@ -15,7 +19,6 @@ import { useScheduleDayTasks } from "../../features/dailyPlanner/logic/UseSchedu
 import { DatePicker } from "../components/calendar/DatePicker";
 import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 export interface IStackHeaderProps extends NativeStackHeaderProps {
   headerLeft: () => JSX.Element;
@@ -103,6 +106,29 @@ export const DatePickerStackHeader = ({
   const theme = useTheme();
   const backgroundFocus = theme.backgroundFocus.get();
 
+  useAnimatedReaction(
+    () => open,
+    (current, prev) => {
+      if (current) {
+        height.value = withTiming(datePickerHeight);
+      } else {
+        height.value = withTiming(headerHeight);
+      }
+    }
+  );
+
+  const onChangeDayPress = useCallback(() => {
+    setOpen((prev) => {
+      console.log("button prev", prev);
+      if (prev) {
+        onClose();
+      } else {
+        onOpen();
+      }
+      return !prev;
+    });
+  }, []);
+
   return (
     <Animated.View
       style={[
@@ -125,21 +151,7 @@ export const DatePickerStackHeader = ({
           {headerLeft && headerLeft()}
         </XStack>
         <XStack flexGrow={1} justifyContent="flex-end">
-          <Button
-            variant="outlined"
-            onPress={() => {
-              setOpen((prev) => {
-                if (prev) {
-                  onClose();
-                  height.value = withTiming(headerHeight);
-                } else {
-                  onOpen();
-                  height.value = withTiming(datePickerHeight);
-                }
-                return !prev;
-              });
-            }}
-          >
+          <Button variant="outlined" onPress={onChangeDayPress}>
             <SizableText size="$6" textAlign={"center"}>
               {title}
             </SizableText>
@@ -149,7 +161,14 @@ export const DatePickerStackHeader = ({
           {headerRight && headerRight()}
         </XStack>
       </XStack>
-      <DatePicker onDayPress={onDayPress} initialDay={initialDay} />
+      <DatePicker
+        onDayPress={(day) => {
+          setOpen(false);
+          onClose();
+          onDayPress(day);
+        }}
+        initialDay={initialDay}
+      />
     </Animated.View>
   );
 };
