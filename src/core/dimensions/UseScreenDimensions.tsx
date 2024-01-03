@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useMemo} from "react";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {Dimensions} from "react-native";
 
@@ -25,19 +25,25 @@ export const ScreenDimensionsProvider = (props: any) => {
     const {top: topInset} = useSafeAreaInsets();
     
 
-    const headerHeight = 75;
-    const headerTotalHeight = headerHeight + topInset;
-    const tabBarHeight = height * 0.1;
-    const screenHeight = height - headerTotalHeight - tabBarHeight;
-    return (
-        <ScreenDimensionsContext.Provider value={{
+    
+    const value = useMemo(() => {
+        const headerHeight = 0.093*height;
+        const headerTotalHeight = headerHeight + topInset;
+        const tabBarHeight = height * 0.1;
+        const screenHeight = height - headerTotalHeight - tabBarHeight;
+        return {
             screenHeight,
             // screenWidth,
             tabBarHeight,
             headerHeight,
             headerTotalHeight,
             topInset
-        }}>
+        }
+    }, [height, topInset]);
+
+    console.log(value.headerHeight/height)
+    return (
+        <ScreenDimensionsContext.Provider value={value}>
             {props.children}
         </ScreenDimensionsContext.Provider>
     )

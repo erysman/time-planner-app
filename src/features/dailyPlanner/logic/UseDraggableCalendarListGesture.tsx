@@ -59,7 +59,7 @@ export const useDraggableCalendarListGesture = (
   listViewHeight: SharedValue<number>,
   tasks: ITask[]
 ) => {
-  const { itemHeight, minuteInPixels, calendarHeight } =
+  const { itemHeight, minuteInPixels, calendarHeight, setEditedTaskId } =
     useDraggableCalendarListContext();
   const { headerHeight } = useScreenDimensions();
   const movingItemId = useSharedValue<string | null>(null);
@@ -100,6 +100,7 @@ export const useDraggableCalendarListGesture = (
     (current, prev) => {
       if (prev !== current) {
         runOnJS(setMovingItemIdState)(current);
+        runOnJS(setEditedTaskId)(current)
       }
     }
   );

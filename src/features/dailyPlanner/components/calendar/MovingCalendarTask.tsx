@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { SharedValue } from "react-native-reanimated";
 import { ITask, TimeAndDurationMap } from "../../model/model";
 import { CalendarTaskHeightEditHandler } from "./CalendarTaskHeightEditHandler";
 import { CalendarTaskView } from "./CalendarTaskView";
+import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 
 export interface MovingCalendarTaskProps {
     minuteInPixels: number;
     task: ITask;
-    isEdited: boolean;
     movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
   }
   
@@ -16,9 +16,6 @@ export interface MovingCalendarTaskProps {
     task,
     movingTimeAndDurationOfTasks,
   }: MovingCalendarTaskProps) => {
-    // const durationMin = task.durationMin ?? DEFAULT_DURATION_MIN;
-    // const height = mapDurationToHeight(durationMin, minuteInPixels)
-  
     return (
       <CalendarTaskHeightEditHandler
         isEdited={true}
@@ -33,7 +30,6 @@ export interface MovingCalendarTaskProps {
           name={task.name}
           isEdited={true}
           priority={task.priority}
-          // height={height}
         />
       </CalendarTaskHeightEditHandler>
     );

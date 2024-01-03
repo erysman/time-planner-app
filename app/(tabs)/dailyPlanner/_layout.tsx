@@ -1,25 +1,11 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import {
-  Stack,
-  useLocalSearchParams,
-  useNavigation,
-  useRouter,
-} from "expo-router";
-import { Button, SizableText, useTheme } from "tamagui";
-import DailyPlannerIndex from ".";
 import dayjs, { Dayjs } from "dayjs";
+import { useMemo } from "react";
+import { useTheme } from "tamagui";
 import {
-  DAY_FORMAT,
-  DAY_LONG_READ_FORMAT,
-  DAY_SHORT_READ_FORMAT,
+  DAY_FORMAT
 } from "../../../config/constants";
-import { useEffect, useMemo } from "react";
-import { ExpoIcon } from "../../../src/core/components/ExpoIcon";
-import { DatePickerStackHeader } from "../../../src/core/navigation/Header";
-import { useDailyPlannerViewMode } from "../../../src/features/dailyPlanner/logic/UseDailyPlannerViewMode";
-import { DailyPlannerScreen } from "../../../src/features/dailyPlanner/screens/DailyPlannerScreen";
 import DailyPlanner from "../../../src/features/dailyPlanner/screens/DailyPlanner";
-import { DailyPlannerContextProvider } from "../../../src/features/dailyPlanner/logic/UseDailyPlannerContext";
 
 const Tab = createMaterialTopTabNavigator();
 

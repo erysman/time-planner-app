@@ -1,32 +1,24 @@
 import { getHeaderTitle } from "@react-navigation/elements";
+import {
+  useNavigation
+} from "@react-navigation/native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
+import dayjs from "dayjs";
 import React, { useCallback, useMemo, useState } from "react";
 import Animated, {
-  Layout,
-  useAnimatedStyle,
   useSharedValue,
-  withTiming,
+  withTiming
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, SizableText, XStack, YStack, useTheme } from "tamagui";
-import { DatePicker } from "../components/calendar/DatePicker";
-import { transform } from "@babel/core";
-import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
-import dayjs from "dayjs";
-import day from "react-native-calendars/src/calendar/day";
+import { Button, SizableText, XStack, useTheme } from "tamagui";
 import {
   DAY_FORMAT,
-  DAY_SHORT_READ_FORMAT,
   DAY_LONG_READ_FORMAT,
+  DAY_SHORT_READ_FORMAT,
 } from "../../../config/constants";
 import { useDailyPlannerContext } from "../../features/dailyPlanner/logic/UseDailyPlannerContext";
-import { ExpoIcon } from "../components/ExpoIcon";
-import {
-  ParamListBase,
-  RouteProp,
-  useNavigation,
-} from "@react-navigation/native";
 import { useScheduleDayTasks } from "../../features/dailyPlanner/logic/UseScheduleDay";
+import { DatePicker } from "../components/calendar/DatePicker";
+import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
 
 export interface IStackHeaderProps extends NativeStackHeaderProps {
   headerLeft: () => JSX.Element;

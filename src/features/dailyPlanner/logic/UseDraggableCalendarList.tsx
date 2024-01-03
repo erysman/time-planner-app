@@ -1,13 +1,7 @@
-import { useMemo, useState } from "react";
-import { LayoutChangeEvent } from "react-native";
-import { useAnimatedStyle, withTiming } from "react-native-reanimated";
-import {
-  DailyPlannerViewMode,
-  useDimensionsByViewMode,
-} from "./UseDailyPlannerViewMode";
-import { ITask, ITaskWithTime } from "../model/model";
-import { useDraggableCalendarListGesture } from "./UseDraggableCalendarListGesture";
+import { useMemo } from "react";
+import { ITask } from "../model/model";
 import { useDailyPlannerContext } from "./UseDailyPlannerContext";
+import { useDraggableCalendarListGesture } from "./UseDraggableCalendarListGesture";
 
 export const useDraggableCalendarList = (
   day: string,

@@ -2,22 +2,26 @@ import { YStack } from "tamagui";
 import { ITask, ITaskWithTime, TimeAndDuration, TimeAndDurationMap } from "../../model/model";
 import { CalendarTask } from "./CalendarTask";
 import { SharedValue } from "react-native-reanimated";
+import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 
 export interface CalendarItemsProps {
   tasks: ITask[];
   pressedTaskId: string | null;
-  onTaskPress: (taskId: string) => void;
-  editedTaskId: string|null;
   movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>
 }
 
 export const CalendarTasks = ({
   tasks,
   pressedTaskId,
-  onTaskPress,
-  editedTaskId,
   movingTimeAndDurationOfTasks,
 }: CalendarItemsProps) => {
+  const { editedTaskId, setEditedTaskId } = useDraggableCalendarListContext();
+  const onTaskPress = (taskId: string) => {
+    setEditedTaskId((prevTaskId) => {
+      if (prevTaskId === taskId) return null;
+      return taskId;
+    });
+  };
   return (
     <YStack fullscreen position="absolute" paddingLeft={60} paddingRight={15}>
       {tasks.map((task) => {

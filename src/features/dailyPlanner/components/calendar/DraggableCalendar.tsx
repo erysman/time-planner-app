@@ -39,17 +39,8 @@ export const DraggableCalendar = ({
   scrollTargetY,
   scrollDuration,
 }: DraggableCalendarProps) => {
-  const { calendarHeight } = useDraggableCalendarListContext();
-  const [editedTaskId, setEditedTaskId] = useState<string | null>(null);
-  const onTaskPress = (taskId: string) => {
-    setEditedTaskId((prevTaskId) => {
-      if (prevTaskId === taskId) return null;
-      return taskId;
-    });
-  };
-
+  const { calendarHeight} = useDraggableCalendarListContext();
   const scrollOffset = useScrollViewOffset(calendarScrollRef);
-
   const animatedScrollProps = useAnimatedProps(() => {
     if (scrollTargetY.value === null) {
       return { contentOffset: { x: 0, y: scrollOffset.value } };
@@ -79,10 +70,8 @@ export const DraggableCalendar = ({
         <YStack backgroundColor="$backgroundFocus" height={calendarHeight}>
           <CalendarSlots />
           <CalendarTasks
-            editedTaskId={editedTaskId}
             tasks={tasks}
             pressedTaskId={movingItemId}
-            onTaskPress={onTaskPress}
             movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
           />
           <CalendarCurrentTime day={day} />

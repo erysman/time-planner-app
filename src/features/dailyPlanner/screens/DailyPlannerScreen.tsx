@@ -4,11 +4,10 @@ import {
   useGetTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
 import { getRefreshInterval } from "../../../core/config/utils";
-import { DraggableCalendarList } from "../components/draggableCalendarList/DraggableCalendarList";
-import { DailyPlannerViewMode } from "../logic/UseDailyPlannerViewMode";
-import { ITask } from "../model/model";
-import { CalendarListDataProvider } from "../logic/UseCalendarListContext";
 import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
+import { DraggableCalendarList } from "../components/draggableCalendarList/DraggableCalendarList";
+import { CalendarListDataProvider } from "../logic/UseCalendarListContext";
+import { ITask } from "../model/model";
 
 export interface DailyPlannerScreenProps {
   day: string;

@@ -74,7 +74,6 @@ export const MovingCalendarListItem = (props: {
       </Animated.View>
       <Animated.View style={[calendarStyle]}>
         <MovingCalendarTask
-          isEdited={true}
           minuteInPixels={minuteInPixels}
           task={task}
           movingTimeAndDurationOfTasks={props.movingTimeAndDurationOfTasks}

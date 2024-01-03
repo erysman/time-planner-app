@@ -1,13 +1,11 @@
 import { GestureDetector } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { YStack } from "tamagui";
-import ListItem from "../../../../core/components/list/ListItem";
-import { DailyPlannerViewMode } from "../../logic/UseDailyPlannerViewMode";
+import { useDraggableCalendarList } from "../../logic/UseDraggableCalendarList";
 import { ITask } from "../../model/model";
 import { DraggableCalendar } from "../calendar/DraggableCalendar";
 import { DraggableList } from "./DraggableList";
 import { MovingCalendarListItem } from "./MovingCalendarListItem";
-import { useDraggableCalendarList } from "../../logic/UseDraggableCalendarList";
 
 export interface DraggableCalendarListProps {
   day: string;
