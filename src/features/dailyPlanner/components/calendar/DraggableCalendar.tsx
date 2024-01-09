@@ -6,11 +6,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { YStack } from "tamagui";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
-import {
-  IProject,
-  ITask,
-  TimeAndDurationMap
-} from "../../model/model";
+import { IProject, ITask, TimeAndDurationMap } from "../../model/model";
 import { CalendarCurrentTime } from "./CalendarCurrentTime";
 import { CalendarSlots } from "./CalendarSlots";
 import { CalendarTasks } from "./CalendarTasks";
@@ -19,9 +15,13 @@ interface DraggableCalendarProps {
   day: string;
   tasks: ITask[];
   projects: IProject[];
-  calendarScrollRef: React.RefObject<Animated.ScrollView>;
-  scrollTargetY: SharedValue<number | null>;
-  scrollDuration: SharedValue<number>;
+  scrollRef: React.RefObject<Animated.ScrollView>;
+  scrollProps: Partial<{
+    contentOffset: {
+      x: number;
+      y: number;
+    };
+  }>;
   calendarStyle: { height: number };
   movingItemId: string | null;
   movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
@@ -32,30 +32,16 @@ export const DraggableCalendar = ({
   tasks,
   projects,
   movingItemId,
-  calendarScrollRef,
+  scrollRef,
   calendarStyle,
   movingTimeAndDurationOfTasks,
-  scrollTargetY,
-  scrollDuration,
+  scrollProps
 }: DraggableCalendarProps) => {
-  const { calendarHeight} = useDraggableCalendarListContext();
-  const scrollOffset = useScrollViewOffset(calendarScrollRef);
-  const animatedScrollProps = useAnimatedProps(() => {
-    if (scrollTargetY.value === null) {
-      return { contentOffset: { x: 0, y: scrollOffset.value } };
-    }
-    return {
-      contentOffset: {
-        x: 0,
-        y: withTiming(scrollTargetY.value, { duration: scrollDuration.value }),
-      },
-    };
-  });
-
+  const { calendarHeight } = useDraggableCalendarListContext();
   return (
     <Animated.View style={[calendarStyle]}>
       <Animated.ScrollView
-        ref={calendarScrollRef}
+        ref={scrollRef}
         alwaysBounceHorizontal={false}
         alwaysBounceVertical={false}
         bounces={false}
@@ -64,7 +50,7 @@ export const DraggableCalendar = ({
         contentContainerStyle={{
           height: calendarHeight,
         }}
-        animatedProps={animatedScrollProps}
+        animatedProps={scrollProps}
       >
         <YStack backgroundColor="$backgroundFocus" height={calendarHeight}>
           <CalendarSlots />

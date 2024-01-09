@@ -23,7 +23,7 @@ export const CalendarListDataProvider = (props: any) => {
   const [editedTaskId, setEditedTaskId] = useState<string | null>(null);
   const { screenHeight } = useScreenDimensions();
   const value = useMemo(() => {
-    const itemHeight = 0.082 * screenHeight;
+    const itemHeight = 0.09 * screenHeight;
     const minuteInPixels = itemHeight / 60;
     const calendarStepHeight = minuteInPixels * 15;
     const calendarHeight = 24 * itemHeight;

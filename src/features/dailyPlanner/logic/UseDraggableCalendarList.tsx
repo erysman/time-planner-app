@@ -8,19 +8,17 @@ export const useDraggableCalendarList = (
   itemsOrder: string[],
   tasks: ITask[]
 ) => {
-  const {dimensions, styles} = useDailyPlannerContext();
-  
+  const { dimensions, styles } = useDailyPlannerContext();
+
   const {
     dragGesture,
     movingItemsOrder,
-    calendarScrollRef,
-    calendarScrollDuration,
-    calendarScrollTargetY,
+    scroll,
     movingItemId,
     movingItemType,
     movingItemViewY,
     listPointerIndex,
-    movingTimeAndDurationOfTasks
+    movingTimeAndDurationOfTasks,
   } = useDraggableCalendarListGesture(
     day,
     itemsOrder,
@@ -42,11 +40,9 @@ export const useDraggableCalendarList = (
       viewY: movingItemViewY,
       type: movingItemType,
       listPointerIndex,
-      movingTimeAndDurationOfTasks
+      movingTimeAndDurationOfTasks,
     },
-    calendarScrollRef,
-    calendarScrollDuration,
-    calendarScrollTargetY,
+    scroll,
     styles,
     movingTask,
   };

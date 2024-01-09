@@ -119,7 +119,6 @@ export const DatePickerStackHeader = ({
 
   const onChangeDayPress = useCallback(() => {
     setOpen((prev) => {
-      console.log("button prev", prev);
       if (prev) {
         onClose();
       } else {

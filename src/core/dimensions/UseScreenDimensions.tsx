@@ -25,8 +25,6 @@ export const ScreenDimensionsProvider = (props: any) => {
     const {height, width: screenWidth} = Dimensions.get("window");
     const {top: topInset} = useSafeAreaInsets();
     
-
-    
     const value = useMemo(() => {
         const isEmulator = !isDevice;
         const headerHeight = Math.floor(0.063*height);

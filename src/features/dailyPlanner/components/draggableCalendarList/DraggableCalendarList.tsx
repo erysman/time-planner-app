@@ -25,9 +25,12 @@ export const DraggableCalendarList = ({
   const {
     dragGesture,
     movingItem,
-    calendarScrollRef,
-    calendarScrollDuration,
-    calendarScrollTargetY,
+    scroll: {
+      calendarScrollProps,
+      calendarScrollRef,
+      listScrollProps,
+      listScrollRef,
+    },
     styles: { calendarStyle, listStyle },
     movingTask,
   } = useDraggableCalendarList(day, tasksOrder, tasks);
@@ -45,6 +48,8 @@ export const DraggableCalendarList = ({
             itemsOrder={movingItem.itemsOrder}
             listPointerIndex={movingItem.listPointerIndex}
             listStyle={listStyle}
+            scrollRef={listScrollRef}
+            scrollProps={listScrollProps}
             movingItemId={movingItem.id}
           />
           <DraggableCalendar
@@ -52,11 +57,12 @@ export const DraggableCalendarList = ({
             projects={projects}
             tasks={tasks}
             movingItemId={movingItem.id}
-            calendarScrollRef={calendarScrollRef}
-            scrollDuration={calendarScrollDuration}
-            scrollTargetY={calendarScrollTargetY}
+            scrollRef={calendarScrollRef}
+            scrollProps={calendarScrollProps}
             calendarStyle={calendarStyle}
-            movingTimeAndDurationOfTasks={movingItem.movingTimeAndDurationOfTasks}
+            movingTimeAndDurationOfTasks={
+              movingItem.movingTimeAndDurationOfTasks
+            }
           />
         </Animated.View>
       </GestureDetector>
@@ -64,7 +70,7 @@ export const DraggableCalendarList = ({
         viewY={movingItem.viewY}
         movingItemType={movingItem.type}
         task={movingTask}
-        project={projects.find(p => p.id === movingTask?.projectId)}
+        project={projects.find((p) => p.id === movingTask?.projectId)}
         movingTimeAndDurationOfTasks={movingItem.movingTimeAndDurationOfTasks}
       />
     </YStack>

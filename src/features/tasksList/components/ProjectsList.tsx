@@ -24,9 +24,15 @@ export const ProjectsList = ({ projects }: ProjectsListProps) => {
     // />
     <YStack fullscreen mt={24} marginHorizontal={24} space={12}>
       {projects.map((project) => {
-        return <ProjectView key={project.id} name={project.name} color={project.color} />;
+        return (
+          <ProjectView
+            key={project.id}
+            name={project.name}
+            color={project.color}
+          />
+        );
       })}
-      <AddProjectView/>
+      <AddProjectView />
     </YStack>
   );
 };
@@ -38,9 +44,16 @@ export interface ProjectViewProps {
 
 export const ProjectView = ({ color, name }: ProjectViewProps) => {
   return (
-    <XStack height={52} width="100%" borderRadius={"$6"} alignItems="center" elevation={10} backgroundColor={"$background"}>
+    <XStack
+      height={52}
+      width="100%"
+      borderRadius={"$6"}
+      alignItems="center"
+      elevation={10}
+      backgroundColor={"$background"}
+    >
       <Circle backgroundColor={color} size="$1.5" marginHorizontal={16} />
-      <SizableText size="$5" ellipsizeMode="tail" numberOfLines={1} >
+      <SizableText size="$5" ellipsizeMode="tail" numberOfLines={1}>
         {name}
       </SizableText>
     </XStack>
@@ -48,13 +61,19 @@ export const ProjectView = ({ color, name }: ProjectViewProps) => {
 };
 
 export const AddProjectView = () => {
-    return (
-      <XStack height={52} width="100%" borderRadius={"$6"} alignItems="center" elevation={10} backgroundColor={"$backgroundHover"}>
-        <PlusIcon size={24} color={"color"} marginHorizontal={16}/>
-        <SizableText size="$5" ellipsizeMode="tail" numberOfLines={1} >
-            {i18n.t("project.add_project")}
-        </SizableText>
-      </XStack>
-    );
-  };
-  
+  return (
+    <XStack
+      height={52}
+      width="100%"
+      borderRadius={"$6"}
+      alignItems="center"
+      elevation={10}
+      backgroundColor={"$backgroundHover"}
+    >
+      <PlusIcon size={24} color={"color"} marginHorizontal={16} />
+      <SizableText size="$5" ellipsizeMode="tail" numberOfLines={1}>
+        {i18n.t("project.add_project")}
+      </SizableText>
+    </XStack>
+  );
+};

@@ -40,7 +40,7 @@ export const DailyPlannerScreen = ({ day }: DailyPlannerScreenProps) => {
   if (isError || isErrorOrder || isErrorProjects) {
     return <H6>{"Error during loading tasks or projects, try again"}</H6>; //TODO: this should be toast!
   }
-
+  
   return (
     <CalendarListDataProvider>
       <DraggableCalendarList

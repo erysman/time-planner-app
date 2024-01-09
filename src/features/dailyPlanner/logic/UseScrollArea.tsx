@@ -1,4 +1,10 @@
-import Animated, { SharedValue, useDerivedValue, useSharedValue } from "react-native-reanimated";
+import Animated, {
+  SharedValue,
+  useAnimatedProps,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 interface AreaBoundries {
   top: number;
@@ -8,29 +14,44 @@ interface AreaBoundries {
 type ScrollDirection = "up" | "down" | null;
 
 export const useDragScrollArea = (
-  viewTop: SharedValue<number>,
+  viewTop: SharedValue<number> | null,
   viewHeight: SharedValue<number>,
   scrollViewContentHeight: number,
   scrollOffset: SharedValue<number>
 ) => {
   const areaHeight = viewHeight.value * 0.15;
+  const top = viewTop?.value ?? 0;
   const upAreaBaseBoundries = {
-    top: viewTop.value,
-    bottom: viewTop.value + areaHeight,
+    top: top,
+    bottom: top + areaHeight,
   } as AreaBoundries;
   const downAreaBaseBoundries = {
-    top: viewTop.value + viewHeight.value - areaHeight,
-    bottom: viewTop.value + viewHeight.value,
+    top: top + viewHeight.value - areaHeight,
+    bottom: top + viewHeight.value,
   } as AreaBoundries;
 
-  const SCROLL_ACTIVATION_THRESHOLD_MS = 300; 
+  const SCROLL_ACTIVATION_THRESHOLD_MS = 300;
   const currentScrollDirection = useSharedValue<ScrollDirection>(null);
   const activeScrollDirection = useSharedValue<ScrollDirection>(null);
   const scrollActivationTimestamp = useSharedValue<number>(0);
   const scrollVelocity = 300; //px/s
   const scrollTargetY = useSharedValue<number | null>(scrollOffset.value);
   const scrollDuration = useSharedValue(0);
-  const isScrollActive = useDerivedValue(() => activeScrollDirection.value !== null)
+  const isScrollActive = useDerivedValue(
+    () => activeScrollDirection.value !== null
+  );
+
+  const scrollProps = useAnimatedProps(() => {
+    if (scrollTargetY.value === null) {
+      return { contentOffset: { x: 0, y: scrollOffset.value } };
+    }
+    return {
+      contentOffset: {
+        x: 0,
+        y: withTiming(scrollTargetY.value, { duration: scrollDuration.value }),
+      },
+    };
+  });
 
   function isTaskTooLarge(itemPosition: { top: number; bottom: number }) {
     "worklet";
@@ -68,7 +89,7 @@ export const useDragScrollArea = (
 
   function activateScroll() {
     "worklet";
-    console.log(`activate scroll!`);
+    console.log(name, `activate scroll!`);
     activeScrollDirection.value = currentScrollDirection.value;
     const { targetPosition, distance } = getScrollTargetPosition(
       activeScrollDirection.value,
@@ -77,12 +98,12 @@ export const useDragScrollArea = (
     );
     scrollDuration.value = (distance / scrollVelocity) * 1000;
     scrollTargetY.value = targetPosition;
-    console.log("isScrollActive", isScrollActive.value)
   }
 
-  function activateScrollIfItemInsideScrollArea(
-    itemPosition: { top: number; bottom: number }
-  ) {
+  function activateScrollIfItemInsideScrollArea(itemPosition: {
+    top: number;
+    bottom: number;
+  }) {
     "worklet";
     if (isTaskTooLarge(itemPosition)) {
       return;
@@ -108,7 +129,8 @@ export const useDragScrollArea = (
     if (
       currentScrollDirection.value !== null &&
       currentScrollDirection.value !== activeScrollDirection.value &&
-      Date.now() - scrollActivationTimestamp.value > SCROLL_ACTIVATION_THRESHOLD_MS
+      Date.now() - scrollActivationTimestamp.value >
+        SCROLL_ACTIVATION_THRESHOLD_MS
     ) {
       activateScroll();
     }
@@ -117,8 +139,7 @@ export const useDragScrollArea = (
   return {
     activateScrollIfItemInsideScrollArea,
     cancelScroll,
-    scrollTargetY,
-    scrollDuration,
+    scrollProps,
     isScrollActive,
   };
 };

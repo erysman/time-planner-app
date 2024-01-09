@@ -66,8 +66,7 @@ export function timeToMinutes(time: string) {
 
 export function minutesToTime(minutes: number) {
   'worklet'
-  const minutesPinnedToMinStep = Math.floor(minutes/15)*15
-  console.log("minutes", minutes, "pinned", minutesPinnedToMinStep)
+  const minutesPinnedToMinStep = Math.round(minutes/15)*15
   const hours = Math.floor(minutesPinnedToMinStep / 60);
   const remainingMinutes = minutesPinnedToMinStep % 60;
 
@@ -81,7 +80,7 @@ export function minutesToTime(minutes: number) {
 
 export function minutesToShortTime(minutes: number) {
   'worklet'
-  const minutesPinnedToMinStep = Math.floor(minutes/15)*15
+  const minutesPinnedToMinStep = Math.round(minutes/15)*15
   const hours = Math.floor(minutesPinnedToMinStep / 60);
   const remainingMinutes = minutesPinnedToMinStep % 60;
 

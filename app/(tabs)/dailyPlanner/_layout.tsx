@@ -35,8 +35,8 @@ export default function DailyPlannerLayout() {
   const days = useMemo(
     () => [
       // ...getAllDaysOfYearSince(today.subtract(1, "year").startOf("year")),
-      // ...getAllDaysOfYearSince(today.startOf("year")),
-      ...getAllDaysOfYearSince(today),
+      ...getAllDaysOfYearSince(today.startOf("year")),
+      // ...getAllDaysOfYearSince(today),
       ...getAllDaysOfYearSince(dayjs().add(1, "year").startOf("year")),
     ],
     []
