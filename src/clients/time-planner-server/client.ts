@@ -914,6 +914,68 @@ export const useValidate = <TData = Awaited<ReturnType<typeof validate>>, TError
 
 
 /**
+ * @summary Get project tasks
+ */
+export const getProjectTasks = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<TaskDTO[]>(
+      {url: `/projects/${id}/tasks`, method: 'get', signal
+    },
+      options);
+    }
+  
+
+export const getGetProjectTasksQueryKey = (id: string,) => {
+    
+    return [`/projects/${id}/tasks`] as const;
+    }
+  
+
+    
+export const getGetProjectTasksQueryOptions = <TData = Awaited<ReturnType<typeof getProjectTasks>>, TError = ErrorMessage>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProjectTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProjectTasksQueryKey(id);
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProjectTasks>>> = ({ signal }) => getProjectTasks(id, requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProjectTasks>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetProjectTasksQueryResult = NonNullable<Awaited<ReturnType<typeof getProjectTasks>>>
+export type GetProjectTasksQueryError = ErrorMessage
+
+/**
+ * @summary Get project tasks
+ */
+export const useGetProjectTasks = <TData = Awaited<ReturnType<typeof getProjectTasks>>, TError = ErrorMessage>(
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProjectTasks>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetProjectTasksQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+/**
  * @summary Get day's tasks
  */
 export const getDayTasks = (

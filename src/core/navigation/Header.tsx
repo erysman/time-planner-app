@@ -19,28 +19,29 @@ import { useScheduleDayTasks } from "../../features/dailyPlanner/logic/UseSchedu
 import { DatePicker } from "../components/calendar/DatePicker";
 import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ExpoIcon } from "../components/ExpoIcon";
 
 export interface IStackHeaderProps extends NativeStackHeaderProps {
   headerLeft: () => JSX.Element;
   headerRight: () => JSX.Element;
 }
 
-export const StackHeader = ({
-  options,
-  route,
-  headerLeft,
-  headerRight,
-  navigation,
-}: IStackHeaderProps) => {
-  const headerTitle = getHeaderTitle(options, route.name);
-  return (
-    <Header
-      title={headerTitle}
-      headerLeft={headerLeft}
-      headerRight={headerRight}
-    />
-  );
-};
+// export const StackHeader = ({
+//   options,
+//   route,
+//   headerLeft,
+//   headerRight,
+//   navigation,
+// }: IStackHeaderProps) => {
+//   const headerTitle = getHeaderTitle(options, route.name);
+//   return (
+//     <Header
+//       title={headerTitle}
+//       headerLeft={headerLeft}
+//       headerRight={headerRight}
+//     />
+//   );
+// };
 
 export interface IHeaderProps {
   title: JSX.Element | string;
@@ -48,13 +49,22 @@ export interface IHeaderProps {
   headerRight?: () => JSX.Element;
 }
 
-export const Header = ({ title, headerLeft, headerRight }: IHeaderProps) => {
+export const Header = (props: {
+  navigation;
+  route;
+  options;
+  back?: any;
+  headerLeft?: any;
+  headerRight?: any;
+}) => {
+  const { navigation, route, options, back, headerLeft, headerRight } = props;
+  const title = getHeaderTitle(options, route.name);
   const { topInset, headerHeight, headerTotalHeight } = useScreenDimensions();
 
   return (
     <SafeAreaView>
       <XStack
-        width={"100%"}
+        width={200}
         backgroundColor={"$background"}
         height={headerHeight}
         alignItems={"center"}
@@ -62,10 +72,24 @@ export const Header = ({ title, headerLeft, headerRight }: IHeaderProps) => {
         borderBottomWidth={1}
         borderColor={"$backgroundFocus"}
       >
-        <XStack flexGrow={1} flexShrink={1}>
+        <XStack flexGrow={1} flexShrink={1} height={headerHeight} alignItems="center">
+        <ExpoIcon
+              iconSet="MaterialIcons"
+              name="arrow-back"
+              color="color"
+              size={24}
+            />
+          <Button variant="outlined" size={24}>
+            <ExpoIcon
+              iconSet="MaterialIcons"
+              name="arrow-back"
+              color="color"
+              size={24}
+            />
+          </Button>
           {headerLeft && headerLeft()}
         </XStack>
-        <XStack flexGrow={1}>
+        <XStack flexGrow={1} justifyContent="flex-end">
           {typeof title === "string" ? (
             <SizableText size="$6" flexGrow={1} textAlign={"center"}>
               {title}

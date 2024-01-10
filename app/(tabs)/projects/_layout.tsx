@@ -2,7 +2,7 @@ import { Stack } from "expo-router";
 import { Header } from "../../../src/core/navigation/Header";
 
 
-export default function TasksLayout() {
+export default function ProjectsLayout() {
 
   return (
     <Stack
@@ -13,14 +13,20 @@ export default function TasksLayout() {
       <Stack.Screen
         name="index"
         options={{
-          header: (props) => (<Header title={"Projects and tasks"} {...props}/>),
+          // header: (props) => (<Header {...props}/>),
           title: "Projects and tasks"
+        }}
+      />
+      <Stack.Screen
+        name="[projectId]"
+        options={{
+          // header: (props) => (<Header {...props}/>),
         }}
       />
       <Stack.Screen
         name="tasks/[taskId]"
         options={{
-          
+          // header: (props) => (<Header {...props}/>),
         }}
       />
     </Stack>

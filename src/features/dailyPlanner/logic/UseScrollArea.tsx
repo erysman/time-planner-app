@@ -89,7 +89,6 @@ export const useDragScrollArea = (
 
   function activateScroll() {
     "worklet";
-    console.log(name, `activate scroll!`);
     activeScrollDirection.value = currentScrollDirection.value;
     const { targetPosition, distance } = getScrollTargetPosition(
       activeScrollDirection.value,

@@ -15,10 +15,10 @@ export default function TabLayout() {
         }}
       >
         <Tabs.Screen
-          name="(tasks)"
+          name="projects"
           options={{
             title: "",
-            tabBarLabel: "Tasks List",
+            tabBarLabel: "Projects List",
             tabBarIcon: (props) => {
               return <MaterialIcons name={"list-alt"} {...props} />;
             },
