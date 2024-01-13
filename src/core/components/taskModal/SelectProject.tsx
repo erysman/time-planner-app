@@ -1,41 +1,39 @@
-import { useState, useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import {
   Adapt,
   Circle,
   Select,
-  SelectProps,
   Sheet,
   SizableText,
   XStack,
-  YStack,
+  YStack
 } from "tamagui";
-import { ExpoIcon } from "../ExpoIcon";
 import { useGetProjects } from "../../../clients/time-planner-server/client";
 import { IProject } from "../../../features/dailyPlanner/model/model";
-import { UseUpdateTaskReturnType } from "./TaskForm";
+import { ExpoIcon } from "../ExpoIcon";
 
-interface SelectProjectProps  {
-  taskId: string;
+interface SelectProjectProps {
   projectId: string;
-  updateTask: UseUpdateTaskReturnType
+  updateProject: (projectId: string) => void;
 }
 
-export function SelectProject({projectId, taskId, updateTask}: SelectProjectProps) {
-  // const [val, setVal] = useState(projectId);
+export function SelectProject({
+  projectId,
+  updateProject,
+}: SelectProjectProps) {
 
   const { data, isLoading, isError } = useGetProjects();
 
   const selectedProject = useMemo(() => {
     return data?.find((p) => p.id === projectId);
   }, [projectId, data]);
+
   return (
     <XStack>
       <Select
         id="project"
         value={projectId}
-        onValueChange={(value) => {
-          updateTask.mutate({id: taskId, data: {projectId: value}})
-        }}
+        onValueChange={updateProject}
         disablePreventBodyScroll
       >
         <Select.Trigger
@@ -51,11 +49,15 @@ export function SelectProject({projectId, taskId, updateTask}: SelectProjectProp
         >
           <SizableText>{"Project:"}</SizableText>
           {selectedProject ? (
-            <XStack justifyContent="center" alignItems="center" space={10} marginLeft={16}>
+            <XStack
+              justifyContent="center"
+              alignItems="center"
+              space={10}
+              marginLeft={16}
+            >
               <Circle
                 backgroundColor={selectedProject.color ?? "$background"}
                 size={16}
-                
               />
               <SizableText fontSize={"$4"}>{selectedProject.name}</SizableText>
             </XStack>

@@ -1,7 +1,7 @@
 import { Spinner, H6 } from "tamagui";
 import { useGetTask } from "../../../clients/time-planner-server/client";
 import { ITask } from "../../../features/dailyPlanner/model/model";
-import { TaskForm } from "./TaskForm";
+import { EditTaskForm } from "./EditTaskForm";
 
 
 interface TaskFormLoadProps {
@@ -21,7 +21,7 @@ export const TaskFormLoad = ({ id, onClose }: TaskFormLoadProps) => {
   const task = data as ITask;
   if(!task) return null;
   return (
-    <TaskForm
+    <EditTaskForm
       name={task.name}
       id={id}
       day={task.startDay}

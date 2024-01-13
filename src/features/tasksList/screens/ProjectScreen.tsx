@@ -3,13 +3,14 @@ import { useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { H6, Spinner, YStack } from "tamagui";
 import {
-    useGetProject,
-    useGetProjectTasks,
+  useGetProject,
+  useGetProjectTasks,
 } from "../../../clients/time-planner-server/client";
 import ListItem from "../../../core/components/list/ListItem";
 import { useTaskModal } from "../../../core/components/taskModal/TaskModal";
 import { getRefreshInterval } from "../../../core/config/utils";
 import { ITask } from "../../dailyPlanner/model/model";
+import { AddTaskFab } from "../../../core/components/AddTaskFab";
 
 export interface ProjectScreenProps {
   id: string;
@@ -46,30 +47,33 @@ export const ProjectScreen = ({ id }: ProjectScreenProps) => {
   }
 
   return (
-    <ScrollView
-      alwaysBounceHorizontal={false}
-      alwaysBounceVertical={false}
-      bounces={false}
-      overScrollMode="never"
-    >
-      <YStack h={"100%"} w={"100%"}>
-        {(tasks as ITask[])?.map((task) => (
-          <ListItem
-            key={task.id}
-            name={task.name}
-            isEdited={false}
-            isImportant={task.isImportant}
-            isUrgent={task.isUrgent}
-            durationMin={task.durationMin}
-            projectColor={project?.color ?? undefined}
-            height={55}
-            onPress={() => {
-              openModal(task.id);
-            }}
-          />
-        ))}
-      </YStack>
-      {taskModal}
-    </ScrollView>
+    <>
+      <ScrollView
+        alwaysBounceHorizontal={false}
+        alwaysBounceVertical={false}
+        bounces={false}
+        overScrollMode="never"
+      >
+        <YStack h={"100%"} w={"100%"}>
+          {(tasks as ITask[])?.map((task) => (
+            <ListItem
+              key={task.id}
+              name={task.name}
+              isEdited={false}
+              isImportant={task.isImportant}
+              isUrgent={task.isUrgent}
+              durationMin={task.durationMin}
+              projectColor={project?.color ?? undefined}
+              height={55}
+              onPress={() => {
+                openModal(task.id);
+              }}
+            />
+          ))}
+        </YStack>
+        {taskModal}
+      </ScrollView>
+      <AddTaskFab />
+    </>
   );
 };

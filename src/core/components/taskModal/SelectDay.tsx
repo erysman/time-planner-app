@@ -1,30 +1,25 @@
 import dayjs from "dayjs";
 import React, { useCallback, useState } from "react";
 import Animated, {
-  useSharedValue,
-  useAnimatedReaction,
-  withTiming,
   useAnimatedProps,
+  useAnimatedReaction,
+  useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
-import { SizableText, Button, YStack } from "tamagui";
+import { Button, SizableText, YStack } from "tamagui";
 import { DAY_FORMAT, DAY_LONG_READ_FORMAT } from "../../../../config/constants";
 import { ExpoIcon } from "../ExpoIcon";
 import { DatePicker } from "../calendar/DatePicker";
-import { UseUpdateTaskReturnType } from "./TaskForm";
 
 const AnimatedYStack = Animated.createAnimatedComponent(YStack);
 
 interface SelectDayProps {
-  taskId: string;
   day?: string;
-  updateTask: UseUpdateTaskReturnType;
+  updateDay: (day: string) => void ;
 }
 
-export const SelectDay = ({ day, updateTask, taskId: id }: SelectDayProps) => {
-  const updateDay = useCallback(
-    (day: string) => updateTask.mutate({ id, data: { startDay: day } }),
-    [updateTask, id]
-  );
+export const SelectDay = ({ day, updateDay }: SelectDayProps) => {
+  
   const [dayPickerOpen, setDayPickerOpen] = useState(false);
   const dayPickerHeightMin = 45;
   const dayPickerHeightMax = 330 + dayPickerHeightMin;

@@ -1,29 +1,22 @@
 import DateTimePicker, {
-    DateTimePickerEvent,
-  } from "@react-native-community/datetimepicker";
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
-import React, { useCallback, useState } from "react";
-import { SizableText, Button } from "tamagui";
+import React, { useState } from "react";
+import { Button, SizableText } from "tamagui";
 import { TIME_FORMAT } from "../../../../config/constants";
 import { mapToDayjs } from "../../utils";
 import { ExpoIcon } from "../ExpoIcon";
-import { UseUpdateTaskReturnType } from "./TaskForm";
 
 interface SelectStartTimeProps {
-  taskId: string;
   startTime?: string;
-  updateTask: UseUpdateTaskReturnType;
+  updateStartTime: (startTime: string) => void;
 }
 
 export const SelectStartTime = ({
-  taskId: id,
-  updateTask,
+  updateStartTime,
   startTime,
 }: SelectStartTimeProps) => {
-  const updateStartTime = useCallback(
-    (startTime: string) => updateTask.mutate({ id, data: { startTime } }),
-    [updateTask, id]
-  );
   const [startTimePickerOpen, setStartTimePickerOpen] = useState(false);
   const setStartTime = (event: DateTimePickerEvent, date?: Date) => {
     setStartTimePickerOpen(false);

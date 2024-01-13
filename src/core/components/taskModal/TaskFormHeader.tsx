@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { XStack, Input, Button } from "tamagui";
 import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
 import { ExpoIcon } from "../ExpoIcon";
-import { UseUpdateTaskReturnType } from "./TaskForm";
+import { UseUpdateTaskReturnType } from "./EditTaskForm";
 import { debounce } from "lodash";
 
 interface TaskFormHeaderProps {

@@ -2,27 +2,21 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
-import React, { useCallback, useMemo, useState } from "react";
-import { SizableText, Button } from "tamagui";
+import React, { useMemo, useState } from "react";
+import { Button, SizableText } from "tamagui";
 import { minutesToShortTime } from "../../utils";
 import { ExpoIcon } from "../ExpoIcon";
-import { UseUpdateTaskReturnType } from "./TaskForm";
 
 interface SelectDurationMinProps {
-  taskId: string;
   durationMin?: number;
-  updateTask: UseUpdateTaskReturnType;
+  updateDuration: (durationMin: number) => void;
 }
 
 export const SelectDurationMin = ({
-  taskId: id,
-  updateTask,
+  updateDuration,
   durationMin,
 }: SelectDurationMinProps) => {
-  const updateDuration = useCallback(
-    (durationMin: number) => updateTask.mutate({ id, data: { durationMin } }),
-    [updateTask, id]
-  );
+  
 
   const initialDurationMin = useMemo(() => {
     if (!durationMin) return dayjs().startOf("day").add(1, "hour").toDate();
