@@ -64,7 +64,7 @@ export const Header = (props: {
   return (
     <SafeAreaView>
       <XStack
-        width={200}
+        width={"100%"}
         backgroundColor={"$background"}
         height={headerHeight}
         alignItems={"center"}

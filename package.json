@@ -56,7 +56,8 @@
     "react-native-web": "~0.19.6",
     "tamagui": "^1.75.5",
     "react-native-pager-view": "6.2.0",
-    "react-native-svg": "13.9.0"
+    "react-native-svg": "13.9.0",
+    "@react-native-community/datetimepicker": "7.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

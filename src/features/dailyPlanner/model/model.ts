@@ -1,13 +1,12 @@
-import { Priority } from "../../../core/model/types";
-
 
 export interface ITask {
   id: string;
   name: string;
-  startDay: string;
+  startDay?: string;
   startTime?: string;
   durationMin?: number;
-  priority: Priority;
+  isImportant: boolean;
+  isUrgent: boolean;
   projectId: string;
 }
 

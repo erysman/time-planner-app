@@ -4,13 +4,13 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { UpdateTaskDTOPriority } from './updateTaskDTOPriority';
 
 export interface UpdateTaskDTO {
   name?: string;
   startDay?: string | null;
   startTime?: string | null;
   durationMin?: number | null;
-  priority?: UpdateTaskDTOPriority;
+  isImportant?: boolean | null;
+  isUrgent?: boolean | null;
   projectId?: string | null;
 }

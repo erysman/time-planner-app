@@ -1,11 +1,8 @@
-import { ReactNode } from "react";
-import { DragAndDropList } from "../../../core/components/list/DragAndDropList";
-import { IProject } from "../../dailyPlanner/model/model";
-import { ProjectsListScreenProps } from "../screens/ProjectsListScreen";
+import { Link, useRouter } from "expo-router";
 import { Circle, SizableText, XStack, YStack } from "tamagui";
-import { PlusIcon } from "../../../core/components/ExpoIcon";
 import i18n from "../../../../config/i18n";
-import { Link, Redirect, useNavigation, useRouter } from "expo-router";
+import { PlusIcon } from "../../../core/components/ExpoIcon";
+import { IProject } from "../../dailyPlanner/model/model";
 
 interface ProjectsListProps {
   projects: IProject[];

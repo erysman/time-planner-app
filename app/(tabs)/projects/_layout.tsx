@@ -23,12 +23,6 @@ export default function ProjectsLayout() {
           // header: (props) => (<Header {...props}/>),
         }}
       />
-      <Stack.Screen
-        name="tasks/[taskId]"
-        options={{
-          // header: (props) => (<Header {...props}/>),
-        }}
-      />
     </Stack>
   );
 }

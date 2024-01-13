@@ -5,6 +5,8 @@
  * OpenAPI spec version: v0
  */
 
+export * from './bannedRangeDTO';
+export * from './createBannedRangeDTO';
 export * from './createProjectDTO';
 export * from './createTaskDTO';
 export * from './createTaskDTOPriority';

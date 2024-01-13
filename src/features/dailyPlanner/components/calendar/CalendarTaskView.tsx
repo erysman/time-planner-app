@@ -1,13 +1,12 @@
 import Animated, {
-  useAnimatedProps,
-  interpolate,
   Extrapolation,
+  interpolate,
+  useAnimatedProps,
 } from "react-native-reanimated";
-import { XStack, SizableText } from "tamagui";
+import { SizableText, XStack } from "tamagui";
 import { PriorityIcons } from "../../../../core/components/PriorityIcons";
-import { Priority } from "../../../../core/model/types";
+
 import { useAnimatedHeight } from "./CalendarTaskHeightEditHandler";
-import { minutesToTime } from "../../logic/utils";
 
 interface CalendarTaskViewProps {
   id: string;
@@ -16,7 +15,8 @@ interface CalendarTaskViewProps {
   onPress?: (taskId: string) => void;
   hourSlotHeight: number;
   height?: number;
-  priority: Priority;
+  isUrgent: boolean;
+  isImportant: boolean;
   projectColor?: string;
 }
 
@@ -27,7 +27,8 @@ export const CalendarTaskView = ({
   hourSlotHeight,
   id,
   name,
-  priority,
+  isImportant,
+  isUrgent,
   isEdited,
   onPress,
   projectColor,
@@ -90,7 +91,7 @@ export const CalendarTaskView = ({
         >
           {name}
         </AnimatedSizableText>
-        <PriorityIcons priority={priority} />
+        <PriorityIcons isImportant={isImportant} isUrgent={isUrgent} />
       </AnimatedXStack>
     </XStack>
   );

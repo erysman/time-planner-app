@@ -24,6 +24,8 @@ import type {
   ProjectDTO,
   CreateProjectDTO,
   ScheduleInfoDTO,
+  BannedRangeDTO,
+  CreateBannedRangeDTO,
   UpdateTaskDTO,
   UpdateProjectDTO,
   Links200One,
@@ -551,6 +553,117 @@ export const getRevokeScheduleMutationOptions = <TError = ErrorMessage,
       return useMutation(mutationOptions);
     }
     
+/**
+ * @summary Get banned ranges
+ */
+export const getBannedRanges = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<BannedRangeDTO[]>(
+      {url: `/bannedRanges`, method: 'get', signal
+    },
+      options);
+    }
+  
+
+export const getGetBannedRangesQueryKey = () => {
+    
+    return [`/bannedRanges`] as const;
+    }
+  
+
+    
+export const getGetBannedRangesQueryOptions = <TData = Awaited<ReturnType<typeof getBannedRanges>>, TError = ErrorMessage>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getBannedRanges>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetBannedRangesQueryKey();
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBannedRanges>>> = ({ signal }) => getBannedRanges(requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getBannedRanges>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetBannedRangesQueryResult = NonNullable<Awaited<ReturnType<typeof getBannedRanges>>>
+export type GetBannedRangesQueryError = ErrorMessage
+
+/**
+ * @summary Get banned ranges
+ */
+export const useGetBannedRanges = <TData = Awaited<ReturnType<typeof getBannedRanges>>, TError = ErrorMessage>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getBannedRanges>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetBannedRangesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+export const createBannedRange = (
+    createBannedRangeDTO: CreateBannedRangeDTO,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<BannedRangeDTO>(
+      {url: `/bannedRanges`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: createBannedRangeDTO
+    },
+      options);
+    }
+  
+
+
+export const getCreateBannedRangeMutationOptions = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createBannedRange>>, TError,{data: CreateBannedRangeDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createBannedRange>>, TError,{data: CreateBannedRangeDTO}, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createBannedRange>>, {data: CreateBannedRangeDTO}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createBannedRange(data,requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type CreateBannedRangeMutationResult = NonNullable<Awaited<ReturnType<typeof createBannedRange>>>
+    export type CreateBannedRangeMutationBody = CreateBannedRangeDTO
+    export type CreateBannedRangeMutationError = ErrorMessage
+
+    export const useCreateBannedRange = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createBannedRange>>, TError,{data: CreateBannedRangeDTO}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getCreateBannedRangeMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
 export const getTask = (
     id: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
@@ -1037,6 +1150,109 @@ export const useGetDayTasks = <TData = Awaited<ReturnType<typeof getDayTasks>>, 
 }
 
 
+export const getBannedRange = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<BannedRangeDTO>(
+      {url: `/bannedRanges/${id}`, method: 'get', signal
+    },
+      options);
+    }
+  
+
+export const getGetBannedRangeQueryKey = (id: string,) => {
+    
+    return [`/bannedRanges/${id}`] as const;
+    }
+  
+
+    
+export const getGetBannedRangeQueryOptions = <TData = Awaited<ReturnType<typeof getBannedRange>>, TError = ErrorMessage>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getBannedRange>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetBannedRangeQueryKey(id);
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBannedRange>>> = ({ signal }) => getBannedRange(id, requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getBannedRange>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetBannedRangeQueryResult = NonNullable<Awaited<ReturnType<typeof getBannedRange>>>
+export type GetBannedRangeQueryError = ErrorMessage
+
+export const useGetBannedRange = <TData = Awaited<ReturnType<typeof getBannedRange>>, TError = ErrorMessage>(
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getBannedRange>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetBannedRangeQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+export const deleteBannedRange = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/bannedRanges/${id}`, method: 'delete'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteBannedRangeMutationOptions = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteBannedRange>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteBannedRange>>, TError,{id: string}, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteBannedRange>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteBannedRange(id,requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteBannedRangeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteBannedRange>>>
+    
+    export type DeleteBannedRangeMutationError = ErrorMessage
+
+    export const useDeleteBannedRange = <TError = ErrorMessage,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteBannedRange>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getDeleteBannedRangeMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
 /**
  * @summary Actuator root web endpoint
  */

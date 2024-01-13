@@ -27,7 +27,7 @@ export interface ExpoIconProps extends StackProps {
     | MaterialCommunityIconsNames
     | MaterialIconsNames
     | FontAwesomeNames;
-  color: keyof ThemeParsed;
+  color?: keyof ThemeParsed;
   size: number;
   iconStyle?: any;
 }
@@ -42,7 +42,8 @@ export const ExpoIcon = ({
 }: ExpoIconProps) => {
   const SelectedIcon = vectorIconsSets[iconSet];
   const theme = useTheme();
-  const iconColor = theme[color]?.val as string;
+  const col = color ?? "color"
+  const iconColor = theme[col]?.val as string;
   return (
     <Stack {...props}>
       <SelectedIcon

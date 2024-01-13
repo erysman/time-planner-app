@@ -4,7 +4,6 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { TaskDTOPriority } from './taskDTOPriority';
 
 export interface TaskDTO {
   id?: string;
@@ -12,6 +11,7 @@ export interface TaskDTO {
   startDay?: string | null;
   startTime?: string | null;
   durationMin?: number | null;
-  priority?: TaskDTOPriority;
+  isImportant?: boolean;
+  isUrgent?: boolean;
   projectId?: string;
 }

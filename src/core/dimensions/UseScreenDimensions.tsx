@@ -4,7 +4,7 @@ import {Dimensions} from "react-native";
 import { isDevice } from "expo-device";
 
 interface ScreenDimensions {
-    // screenWidth: number,
+    screenWidth: number,
     screenHeight: number,
     tabBarHeight: number,
     headerHeight: number,
@@ -14,7 +14,7 @@ interface ScreenDimensions {
 
 const ScreenDimensionsContext = React.createContext<ScreenDimensions>({
     screenHeight: 0,
-    // screenWidth: 0,
+    screenWidth: 0,
     tabBarHeight: 0,
     headerHeight: 0,
     headerTotalHeight: 0,
@@ -33,13 +33,13 @@ export const ScreenDimensionsProvider = (props: any) => {
         const screenHeight = height - tabBarHeight - (isEmulator ? headerTotalHeight : headerHeight);
         return {
             screenHeight,
-            // screenWidth,
+            screenWidth,
             tabBarHeight,
             headerHeight,
             headerTotalHeight,
             topInset
         }
-    }, [height, topInset]);
+    }, [height, topInset, screenWidth]);
 
     return (
         <ScreenDimensionsContext.Provider value={value}>

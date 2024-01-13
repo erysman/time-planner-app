@@ -31,7 +31,8 @@ export interface MovingCalendarTaskProps {
           id={task.id}
           name={task.name}
           isEdited={true}
-          priority={task.priority}
+          isImportant={task.isImportant}
+          isUrgent={task.isUrgent}
           projectColor={projectColor}
         />
       </CalendarTaskHeightEditHandler>

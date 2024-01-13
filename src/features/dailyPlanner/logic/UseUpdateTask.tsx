@@ -1,10 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { produce } from "immer";
-import { useUpdateTask, getGetDayTasksQueryKey } from "../../../clients/time-planner-server/client";
+import {
+  useUpdateTask,
+  getGetDayTasksQueryKey,
+  getGetProjectTasksQueryKey,
+  getGetTaskQueryKey,
+} from "../../../clients/time-planner-server/client";
 import { TaskDTO } from "../../../clients/time-planner-server/model";
 
-export const useUpdateTaskWrapper = (day: string) => {
-    const queryClient = useQueryClient();
+export const useUpdateTaskDayWrapper = (day: string) => {
+  const queryClient = useQueryClient();
 
   const updateTask = useUpdateTask({
     mutation: {
@@ -36,12 +41,22 @@ export const useUpdateTaskWrapper = (day: string) => {
           context?.previousData
         );
       },
-      onSettled: () => {
+      onSettled: (data) => {
         queryClient.invalidateQueries({
           queryKey: getGetDayTasksQueryKey(day),
         });
+        if (data?.projectId) {
+          queryClient.invalidateQueries({
+            queryKey: getGetProjectTasksQueryKey(data.projectId),
+          });
+        }
+        if (data?.id) {
+          queryClient.invalidateQueries({
+            queryKey: getGetTaskQueryKey(data.id),
+          });
+        }
       },
     },
   });
-  return {updateTask}
-}
+  return { updateTask };
+};

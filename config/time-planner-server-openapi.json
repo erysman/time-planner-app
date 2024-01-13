@@ -468,6 +468,91 @@
         }
       }
     },
+    "/bannedRanges": {
+      "get": {
+        "tags": [
+          "banned-ranges-controller"
+        ],
+        "summary": "Get banned ranges",
+        "operationId": "getBannedRanges",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BannedRangeDTO"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BannedRangeDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "banned-ranges-controller"
+        ],
+        "operationId": "createBannedRange",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBannedRangeDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BannedRangeDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tasks/{id}": {
       "get": {
         "tags": [
@@ -858,6 +943,79 @@
         }
       }
     },
+    "/bannedRanges/{id}": {
+      "get": {
+        "tags": [
+          "banned-ranges-controller"
+        ],
+        "operationId": "getBannedRange",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BannedRangeDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "banned-ranges-controller"
+        ],
+        "operationId": "deleteBannedRange",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/actuator": {
       "get": {
         "tags": [
@@ -1039,15 +1197,13 @@
             "format": "int32",
             "nullable": true
           },
-          "priority": {
-            "type": "string",
-            "nullable": true,
-            "enum": [
-              "IMPORTANT_URGENT",
-              "IMPORTANT",
-              "URGENT",
-              "NORMAL"
-            ]
+          "isImportant": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isUrgent": {
+            "type": "boolean",
+            "nullable": true
           },
           "projectId": {
             "type": "string",
@@ -1085,14 +1241,11 @@
             "format": "int32",
             "nullable": true
           },
-          "priority": {
-            "type": "string",
-            "enum": [
-              "IMPORTANT_URGENT",
-              "IMPORTANT",
-              "URGENT",
-              "NORMAL"
-            ]
+          "isImportant": {
+            "type": "boolean"
+          },
+          "isUrgent": {
+            "type": "boolean"
           },
           "projectId": {
             "type": "string",
@@ -1152,6 +1305,36 @@
           }
         }
       },
+      "CreateBannedRangeDTO": {
+        "type": "object",
+        "properties": {
+          "scheduleStartTime": {
+            "pattern": "HH:mm",
+            "type": "string"
+          },
+          "scheduleEndTime": {
+            "pattern": "HH:mm",
+            "type": "string"
+          }
+        }
+      },
+      "BannedRangeDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startTime": {
+            "pattern": "HH:mm",
+            "type": "string"
+          },
+          "endTime": {
+            "pattern": "HH:mm",
+            "type": "string"
+          }
+        }
+      },
       "UpdateTaskDTO": {
         "type": "object",
         "properties": {
@@ -1173,15 +1356,13 @@
             "format": "int32",
             "nullable": true
           },
-          "priority": {
-            "type": "string",
-            "nullable": true,
-            "enum": [
-              "IMPORTANT_URGENT",
-              "IMPORTANT",
-              "URGENT",
-              "NORMAL"
-            ]
+          "isImportant": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isUrgent": {
+            "type": "boolean",
+            "nullable": true
           },
           "projectId": {
             "type": "string",

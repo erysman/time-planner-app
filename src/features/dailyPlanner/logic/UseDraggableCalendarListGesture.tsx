@@ -25,7 +25,7 @@ import {
 import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
 import { ITask, ITaskWithTime, TimeAndDurationMap } from "../model/model";
 import { useDraggableCalendarListContext } from "./UseCalendarListContext";
-import { useUpdateTaskWrapper } from "./UseUpdateTask";
+import { useUpdateTaskDayWrapper } from "./UseUpdateTask";
 import { useUpdateTasksDayOrderWrapper } from "./UseUpdateTasksDayOrder";
 import {
   mapCalendarPositionToMinutes,
@@ -125,7 +125,7 @@ export const useDraggableCalendarListGesture = (
     }
   );
 
-  const { updateTask } = useUpdateTaskWrapper(day);
+  const { updateTask } = useUpdateTaskDayWrapper(day);
   const setTaskTime = (
     itemId: string,
     time: string | null,

@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import utc from "dayjs/plugin/utc";
 import { Dayjs } from "dayjs";
-import { DAY_FORMAT, TIME_FORMAT } from "../../../../config/constants";
+import { TIME_FORMAT } from "../../../../config/constants";
 
 dayjs.extend(duration)
 dayjs.extend(utc)
@@ -54,10 +54,6 @@ export function mapHeightToDurationMin(
   return durationMinPinnedToMinStep || 0;
 }
 
-export function mapToDayjs(date: string, time: string): Dayjs {
-  return dayjs(`${date}${time}`, `${DAY_FORMAT}${TIME_FORMAT}`);
-}
-
 export function timeToMinutes(time: string) {
   'worklet'
   const [hours, minutes] = time.split(':').map(Number);
@@ -78,15 +74,3 @@ export function minutesToTime(minutes: number) {
   return `${formattedHours}:${formattedMinutes}`;
 }
 
-export function minutesToShortTime(minutes: number) {
-  'worklet'
-  const minutesPinnedToMinStep = Math.round(minutes/15)*15
-  const hours = Math.floor(minutesPinnedToMinStep / 60);
-  const remainingMinutes = minutesPinnedToMinStep % 60;
-
-  // Ensure leading zeros for single-digit minutes
-  const formattedMinutes = remainingMinutes < 10 ? `0${remainingMinutes}` : `${remainingMinutes}`;
-
-  // Combine hours and minutes in the "HH:mm" format
-  return `${hours}:${formattedMinutes}`;
-}

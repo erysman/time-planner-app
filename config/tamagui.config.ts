@@ -6,16 +6,12 @@ const tamaguiConfig = createTamagui({
   ...config,
   animations: createAnimations({
     fast: {
-      type: 'spring',
-      damping: 20,
-      mass: 1.2,
-      stiffness: 250,
+      type: 'timing',
+      duration: 100,
     },
     medium: {
-      type: 'spring',
-      damping: 10,
-      mass: 0.9,
-      stiffness: 100,
+      type: 'timing',
+      duration: 200,
     },
     slow: {
       type: 'timing',

@@ -47,7 +47,8 @@ export const DraggableList = ({
         <ListItem
           name={task.name}
           isEdited={false}
-          priority={task.priority}
+          isImportant={task.isImportant}
+          isUrgent={task.isUrgent}
           durationMin={task.durationMin}
           projectColor={projects.find((p) => p.id === task.projectId)?.color}
         />
