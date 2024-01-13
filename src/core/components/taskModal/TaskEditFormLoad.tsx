@@ -1,15 +1,15 @@
 import { Spinner, H6 } from "tamagui";
 import { useGetTask } from "../../../clients/time-planner-server/client";
 import { ITask } from "../../../features/dailyPlanner/model/model";
-import { EditTaskForm } from "./EditTaskForm";
+import { TaskEditForm } from "../taskForm/TaskEditForm";
 
 
-interface TaskFormLoadProps {
+interface TaskEditFormLoadProps {
   id: string;
   onClose: () => void;
 }
 
-export const TaskFormLoad = ({ id, onClose }: TaskFormLoadProps) => {
+export const TaskEditFormLoad = ({ id, onClose }: TaskEditFormLoadProps) => {
   const { data, isError, isLoading } = useGetTask(id);
 
   if (isLoading) {
@@ -21,7 +21,7 @@ export const TaskFormLoad = ({ id, onClose }: TaskFormLoadProps) => {
   const task = data as ITask;
   if(!task) return null;
   return (
-    <EditTaskForm
+    <TaskEditForm
       name={task.name}
       id={id}
       day={task.startDay}

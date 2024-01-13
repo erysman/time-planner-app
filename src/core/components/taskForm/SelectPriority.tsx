@@ -4,6 +4,7 @@ import { HourglassIcon, StartIcon } from "../ExpoIcon";
 import { SwitchWithLabel } from "./SwitchWithLabel";
 
 interface SelectPriorityProps {
+  id: string;
   isImportant: boolean;
   isUrgent: boolean;
   updateUrgent: (isUrgent: boolean) => void;
@@ -11,6 +12,7 @@ interface SelectPriorityProps {
 }
 
 export const SelectPriority = ({
+  id,
   isImportant,
   isUrgent,
   updateUrgent,
@@ -19,15 +21,17 @@ export const SelectPriority = ({
   return (
     <YStack>
       <SwitchWithLabel
+        id={id}
         size={"$4"}
-        name={"Important"}
+        name={`Important`}
         icon={<StartIcon size={16} color={"color"} />}
         value={isImportant}
         setValue={(v) => updateImportant(v)}
       />
       <SwitchWithLabel
+        id={id}
         size={"$4"}
-        name={"Urgent"}
+        name={`Urgent`}
         icon={<HourglassIcon size={16} color={"color"} />}
         value={isUrgent}
         setValue={(v) => updateUrgent(v)}

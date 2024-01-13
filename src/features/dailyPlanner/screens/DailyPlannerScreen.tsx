@@ -1,54 +1,27 @@
-import { H6, Spinner, YStack } from "tamagui";
-import {
-  useGetDayTasks,
-  useGetProjects,
-  useGetTasksDayOrder,
-} from "../../../clients/time-planner-server/client";
-import { getRefreshInterval } from "../../../core/config/utils";
-import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
-import { DraggableCalendarList } from "../components/draggableCalendarList/DraggableCalendarList";
-import { CalendarListDataProvider } from "../logic/UseCalendarListContext";
-import { IProject, ITask } from "../model/model";
+import dayjs from "dayjs";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { SizableText, YStack } from "tamagui";
+import { DAY_FORMAT } from "../../../../config/constants";
+import { DatePickerTabHeader } from "../../../core/navigation/Header";
+import { DailyPlannerLoad } from "./DailyPlannerLoad";
+import { ErrorBoundary } from "react-error-boundary";
+import { GenericFallback } from "../../../core/components/fallbacks/GenericFallback";
 
-export interface DailyPlannerScreenProps {
-  day: string;
-}
+export default function DailyPlannerScreen({ route, navigation }) {
+  const day = route.name;
+  const isDateValid = day && dayjs(day, DAY_FORMAT).isValid();
 
-export const DailyPlannerScreen = ({ day }: DailyPlannerScreenProps) => {
-  const {
-    data: tasks,
-    isError,
-    isLoading,
-  } = useGetDayTasks(day, { query: { refetchInterval: getRefreshInterval() } });
-  const {
-    data: tasksOrder,
-    isError: isErrorOrder,
-    isLoading: isLoadingOrder,
-  } = useGetTasksDayOrder(day, {
-    query: { refetchInterval: getRefreshInterval() },
-  });
-
-  const {
-    data: projects,
-    isError: isErrorProjects,
-    isLoading: isLoadingProjects,
-  } = useGetProjects({ query: { refetchInterval: getRefreshInterval() } });
-
-  if (isLoading || isLoadingOrder || isLoadingProjects) {
-    return <Spinner />; //TODO: print skeleton, not Spinner
+  if (!isDateValid) {
+    return <SizableText>{`day not valid, ${day}`}</SizableText>;
   }
-  if (isError || isErrorOrder || isErrorProjects) {
-    return <H6>{"Error during loading tasks or projects, try again"}</H6>; //TODO: this should be toast!
-  }
-  
   return (
-    <CalendarListDataProvider>
-      <DraggableCalendarList
-        day={day}
-        tasks={tasks as ITask[]}
-        projects={projects as IProject[]}
-        tasksOrder={tasksOrder}
-      />
-    </CalendarListDataProvider>
+    <SafeAreaView>
+      <YStack>
+        <DatePickerTabHeader day={day} />
+        <ErrorBoundary FallbackComponent={GenericFallback}>
+          <DailyPlannerLoad day={day} />
+        </ErrorBoundary>
+      </YStack>
+    </SafeAreaView>
   );
-};
+}

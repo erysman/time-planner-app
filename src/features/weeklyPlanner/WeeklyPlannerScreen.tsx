@@ -3,7 +3,6 @@ import { useScreenDimensions } from "../../core/dimensions/UseScreenDimensions";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const WeeklyPlannerScreen = () => {
-  const {} = useScreenDimensions();
   return (
     <SafeAreaView>
       <Stack>

@@ -2,8 +2,10 @@ import { H1, YStack } from "tamagui";
 import { useAuth } from "../hooks/UseAuth";
 import { EmailAndPasswordForm } from "../components/EmailAndPasswordForm";
 import { AuthFooter } from "../components/AuthFooter";
+import { ErrorBoundary } from "react-error-boundary";
+import { GenericFallback } from "../../../core/components/fallbacks/GenericFallback";
 
-export const SignUpScreen = () => {
+export const SignUpForm = () => {
   const {
     loggingInProgress,
     actions: { signUpWithPassword, loginWithGoogle },
@@ -28,5 +30,13 @@ export const SignUpScreen = () => {
         redirectHref={"/(auth)/login"}
       />
     </YStack>
+  );
+};
+
+export const SignUpScreen = () => {
+  return (
+    <ErrorBoundary FallbackComponent={GenericFallback}>
+      <SignUpForm />
+    </ErrorBoundary>
   );
 };

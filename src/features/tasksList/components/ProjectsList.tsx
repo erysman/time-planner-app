@@ -1,8 +1,9 @@
 import { Link, useRouter } from "expo-router";
-import { Circle, SizableText, XStack, YStack } from "tamagui";
+import { Button, Circle, H6, SizableText, XStack, YStack } from "tamagui";
 import i18n from "../../../../config/i18n";
-import { PlusIcon } from "../../../core/components/ExpoIcon";
+import { ExpoIcon, PlusIcon } from "../../../core/components/ExpoIcon";
 import { IProject } from "../../dailyPlanner/model/model";
+import { FallbackProps } from "react-error-boundary";
 
 interface ProjectsListProps {
   projects: IProject[];
@@ -11,7 +12,7 @@ interface ProjectsListProps {
 export const ProjectsList = ({ projects }: ProjectsListProps) => {
   return (
     <YStack fullscreen mt={24} marginHorizontal={24} space={12}>
-      {projects.map((project) => {
+      {projects?.map((project) => {
         return (
           <ProjectView
             key={project.id}
@@ -26,6 +27,25 @@ export const ProjectsList = ({ projects }: ProjectsListProps) => {
   );
 };
 
+export const ProjectsListFallback = ({
+  error,
+  resetErrorBoundary,
+}: FallbackProps) => {
+  return (
+    <YStack mt={24} marginHorizontal={24} space={12}>
+      <H6>{`Something went wrong:`}</H6>
+      <SizableText>{error.message}</SizableText>
+      <Button
+        icon={<ExpoIcon iconSet="MaterialIcons" name="refresh" size={16} />}
+        onPress={resetErrorBoundary}
+      >
+        {"Retry"}
+      </Button>
+      <AddProjectView />
+    </YStack>
+  );
+};
+
 export interface ProjectItemProps {
   id: string;
   name: string;
@@ -35,7 +55,10 @@ export interface ProjectItemProps {
 export const ProjectView = ({ color, name, id }: ProjectItemProps) => {
   const router = useRouter();
   return (
-    <Link href={{pathname: `/projects/[projectId]`, params: {projectId: id}}} asChild>
+    <Link
+      href={{ pathname: `/projects/[projectId]`, params: { projectId: id } }}
+      asChild
+    >
       <XStack
         height={52}
         width="100%"

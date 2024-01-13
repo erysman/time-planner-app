@@ -1,6 +1,7 @@
 import { Switch, SizeTokens, useTheme, XStack, Label } from "tamagui";
 
 interface SwitchWithLabelProps {
+  id: string;
   size: SizeTokens;
   name: string;
   icon: React.JSX.Element;
@@ -9,13 +10,14 @@ interface SwitchWithLabelProps {
 }
 
 export function SwitchWithLabel({
+  id,
   name,
   size,
   icon,
   value,
   setValue,
 }: SwitchWithLabelProps) {
-  const id = `switch-${name}-${size.toString().slice(1)}}}`;
+  const formId = `switch-${name}-${id}}}`;
   const theme = useTheme();
   const thumbColor = theme.background.get();
   return (
@@ -27,14 +29,14 @@ export function SwitchWithLabel({
           paddingRight="$0"
           justifyContent="flex-end"
           size={size}
-          htmlFor={id}
+          htmlFor={formId}
         >
           {name}
         </Label>
       </XStack>
 
       <Switch
-        id={id}
+        id={formId}
         size={size}
         backgroundColor={"$background"}
         checked={value}

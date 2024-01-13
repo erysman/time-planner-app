@@ -1,9 +1,13 @@
 import { Button } from "tamagui";
 import { ExpoIcon } from "./ExpoIcon";
-import { useTaskModal } from "./taskModal/TaskModal";
+import { useCreateTaskModal } from "./taskModal/UseCreateTaskModal";
 
-export const AddTaskFab = () => {
-   const {openModal, taskModal} = useTaskModal()
+interface AddTaskFabProps {
+  projectId: string;
+}
+
+export const AddTaskFab = ({ projectId }: AddTaskFabProps) => {
+  const { openModal, taskModal } = useCreateTaskModal(projectId);
   return (
     <>
       <Button

@@ -13,8 +13,9 @@ import { TaskFormHeader } from "./TaskFormHeader";
 import { useUpdateTaskDetails } from "./UseUpdateTaskDetails";
 import { DeleteButton } from "./DeleteButton";
 import { SelectPriority } from "./SelectPriority";
+import { debounce } from "lodash";
 
-interface TaskFormProps {
+interface TaskEditFormProps {
   id: string;
   name: string;
   day?: string;
@@ -26,7 +27,7 @@ interface TaskFormProps {
   onClose: () => void;
 }
 
-export const EditTaskForm = ({
+export const TaskEditForm = ({
   name,
   id,
   day,
@@ -36,10 +37,14 @@ export const EditTaskForm = ({
   isUrgent,
   isImportant,
   onClose,
-}: TaskFormProps) => {
+}: TaskEditFormProps) => {
   
   const {updateTask} = useUpdateTaskDetails(id, projectId, day);
 
+  const updateName = useCallback(
+    debounce((text: string) => updateTask.mutate({ id, data: { name: text } }), 1000),
+    [updateTask, id]
+  );
   const updateUrgent = useCallback(
     (isUrgent: boolean) => {
       updateTask.mutate({
@@ -94,8 +99,7 @@ export const EditTaskForm = ({
         <YStack h={"100%"} w={"100%"} space={8} paddingVertical={12}>
           <TaskFormHeader
             name={name}
-            taskId={id}
-            updateTask={updateTask}
+            updateName={updateName}
             onClose={onClose}
             namePressed={namePressed}
             setNamePressed={setNamePressed}
@@ -103,6 +107,7 @@ export const EditTaskForm = ({
           <Separator borderBottomWidth={1} width={"100%"} />
           <YStack marginHorizontal={12} space={12}>
             <SelectPriority
+              id={id}
               isImportant={isImportant}
               isUrgent={isUrgent}
               updateImportant={updateImportant}
@@ -131,6 +136,7 @@ export const EditTaskForm = ({
             />
             <YStack space={8}>
               <SelectProject
+                id={id}
                 projectId={projectId}
                 updateProject={updateProject}
               />

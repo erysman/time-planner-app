@@ -5,7 +5,7 @@ import { useTheme } from "tamagui";
 import {
   DAY_FORMAT
 } from "../../../config/constants";
-import DailyPlanner from "../../../src/features/dailyPlanner/screens/DailyPlanner";
+import DailyPlannerScreen from "../../../src/features/dailyPlanner/screens/DailyPlannerScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -48,7 +48,7 @@ export default function DailyPlannerLayout() {
         <Tab.Screen
           key={day}
           name={day}
-          component={DailyPlanner}
+          component={DailyPlannerScreen}
           options={{ tabBarLabel: "index", lazy: true, lazyPreloadDistance: 0 }}
         />
       );

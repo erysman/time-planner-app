@@ -1,33 +1,29 @@
-import { useState, useCallback, useEffect } from "react";
-import { XStack, Input, Button } from "tamagui";
+import { useEffect, useState } from "react";
+import { Button, Input, XStack } from "tamagui";
 import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
 import { ExpoIcon } from "../ExpoIcon";
-import { UseUpdateTaskReturnType } from "./EditTaskForm";
-import { debounce } from "lodash";
 
 interface TaskFormHeaderProps {
-  taskId: string;
   name: string;
-  updateTask: UseUpdateTaskReturnType;
+  updateName: (name: string) => void;
   onClose: () => void;
+  onSave?: () => void;
   setNamePressed: React.Dispatch<React.SetStateAction<boolean>>;
   namePressed: boolean;
+  autofocus?: boolean;
 }
 
 export const TaskFormHeader = ({
   name,
-  updateTask,
-  taskId: id,
+  updateName,
   onClose,
+  onSave,
   namePressed,
   setNamePressed,
+  autofocus,
 }: TaskFormHeaderProps) => {
   const { screenWidth } = useScreenDimensions();
   const [inputName, setInputName] = useState<string | undefined>(name);
-  const updateName = useCallback(
-    debounce((text) => updateTask.mutate({ id, data: { name: text } }), 1000),
-    [updateTask, id]
-  );
 
   useEffect(() => {
     setInputName(name);
@@ -36,12 +32,13 @@ export const TaskFormHeader = ({
   return (
     <XStack justifyContent="center" alignItems="center" w={"100%"}>
       <Input
+        autoFocus={autofocus}
         position="absolute"
         maxWidth={screenWidth * 0.75}
         size="$4"
         fontSize={"$5"}
         value={inputName}
-        placeholder={name}
+        placeholder={"Name..."}
         placeholderTextColor={"$color"}
         onPress={() => setNamePressed(true)}
         borderWidth={namePressed ? 1 : 0}
@@ -51,9 +48,7 @@ export const TaskFormHeader = ({
         }}
         onSubmitEditing={() => setNamePressed(false)}
       />
-      <XStack flexGrow={1} alignItems="center"></XStack>
-      <XStack flexGrow={1} justifyContent="center"></XStack>
-      <XStack flexGrow={1} justifyContent="flex-end">
+      <XStack flexGrow={1} alignItems="center">
         <Button
           size="$3"
           circular
@@ -67,6 +62,13 @@ export const TaskFormHeader = ({
           }
           onPress={onClose}
         />
+      </XStack>
+      <XStack flexGrow={1} justifyContent="center"></XStack>
+      <XStack flexGrow={1} justifyContent="flex-end" alignItems="center">
+        {onSave ? <Button size="$4" onPress={onSave}>
+          {"Save"}
+        </Button> : null}
+        
       </XStack>
     </XStack>
   );

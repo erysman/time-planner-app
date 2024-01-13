@@ -2,25 +2,36 @@ import { Button, H6, YStack } from "tamagui";
 import { useAuth } from "../auth/hooks/UseAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useApiHealth } from "../../core/debug/UseApiHealth";
+import { ErrorBoundary } from "react-error-boundary";
+import { GenericFallback } from "../../core/components/fallbacks/GenericFallback";
 
-export const SettingsScreen = () => {
+export const SettingsList = () => {
   const {
-    user, actions: { logout },
+    user,
+    actions: { logout },
   } = useAuth();
   const { isServerAlive } = useApiHealth();
   return (
+    <YStack mt={16} space={"$2"} marginHorizontal={24}>
+      <Button onPress={logout}>{"Logout"}</Button>
+      <H6>{`Server connected: ${isServerAlive}`}</H6>
+      <Button
+        variant="outlined"
+        size="$3"
+        onPress={async () => console.log(await user?.getIdToken())}
+      >
+        {"Log auth token"}
+      </Button>
+    </YStack>
+  );
+};
+
+export const SettingsScreen = () => {
+  return (
     <SafeAreaView>
-      <YStack mt={16}  space={"$2"} marginHorizontal={24}>
-        <Button  onPress={logout}>
-          {"Logout"}
-        </Button>
-        <H6>{`Server connected: ${isServerAlive}`}</H6>
-            <Button variant="outlined" size="$3"  onPress={async () => console.log(await user?.getIdToken())}>
-                {"Log auth token"}
-            </Button>
-            
- 
-      </YStack>
+      <ErrorBoundary FallbackComponent={GenericFallback}>
+        <SettingsList />
+      </ErrorBoundary>
     </SafeAreaView>
   );
 };

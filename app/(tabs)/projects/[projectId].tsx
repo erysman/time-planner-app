@@ -7,6 +7,6 @@ import { ProjectScreen } from "../../../src/features/tasksList/screens/ProjectSc
 export default function ProjectTasksList() {
   const { projectId } = useLocalSearchParams<{ projectId: string }>();
   return (
-    <ProjectScreen id={projectId}/>
+    <ProjectScreen projectId={projectId}/>
   );
 }

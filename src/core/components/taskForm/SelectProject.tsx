@@ -13,11 +13,13 @@ import { IProject } from "../../../features/dailyPlanner/model/model";
 import { ExpoIcon } from "../ExpoIcon";
 
 interface SelectProjectProps {
+  id: string;
   projectId: string;
   updateProject: (projectId: string) => void;
 }
 
 export function SelectProject({
+  id,
   projectId,
   updateProject,
 }: SelectProjectProps) {
@@ -31,7 +33,7 @@ export function SelectProject({
   return (
     <XStack>
       <Select
-        id="project"
+        id={`project-${projectId}-${id}`}
         value={projectId}
         onValueChange={updateProject}
         disablePreventBodyScroll
