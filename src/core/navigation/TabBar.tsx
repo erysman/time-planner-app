@@ -88,6 +88,9 @@ export const TabBar = ({
               backgroundColor={isFocused ? "$backgroundFocus" : "$background"}
               justifyContent={"center"}
               alignItems={"center"}
+              pressStyle={{
+                backgroundColor: "$backgroundHover"
+              }}
             >
               {icon
                 ? icon({

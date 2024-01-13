@@ -42,6 +42,10 @@ export default function ListItem({
         backgroundColor={"$background"}
         borderColor={projectColor ?? "$background"}
         borderLeftWidth={8}
+        onPress={onPress}
+        pressStyle={{
+          backgroundColor: "$backgroundHover"
+        }}
       >
         <Checkbox size="$2" circular marginLeft={8} marginRight={16}>
           <Checkbox.Indicator>

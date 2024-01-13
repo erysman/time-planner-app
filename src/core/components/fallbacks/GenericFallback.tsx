@@ -1,6 +1,6 @@
 import { FallbackProps } from "react-error-boundary";
 import { Button, H6, SizableText, YStack } from "tamagui";
-import { AddProjectView } from "../../../features/tasksList/components/ProjectsList";
+import { AddProject } from "../../../features/tasksList/components/ProjectsList";
 import { ExpoIcon } from "../ExpoIcon";
 
 export const GenericFallback = ({

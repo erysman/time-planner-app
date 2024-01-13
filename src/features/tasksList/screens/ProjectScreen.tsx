@@ -8,7 +8,7 @@ import {
 } from "../../../clients/time-planner-server/client";
 import { AddTaskFab } from "../../../core/components/AddTaskFab";
 import ListItem from "../../../core/components/list/ListItem";
-import { useEditTaskModal } from "../../../core/components/taskModal/UseEditTaskModal";
+import { useEditTaskModal } from "../../../core/components/modal/UseEditTaskModal";
 import { getRefreshInterval } from "../../../core/config/utils";
 import { ITask } from "../../dailyPlanner/model/model";
 import { GenericFallback } from "../../../core/components/fallbacks/GenericFallback";

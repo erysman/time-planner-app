@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Sheet } from "tamagui";
+import { Sheet, SheetProps } from "tamagui";
 
-export interface TaskModalProps {
+export interface ModalProps extends SheetProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   children: any;
 }
 
-export const TaskModal = ({ open, setOpen, children }: TaskModalProps) => {
+export const Modal = ({ open, setOpen, children, ...props }: ModalProps) => {
   const [position, setPosition] = useState(0);
   return (
     <Sheet
@@ -22,9 +22,10 @@ export const TaskModal = ({ open, setOpen, children }: TaskModalProps) => {
       onPositionChange={setPosition}
       zIndex={100_000}
       animation="medium"
+      {...props}
     >
       <Sheet.Overlay
-      open={!open}
+        open={!open}
         animation="lazy"
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}

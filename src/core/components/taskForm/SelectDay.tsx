@@ -10,6 +10,7 @@ import { Button, SizableText, YStack } from "tamagui";
 import { DAY_FORMAT, DAY_LONG_READ_FORMAT } from "../../../../config/constants";
 import { ExpoIcon } from "../ExpoIcon";
 import { DatePicker } from "../calendar/DatePicker";
+import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
 
 const AnimatedYStack = Animated.createAnimatedComponent(YStack);
 
@@ -28,6 +29,7 @@ export const SelectDay = ({
   validateStartDay,
   errorMessage,
 }: SelectDayProps) => {
+  const {screenWidth} = useScreenDimensions();
   const [dayPickerOpen, setDayPickerOpen] = useState(false);
   const dayPickerHeightMin = 45;
   const dayPickerHeightMax = 330 + dayPickerHeightMin;
@@ -55,6 +57,8 @@ export const SelectDay = ({
     <>
       <AnimatedYStack animatedProps={dayYStackProps} overflow={"hidden"}>
         <Button
+        justifyContent="flex-start"
+          // width={0.5* screenWidth}
           onPress={onChangeDayPress}
           borderWidth={!isStartDayValid ? 1 : 0}
           borderColor={!isStartDayValid ? "$red9" : "$borderColor"}

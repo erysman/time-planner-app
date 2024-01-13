@@ -6,6 +6,7 @@ import React, { useMemo, useState } from "react";
 import { Button, SizableText } from "tamagui";
 import { minutesToShortTime } from "../../utils";
 import { ExpoIcon } from "../ExpoIcon";
+import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
 
 interface SelectDurationMinProps {
   isDurationValid: boolean;
@@ -22,6 +23,7 @@ export const SelectDurationMin = ({
   validateDuration,
   errorMessage,
 }: SelectDurationMinProps) => {
+  const {screenWidth} = useScreenDimensions();
   const initialDurationMin = useMemo(() => {
     if (!durationMin) return dayjs().startOf("day").add(1, "hour").toDate();
     return dayjs().startOf("day").add(durationMin, "minute").toDate();
@@ -42,6 +44,8 @@ export const SelectDurationMin = ({
   return (
     <>
       <Button
+      justifyContent="flex-start"
+      // width={0.5* screenWidth}
         onPress={() => {
           setDurationPickerOpen(true);
         }}

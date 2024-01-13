@@ -1,6 +1,6 @@
 import { Button } from "tamagui";
 import { ExpoIcon } from "./ExpoIcon";
-import { useCreateTaskModal } from "./taskModal/UseCreateTaskModal";
+import { useCreateTaskModal } from "./modal/UseCreateTaskModal";
 
 interface AddTaskFabProps {
   projectId: string;

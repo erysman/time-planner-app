@@ -7,13 +7,14 @@ import { Button, SizableText } from "tamagui";
 import { TIME_FORMAT } from "../../../../config/constants";
 import { mapToDayjs } from "../../utils";
 import { ExpoIcon } from "../ExpoIcon";
+import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
 
 interface SelectStartTimeProps {
   startTime?: string;
   updateStartTime: (startTime: string) => void;
   validateStartTime: (startTime: string) => boolean;
   isStartTimeValid: boolean;
-  errorMessage?:string;
+  errorMessage?: string;
 }
 
 export const SelectStartTime = ({
@@ -21,20 +22,23 @@ export const SelectStartTime = ({
   startTime,
   isStartTimeValid,
   validateStartTime,
-  errorMessage
+  errorMessage,
 }: SelectStartTimeProps) => {
+  const { screenWidth } = useScreenDimensions();
   const [startTimePickerOpen, setStartTimePickerOpen] = useState(false);
   const setStartTime = (event: DateTimePickerEvent, date?: Date) => {
     setStartTimePickerOpen(false);
     const { type } = event;
     if (type !== "set") return;
     const time = dayjs(date).format(TIME_FORMAT);
-    if(!validateStartTime(time)) return;
+    if (!validateStartTime(time)) return;
     updateStartTime(time);
   };
   return (
     <>
       <Button
+        justifyContent="flex-start"
+        // width={0.5 * screenWidth}
         onPress={() => {
           setStartTimePickerOpen(true);
         }}

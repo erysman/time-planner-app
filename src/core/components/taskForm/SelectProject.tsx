@@ -6,7 +6,7 @@ import {
   Sheet,
   SizableText,
   XStack,
-  YStack
+  YStack,
 } from "tamagui";
 import { useGetProjects } from "../../../clients/time-planner-server/client";
 import { IProject } from "../../../features/dailyPlanner/model/model";
@@ -23,7 +23,6 @@ export function SelectProject({
   projectId,
   updateProject,
 }: SelectProjectProps) {
-
   const { data, isLoading, isError } = useGetProjects();
 
   const selectedProject = useMemo(() => {
@@ -38,18 +37,15 @@ export function SelectProject({
         onValueChange={updateProject}
         disablePreventBodyScroll
       >
-        <Select.Trigger
-          width={"auto"}
-          maxWidth={300}
-          icon={
+        <Select.Trigger width={"100%"}>
+          <XStack space={10}>
             <ExpoIcon
               iconSet="MaterialIcons"
               name="drive-file-move-outline"
               size={24}
             />
-          }
-        >
-          <SizableText>{"Project:"}</SizableText>
+            <SizableText>{"Project:"}</SizableText>
+          </XStack>
           {selectedProject ? (
             <XStack
               justifyContent="center"
