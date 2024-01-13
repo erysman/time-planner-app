@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import utc from "dayjs/plugin/utc";
 import { Dayjs } from "dayjs";
-import { TIME_FORMAT } from "../../../../config/constants";
+import { DEFAULT_CALENDAR_STEP_MINUTES, TIME_FORMAT } from "../../../../config/constants";
 
 dayjs.extend(duration)
 dayjs.extend(utc)
@@ -50,7 +50,7 @@ export function mapHeightToDurationMin(
 ): number {
   'worklet'
   const durationMin = height / minuteInPixels;
-  const durationMinPinnedToMinStep = Math.floor(durationMin/15)*15
+  const durationMinPinnedToMinStep = Math.floor(durationMin/DEFAULT_CALENDAR_STEP_MINUTES)*DEFAULT_CALENDAR_STEP_MINUTES
   return durationMinPinnedToMinStep || 0;
 }
 
@@ -62,7 +62,7 @@ export function timeToMinutes(time: string) {
 
 export function minutesToTime(minutes: number) {
   'worklet'
-  const minutesPinnedToMinStep = Math.round(minutes/15)*15
+  const minutesPinnedToMinStep = Math.round(minutes/DEFAULT_CALENDAR_STEP_MINUTES)*DEFAULT_CALENDAR_STEP_MINUTES
   const hours = Math.floor(minutesPinnedToMinStep / 60);
   const remainingMinutes = minutesPinnedToMinStep % 60;
 

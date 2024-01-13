@@ -15,7 +15,7 @@ import { TaskDTO } from "../../../clients/time-planner-server/model";
 import { mapDurationToHeight, mapHeightToDurationMin } from "../logic/utils";
 import { TimeAndDurationMap } from "../model/model";
 import { useDraggableCalendarListContext } from "./UseCalendarListContext";
-import { DEFAULT_DURATION_MIN } from "../../../../config/constants";
+import { DEFAULT_CALENDAR_STEP_MINUTES, DEFAULT_DURATION_MIN, MIN_TASK_DURATION_MINUTES } from "../../../../config/constants";
 
 export const useTaskHeightDrag = (
   isEdited: boolean,
@@ -27,33 +27,30 @@ export const useTaskHeightDrag = (
   const { minuteInPixels, calendarStepHeight } =
     useDraggableCalendarListContext();
 
-    function getDuration() {
-      'worklet'
-      const timeAndDuration = movingTimeAndDurationOfTasks.value[id];
-      if(!timeAndDuration) return 0;
-      if(!timeAndDuration.durationMinutes) return DEFAULT_DURATION_MIN;
-      return timeAndDuration.durationMinutes;
-    }
+  function getDuration() {
+    "worklet";
+    const timeAndDuration = movingTimeAndDurationOfTasks.value[id];
+    if (!timeAndDuration) return 0;
+    if (!timeAndDuration.durationMinutes) return DEFAULT_DURATION_MIN;
+    return timeAndDuration.durationMinutes;
+  }
 
-    function calculateHeight() {
-      'worklet'
-      const duration = getDuration()
-      const heightTmp = mapDurationToHeight(duration, minuteInPixels);
-      const height = isEdited ? heightTmp : heightTmp - 2;
-      return height;
-    }
+  function calculateHeight() {
+    "worklet";
+    const duration = getDuration();
+    const heightTmp = mapDurationToHeight(duration, minuteInPixels);
+    const height = isEdited ? heightTmp : heightTmp - 2;
+    return height;
+  }
 
-    function updateDurationOnTasksMap(
-      itemId: string,
-      durationMinutes: number
-    ) {
-      "worklet";
-      let newMap = { ...movingTimeAndDurationOfTasks.value };
-      if(!newMap[itemId]) return;
-      const task = {...newMap[itemId], durationMinutes}
-      newMap[itemId] = task
-      movingTimeAndDurationOfTasks.value = newMap;
-    }
+  function updateDurationOnTasksMap(itemId: string, durationMinutes: number) {
+    "worklet";
+    let newMap = { ...movingTimeAndDurationOfTasks.value };
+    if (!newMap[itemId]) return;
+    const task = { ...newMap[itemId], durationMinutes };
+    newMap[itemId] = task;
+    movingTimeAndDurationOfTasks.value = newMap;
+  }
 
   const durationOffset = useSharedValue(0);
   const height = useDerivedValue(() => {
@@ -61,12 +58,8 @@ export const useTaskHeightDrag = (
     const numberOfSteps = Math.trunc(durationOffset.value / calendarStepHeight);
     const newHeight = oldHeight + numberOfSteps * calendarStepHeight;
     //TODO: height shouldn't exceed calendar end
-    return Math.max(newHeight, 2 * calendarStepHeight);
+    return Math.max(newHeight, MIN_TASK_DURATION_MINUTES/DEFAULT_CALENDAR_STEP_MINUTES * calendarStepHeight);
   });
-
-  // useEffect(() => {
-  //   durationOffset.value = 0;
-  // }, [durationMin]);
 
   const queryClient = useQueryClient();
   const updateTask = useUpdateTask({
@@ -91,7 +84,7 @@ export const useTaskHeightDrag = (
     .enabled(isEdited)
     .onBegin(() => {
       durationOffset.value = 0;
-      console.log(`heightDragPan started`)
+      console.log(`heightDragPan started`);
     })
     .onChange((event) => {
       durationOffset.value = event.translationY;
@@ -103,10 +96,10 @@ export const useTaskHeightDrag = (
       );
       const timeAndDuration = movingTimeAndDurationOfTasks.value[id];
       if (newDurationMin !== timeAndDuration?.durationMinutes) {
-        updateDurationOnTasksMap(id, newDurationMin)
+        updateDurationOnTasksMap(id, newDurationMin);
         runOnJS(updateTaskDuration)(newDurationMin);
       }
-      durationOffset.value=0;
+      durationOffset.value = 0;
     });
 
   return { heightDragPan, height };

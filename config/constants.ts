@@ -9,3 +9,5 @@ export const DAY_SHORT_READ_FORMAT = "DD MMM";
 export const DAY_LONG_READ_FORMAT = "DD MMM YY";
 
 export const DEFAULT_DURATION_MIN = 60;
+export const DEFAULT_CALENDAR_STEP_MINUTES = 15;
+export const MIN_TASK_DURATION_MINUTES = 30;

@@ -1,10 +1,10 @@
 import dayjs, { Dayjs } from "dayjs";
-import { DAY_FORMAT, TIME_FORMAT } from "../../config/constants";
+import { DAY_FORMAT, DEFAULT_CALENDAR_STEP_MINUTES, TIME_FORMAT } from "../../config/constants";
 
 
 export function minutesToShortTime(minutes: number) {
   'worklet';
-  const minutesPinnedToMinStep = Math.round(minutes / 15) * 15;
+  const minutesPinnedToMinStep = Math.round(minutes / DEFAULT_CALENDAR_STEP_MINUTES) * DEFAULT_CALENDAR_STEP_MINUTES;
   const hours = Math.floor(minutesPinnedToMinStep / 60);
   const remainingMinutes = minutesPinnedToMinStep % 60;
 

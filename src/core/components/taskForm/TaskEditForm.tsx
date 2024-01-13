@@ -1,10 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
-import {
-  ScrollView,
-  Separator,
-  YStack
-} from "tamagui";
+import { ScrollView, Separator, SizableText, YStack } from "tamagui";
 import { SelectDay } from "./SelectDay";
 import { SelectDurationMin } from "./SelectDuration";
 import { SelectProject } from "./SelectProject";
@@ -14,6 +10,12 @@ import { useUpdateTaskDetails } from "./UseUpdateTaskDetails";
 import { DeleteButton } from "./DeleteButton";
 import { SelectPriority } from "./SelectPriority";
 import { debounce } from "lodash";
+import {
+  useValidateName,
+  useValidateStartDay,
+  useValidateStartTime,
+  useValidateDuration,
+} from "./UseValidateTask";
 
 interface TaskEditFormProps {
   id: string;
@@ -38,11 +40,21 @@ export const TaskEditForm = ({
   isImportant,
   onClose,
 }: TaskEditFormProps) => {
-  
-  const {updateTask} = useUpdateTaskDetails(id, projectId, day);
+  const { updateTask } = useUpdateTaskDetails(id, projectId, day);
+
+  const { isNameValid, nameMessage, validateName } = useValidateName();
+  const { isStartDayValid, startDayMessage, validateStartDay } =
+    useValidateStartDay();
+  const { isStartTimeValid, startTimeMessage, validateStartTime } =
+    useValidateStartTime();
+  const { durationMessage, isDurationValid, validateDuration } =
+    useValidateDuration();
 
   const updateName = useCallback(
-    debounce((text: string) => updateTask.mutate({ id, data: { name: text } }), 1000),
+    debounce(
+      (text: string) => updateTask.mutate({ id, data: { name: text } }),
+      1000
+    ),
     [updateTask, id]
   );
   const updateUrgent = useCallback(
@@ -103,9 +115,14 @@ export const TaskEditForm = ({
             onClose={onClose}
             namePressed={namePressed}
             setNamePressed={setNamePressed}
+            isNameValid={isNameValid}
+            validateName={validateName}
           />
           <Separator borderBottomWidth={1} width={"100%"} />
           <YStack marginHorizontal={12} space={12}>
+            {nameMessage ? (
+              <SizableText color={"$red9"}>{nameMessage}</SizableText>
+            ) : null}
             <SelectPriority
               id={id}
               isImportant={isImportant}
@@ -119,14 +136,20 @@ export const TaskEditForm = ({
               alignSelf="center"
             />
             <YStack space={8}>
-              <SelectDay day={day} updateDay={updateDay} />
+              <SelectDay day={day} updateDay={updateDay} isStartDayValid={isStartDayValid} validateStartDay={validateStartDay} errorMessage={startDayMessage}/>
               <SelectStartTime
                 updateStartTime={updateStartTime}
                 startTime={startTime}
+                isStartTimeValid={isStartTimeValid}
+                validateStartTime={validateStartTime}
+                errorMessage={startTimeMessage}
               />
               <SelectDurationMin
                 updateDuration={updateDuration}
                 durationMin={durationMin}
+                isDurationValid={isDurationValid}
+                validateDuration={validateDuration}
+                errorMessage={durationMessage}
               />
             </YStack>
             <Separator
@@ -156,5 +179,3 @@ export const TaskEditForm = ({
     </TouchableWithoutFeedback>
   );
 };
-
-

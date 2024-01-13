@@ -15,11 +15,19 @@ const AnimatedYStack = Animated.createAnimatedComponent(YStack);
 
 interface SelectDayProps {
   day?: string;
-  updateDay: (day: string) => void ;
+  updateDay: (day: string) => void;
+  isStartDayValid: boolean;
+  validateStartDay: (startDay: string) => boolean;
+  errorMessage?: string;
 }
 
-export const SelectDay = ({ day, updateDay }: SelectDayProps) => {
-  
+export const SelectDay = ({
+  day,
+  updateDay,
+  isStartDayValid,
+  validateStartDay,
+  errorMessage,
+}: SelectDayProps) => {
   const [dayPickerOpen, setDayPickerOpen] = useState(false);
   const dayPickerHeightMin = 45;
   const dayPickerHeightMax = 330 + dayPickerHeightMin;
@@ -44,22 +52,32 @@ export const SelectDay = ({ day, updateDay }: SelectDayProps) => {
     height: dayPickerHeight.value,
   }));
   return (
-    <AnimatedYStack animatedProps={dayYStackProps} overflow={"hidden"}>
-      <Button onPress={onChangeDayPress}>
-        <ExpoIcon iconSet="MaterialIcons" name="today" size={24} />
-        <SizableText>
-          {day
-            ? `Day: ${dayjs(day, DAY_FORMAT).format(DAY_LONG_READ_FORMAT)}`
-            : `Set planned day`}
-        </SizableText>
-      </Button>
-      <DatePicker
-        onDayPress={(newDay) => {
-          setDayPickerOpen(false);
-          updateDay(newDay);
-        }}
-        initialDay={day ?? dayjs().format(DAY_FORMAT)}
-      />
-    </AnimatedYStack>
+    <>
+      <AnimatedYStack animatedProps={dayYStackProps} overflow={"hidden"}>
+        <Button
+          onPress={onChangeDayPress}
+          borderWidth={!isStartDayValid ? 1 : 0}
+          borderColor={!isStartDayValid ? "$red9" : "$borderColor"}
+        >
+          <ExpoIcon iconSet="MaterialIcons" name="today" size={24} />
+          <SizableText>
+            {day
+              ? `Day: ${dayjs(day, DAY_FORMAT).format(DAY_LONG_READ_FORMAT)}`
+              : `Set planned day`}
+          </SizableText>
+        </Button>
+        <DatePicker
+          onDayPress={(newDay) => {
+            setDayPickerOpen(false);
+            if (!validateStartDay(newDay)) return;
+            updateDay(newDay);
+          }}
+          initialDay={day ?? dayjs().format(DAY_FORMAT)}
+        />
+      </AnimatedYStack>
+      {errorMessage ? (
+        <SizableText color={"$red9"}>{errorMessage}</SizableText>
+      ) : null}
+    </>
   );
 };

@@ -11,9 +11,12 @@ interface TaskFormHeaderProps {
   setNamePressed: React.Dispatch<React.SetStateAction<boolean>>;
   namePressed: boolean;
   autofocus?: boolean;
+  isNameValid: boolean;
+  validateName: (name:string) => boolean;
 }
 
 export const TaskFormHeader = ({
+  isNameValid,
   name,
   updateName,
   onClose,
@@ -21,6 +24,7 @@ export const TaskFormHeader = ({
   namePressed,
   setNamePressed,
   autofocus,
+  validateName,
 }: TaskFormHeaderProps) => {
   const { screenWidth } = useScreenDimensions();
   const [inputName, setInputName] = useState<string | undefined>(name);
@@ -41,9 +45,11 @@ export const TaskFormHeader = ({
         placeholder={"Name..."}
         placeholderTextColor={"$color"}
         onPress={() => setNamePressed(true)}
-        borderWidth={namePressed ? 1 : 0}
+        borderWidth={namePressed || !isNameValid ? 1 : 0}
+        borderColor={!isNameValid ? "$red9" : "$borderColor"}
         onChangeText={(text) => {
           setInputName(text);
+          if(!validateName(text)) return;
           updateName(text);
         }}
         onSubmitEditing={() => setNamePressed(false)}

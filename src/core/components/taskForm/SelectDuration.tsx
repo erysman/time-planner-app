@@ -8,16 +8,20 @@ import { minutesToShortTime } from "../../utils";
 import { ExpoIcon } from "../ExpoIcon";
 
 interface SelectDurationMinProps {
+  isDurationValid: boolean;
   durationMin?: number;
   updateDuration: (durationMin: number) => void;
+  validateDuration: (durationMin: number) => boolean;
+  errorMessage?: string;
 }
 
 export const SelectDurationMin = ({
   updateDuration,
   durationMin,
+  isDurationValid,
+  validateDuration,
+  errorMessage,
 }: SelectDurationMinProps) => {
-  
-
   const initialDurationMin = useMemo(() => {
     if (!durationMin) return dayjs().startOf("day").add(1, "hour").toDate();
     return dayjs().startOf("day").add(durationMin, "minute").toDate();
@@ -32,6 +36,7 @@ export const SelectDurationMin = ({
       (date?.getHours() ?? 0) * 60 + (date?.getMinutes() ?? 0);
     console.log(durationMin);
     if (!durationMin) return;
+    if (!validateDuration(durationMin)) return;
     updateDuration(durationMin);
   };
   return (
@@ -40,6 +45,8 @@ export const SelectDurationMin = ({
         onPress={() => {
           setDurationPickerOpen(true);
         }}
+        borderWidth={!isDurationValid ? 1 : 0}
+        borderColor={!isDurationValid ? "$red9" : "$borderColor"}
       >
         <ExpoIcon iconSet="MaterialIcons" name="access-time" size={24} />
         <SizableText>
@@ -55,6 +62,9 @@ export const SelectDurationMin = ({
           value={initialDurationMin}
           onChange={setDurationTime}
         />
+      ) : null}
+      {errorMessage ? (
+        <SizableText color={"$red9"}>{errorMessage}</SizableText>
       ) : null}
     </>
   );

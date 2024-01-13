@@ -11,11 +11,17 @@ import { ExpoIcon } from "../ExpoIcon";
 interface SelectStartTimeProps {
   startTime?: string;
   updateStartTime: (startTime: string) => void;
+  validateStartTime: (startTime: string) => boolean;
+  isStartTimeValid: boolean;
+  errorMessage?:string;
 }
 
 export const SelectStartTime = ({
   updateStartTime,
   startTime,
+  isStartTimeValid,
+  validateStartTime,
+  errorMessage
 }: SelectStartTimeProps) => {
   const [startTimePickerOpen, setStartTimePickerOpen] = useState(false);
   const setStartTime = (event: DateTimePickerEvent, date?: Date) => {
@@ -23,6 +29,7 @@ export const SelectStartTime = ({
     const { type } = event;
     if (type !== "set") return;
     const time = dayjs(date).format(TIME_FORMAT);
+    if(!validateStartTime(time)) return;
     updateStartTime(time);
   };
   return (
@@ -31,6 +38,8 @@ export const SelectStartTime = ({
         onPress={() => {
           setStartTimePickerOpen(true);
         }}
+        borderWidth={!isStartTimeValid ? 1 : 0}
+        borderColor={!isStartTimeValid ? "$red9" : "$borderColor"}
       >
         <ExpoIcon iconSet="MaterialIcons" name="access-time" size={24} />
         <SizableText>
@@ -45,6 +54,9 @@ export const SelectStartTime = ({
           }
           onChange={setStartTime}
         />
+      ) : null}
+      {errorMessage ? (
+        <SizableText color={"$red9"}>{errorMessage}</SizableText>
       ) : null}
     </>
   );

@@ -58,7 +58,8 @@
     "react-native-svg": "13.9.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-web": "~0.19.6",
-    "tamagui": "^1.75.5"
+    "tamagui": "^1.75.5",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

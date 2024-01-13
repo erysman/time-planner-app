@@ -1,5 +1,6 @@
 import React, { useContext, useMemo, useState } from "react";
 import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
+import { DEFAULT_CALENDAR_STEP_MINUTES } from "../../../../config/constants";
 
 interface ICalendarListContext {
   itemHeight: number;
@@ -25,7 +26,7 @@ export const CalendarListDataProvider = (props: any) => {
   const value = useMemo(() => {
     const itemHeight = 0.09 * screenHeight;
     const minuteInPixels = itemHeight / 60;
-    const calendarStepHeight = minuteInPixels * 15;
+    const calendarStepHeight = minuteInPixels * DEFAULT_CALENDAR_STEP_MINUTES;
     const calendarHeight = 24 * itemHeight;
     return {
       itemHeight,

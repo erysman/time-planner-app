@@ -9,15 +9,25 @@ export const GenericFallback = ({
   }: FallbackProps) => {
     return (
       <YStack mt={24} marginHorizontal={24} space={12}>
-        <H6>{`Something went wrong:`}</H6>
-        <SizableText>{error.message}</SizableText>
+        <H6 color={"$red9"}>{`Something went wrong:`}</H6>
+        <SizableText color={"$red9"}>{error.message}</SizableText>
         <Button
           icon={<ExpoIcon iconSet="MaterialIcons" name="refresh" size={16} />}
           onPress={resetErrorBoundary}
         >
           {"Retry"}
         </Button>
-        <AddProjectView />
+      </YStack>
+    );
+  };
+
+  export const NoRetryFallback = (props: {
+    error: {message?: string}
+  }) => {
+    return (
+      <YStack mt={24} marginHorizontal={24} space={12}>
+        <H6 color={"$red9"}>{`Something went wrong:`}</H6>
+        <SizableText color={"$red9"}>{props.error?.message}</SizableText>
       </YStack>
     );
   };

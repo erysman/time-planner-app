@@ -1,22 +1,32 @@
+import { useQueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
-import { ScrollView, Separator, YStack } from "tamagui";
-import { SelectDay } from "./SelectDay";
-import { SelectDurationMin } from "./SelectDuration";
-import { SelectProject } from "./SelectProject";
-import { SelectStartTime } from "./SelectStartTime";
-import { TaskFormHeader } from "./TaskFormHeader";
-import { useUpdateTaskDetails } from "./UseUpdateTaskDetails";
-import { DeleteButton } from "./DeleteButton";
-import { SelectPriority } from "./SelectPriority";
+import {
+  ScrollView,
+  Separator,
+  SizableText,
+  YStack
+} from "tamagui";
+import { z } from "zod";
+import {
+  DEFAULT_CALENDAR_STEP_MINUTES,
+  MIN_TASK_DURATION_MINUTES,
+} from "../../../../config/constants";
 import {
   getGetDayTasksQueryKey,
   getGetProjectTasksQueryKey,
-  getGetTaskQueryKey,
   getGetTasksDayOrderQueryKey,
   useCreateTask,
 } from "../../../clients/time-planner-server/client";
-import { useQueryClient } from "@tanstack/react-query";
+import { NoRetryFallback } from "../fallbacks/GenericFallback";
+import { SelectDay } from "./SelectDay";
+import { SelectDurationMin } from "./SelectDuration";
+import { SelectPriority } from "./SelectPriority";
+import { SelectProject } from "./SelectProject";
+import { SelectStartTime } from "./SelectStartTime";
+import { TaskFormHeader } from "./TaskFormHeader";
+import { useValidateName, useValidateStartDay, useValidateStartTime, useValidateDuration } from "./UseValidateTask";
 
 interface TaskCreateFormProps {
   projectId: string;
@@ -59,9 +69,42 @@ export const TaskCreateForm = ({
   const [durationMin, setDurationMin] = useState<number>();
   const [editedProjectId, setEditedProjectId] = useState<string>(projectId);
 
+  const resetState = () => {
+    setNamePressed(false);
+    setName("");
+    setIsImportant(false);
+    setIsUrgent(false);
+    setStartDay(undefined);
+    setStartTime(undefined);
+    setDurationMin(undefined);
+    setEditedProjectId(projectId);
+  };
+
+  const { isNameValid, nameMessage, validateName } = useValidateName();
+  const { isStartDayValid, startDayMessage, validateStartDay } =
+    useValidateStartDay();
+  const { isStartTimeValid, startTimeMessage, validateStartTime } =
+    useValidateStartTime();
+  const { durationMessage, isDurationValid, validateDuration } =
+    useValidateDuration();
+
   useEffect(() => setEditedProjectId(projectId), [projectId]);
 
   const onSave = useCallback(() => {
+    const isNameValid = validateName(name);
+    if (!isNameValid) return;
+    if (durationMin) {
+      const isDurationValid = validateDuration(durationMin);
+      if (!isDurationValid) return;
+    }
+    if (startDay) {
+      const isStartDayValid = validateStartDay(startDay);
+      if (!isStartDayValid) return;
+    }
+    if (startTime) {
+      const isStartTimeValid = validateStartTime(startTime);
+      if (!isStartTimeValid) return;
+    }
     createTask.mutate({
       data: {
         name,
@@ -73,6 +116,9 @@ export const TaskCreateForm = ({
         projectId: editedProjectId,
       },
     });
+    if (createTask.isSuccess) {
+      resetState();
+    }
     onClose();
   }, [
     onClose,
@@ -84,6 +130,7 @@ export const TaskCreateForm = ({
     startDay,
     startTime,
     editedProjectId,
+    resetState,
   ]);
 
   return (
@@ -105,11 +152,16 @@ export const TaskCreateForm = ({
               namePressed={namePressed}
               setNamePressed={setNamePressed}
               autofocus
+              isNameValid={isNameValid}
+              validateName={validateName}
             />
           ) : null}
 
           <Separator borderBottomWidth={1} width={"100%"} />
           <YStack marginHorizontal={12} space={12}>
+            {nameMessage ? (
+              <SizableText color={"$red9"}>{nameMessage}</SizableText>
+            ) : null}
             <SelectPriority
               id={"createForm"}
               isImportant={isImportant}
@@ -123,14 +175,26 @@ export const TaskCreateForm = ({
               alignSelf="center"
             />
             <YStack space={8}>
-              <SelectDay day={startDay} updateDay={setStartDay} />
+              <SelectDay
+                day={startDay}
+                updateDay={setStartDay}
+                isStartDayValid={isStartDayValid}
+                validateStartDay={validateStartDay}
+                errorMessage={startDayMessage}
+              />
               <SelectStartTime
                 updateStartTime={setStartTime}
                 startTime={startTime}
+                isStartTimeValid={isStartTimeValid}
+                validateStartTime={validateStartTime}
+                errorMessage={startTimeMessage}
               />
               <SelectDurationMin
-                updateDuration={setDurationMin}
                 durationMin={durationMin}
+                updateDuration={setDurationMin}
+                isDurationValid={isDurationValid}
+                validateDuration={validateDuration}
+                errorMessage={durationMessage}
               />
             </YStack>
             <Separator
@@ -147,6 +211,9 @@ export const TaskCreateForm = ({
               {/* <TextArea placeholder="Description..." /> */}
             </YStack>
           </YStack>
+          {createTask.isError ? (
+            <NoRetryFallback error={createTask.error} />
+          ) : null}
         </YStack>
       </ScrollView>
     </TouchableWithoutFeedback>
