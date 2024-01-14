@@ -4,7 +4,7 @@ import { z } from "zod";
 import {
   DEFAULT_CALENDAR_STEP_MINUTES,
   MIN_TASK_DURATION_MINUTES,
-} from "../../../../config/constants";
+} from "../../../../../config/constants";
 
 export const useValidateStartTime = () => {
   const startTimeSchema = z.string();

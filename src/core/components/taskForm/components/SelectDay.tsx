@@ -7,10 +7,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Button, SizableText, YStack } from "tamagui";
-import { DAY_FORMAT, DAY_LONG_READ_FORMAT } from "../../../../config/constants";
-import { ExpoIcon } from "../ExpoIcon";
-import { DatePicker } from "../calendar/DatePicker";
-import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
+import { DAY_FORMAT, DAY_LONG_READ_FORMAT } from "../../../../../config/constants";
+import { ExpoIcon } from "../../ExpoIcon";
+import { DatePicker } from "../../calendar/DatePicker";
+import { useScreenDimensions } from "../../../logic/dimensions/UseScreenDimensions";
 
 const AnimatedYStack = Animated.createAnimatedComponent(YStack);
 

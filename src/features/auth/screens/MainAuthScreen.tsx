@@ -5,7 +5,7 @@ import i18n from "../../../../config/i18n";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
 import { useAuth } from "../hooks/UseAuth";
 import { ErrorBoundary } from "react-error-boundary";
-import { GenericFallback } from "../../../core/components/fallbacks/GenericFallback";
+import { GenericFallback } from "../../../core/components/fallback/GenericFallback";
 
 export const MainAuthForm = () => {
   const {

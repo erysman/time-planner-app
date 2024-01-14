@@ -9,7 +9,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Separator, YStack } from "tamagui";
-import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
+import { useScreenDimensions } from "../../logic/dimensions/UseScreenDimensions";
 import { MovableItem } from "./MovableItem";
 import { MovingItem } from "./MovingItem";
 import { MovingItemPointer } from "./MovingItemPointer";

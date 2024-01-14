@@ -4,9 +4,9 @@ import DateTimePicker, {
 import dayjs from "dayjs";
 import React, { useMemo, useState } from "react";
 import { Button, SizableText } from "tamagui";
-import { minutesToShortTime } from "../../utils";
-import { ExpoIcon } from "../ExpoIcon";
-import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
+import { minutesToShortTime } from "../../../utils";
+import { ExpoIcon } from "../../ExpoIcon";
+import { useScreenDimensions } from "../../../logic/dimensions/UseScreenDimensions";
 
 interface SelectDurationMinProps {
   isDurationValid: boolean;

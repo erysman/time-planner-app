@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Input, XStack } from "tamagui";
-import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
+import { useScreenDimensions } from "../../logic/dimensions/UseScreenDimensions";
 import { ExpoIcon } from "../ExpoIcon";
 
 interface TaskFormHeaderProps {

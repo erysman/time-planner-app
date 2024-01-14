@@ -3,7 +3,7 @@ import { useAuth } from "../auth/hooks/UseAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useApiHealth } from "../../core/debug/UseApiHealth";
 import { ErrorBoundary } from "react-error-boundary";
-import { GenericFallback } from "../../core/components/fallbacks/GenericFallback";
+import { GenericFallback } from "../../core/components/fallback/GenericFallback";
 
 export const SettingsList = () => {
   const {

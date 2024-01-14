@@ -12,7 +12,7 @@ import {
 } from "../../../clients/time-planner-server/client";
 import ListItem from "../../../core/components/list/ListItem";
 import { useEditTaskModal } from "../../../core/components/modal/UseEditTaskModal";
-import { getRefreshInterval } from "../../../core/config/utils";
+import { getRefreshInterval } from "../../../core/logic/config/utils";
 import { ITask } from "../../dailyPlanner/model/model";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
 import { useConfirmDeleteModal } from "../../../core/components/modal/UseConfirmActionModal";

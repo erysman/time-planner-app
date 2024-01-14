@@ -12,7 +12,7 @@ import {
 import { DragAndDropList } from "../../../core/components/list/DragAndDropList";
 import ListItem from "../../../core/components/list/ListItem";
 import { IProject, ITask } from "../../dailyPlanner/model/model";
-import { getRefreshInterval } from "../../../core/config/utils";
+import { getRefreshInterval } from "../../../core/logic/config/utils";
 
 export const TasksListScreen = () => {
   const day = dayjs().format(DAY_FORMAT);

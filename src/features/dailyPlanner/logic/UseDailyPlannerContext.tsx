@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
+import { useScreenDimensions } from "../../../core/logic/dimensions/UseScreenDimensions";
 import {
   DailyPlannerViewMode,
   DailyPlannerViewModeProperties,

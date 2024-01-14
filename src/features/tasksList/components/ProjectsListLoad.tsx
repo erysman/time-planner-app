@@ -1,6 +1,6 @@
 import { Spinner } from "tamagui";
 import { useGetProjects } from "../../../clients/time-planner-server/client";
-import { getRefreshInterval } from "../../../core/config/utils";
+import { getRefreshInterval } from "../../../core/logic/config/utils";
 import { IProject } from "../../dailyPlanner/model/model";
 import { ProjectsList } from "./ProjectsList";
 

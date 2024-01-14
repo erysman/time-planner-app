@@ -1,6 +1,6 @@
 import { ErrorBoundary } from "react-error-boundary";
-import { AddTaskFab } from "../../../core/components/AddTaskFab";
-import { GenericFallback } from "../../../core/components/fallbacks/GenericFallback";
+import { AddTaskFab } from "../components/AddTaskFab";
+import { GenericFallback } from "../../../core/components/fallback/GenericFallback";
 import { ProjectTasksList } from "../components/ProjectTasksList";
 
 export interface ProjectScreenProps {

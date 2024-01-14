@@ -1,6 +1,6 @@
 import React from "react";
 import { YStack } from "tamagui";
-import { HourglassIcon, StartIcon } from "../ExpoIcon";
+import { HourglassIcon, StartIcon } from "../../ExpoIcon";
 import { SwitchWithLabel } from "./SwitchWithLabel";
 
 interface SelectPriorityProps {

@@ -17,7 +17,7 @@ import {
 import { useDailyPlannerContext } from "../../features/dailyPlanner/logic/UseDailyPlannerContext";
 import { useScheduleDayTasks } from "../../features/dailyPlanner/logic/UseScheduleDay";
 import { DatePicker } from "../components/calendar/DatePicker";
-import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
+import { useScreenDimensions } from "../logic/dimensions/UseScreenDimensions";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ExpoIcon } from "../components/ExpoIcon";
 

@@ -1,21 +1,21 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { ScrollView, Separator, SizableText, YStack } from "tamagui";
-import { SelectDay } from "./SelectDay";
-import { SelectDurationMin } from "./SelectDuration";
-import { SelectProject } from "./SelectProject";
-import { SelectStartTime } from "./SelectStartTime";
+import { SelectDay } from "./components/SelectDay";
+import { SelectDurationMin } from "./components/SelectDuration";
+import { SelectProject } from "./components/SelectProject";
+import { SelectStartTime } from "./components/SelectStartTime";
 import { TaskFormHeader } from "./TaskFormHeader";
-import { useUpdateTaskDetails } from "./UseUpdateTaskDetails";
-import { DeleteButton } from "./DeleteButton";
-import { SelectPriority } from "./SelectPriority";
+import { useUpdateTaskDetails } from "./logic/UseUpdateTaskDetails";
+import { DeleteButton } from "./components/DeleteButton";
+import { SelectPriority } from "./components/SelectPriority";
 import { debounce, uniqueId } from "lodash";
 import {
   useValidateName,
   useValidateStartDay,
   useValidateStartTime,
   useValidateDuration,
-} from "./UseValidateTask";
+} from "./logic/UseValidateTask";
 
 interface TaskEditFormProps {
   id: string;

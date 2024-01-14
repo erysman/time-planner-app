@@ -6,7 +6,7 @@ import { IProject, ITask } from "../../model/model";
 import { DraggableCalendar } from "../calendar/DraggableCalendar";
 import { DraggableList } from "./DraggableList";
 import { MovingCalendarListItem } from "./MovingCalendarListItem";
-import { useScreenDimensions } from "../../../../core/dimensions/UseScreenDimensions";
+import { useScreenDimensions } from "../../../../core/logic/dimensions/UseScreenDimensions";
 import { deviceName } from "expo-device";
 
 export interface DraggableCalendarListProps {

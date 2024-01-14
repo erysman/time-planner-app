@@ -7,9 +7,9 @@ import {
   getGetTaskQueryKey,
   getGetTasksDayOrderQueryKey,
   useDeleteTask,
-} from "../../../clients/time-planner-server/client";
-import { ExpoIcon } from "../ExpoIcon";
-import { useConfirmDeleteModal } from "../modal/UseConfirmActionModal";
+} from "../../../../clients/time-planner-server/client";
+import { ExpoIcon } from "../../ExpoIcon";
+import { useConfirmDeleteModal } from "../../modal/UseConfirmActionModal";
 
 export const DeleteButton = (props: {
   name: string;

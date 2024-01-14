@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/UseAuth";
 import { EmailAndPasswordForm } from "../components/EmailAndPasswordForm";
 import { AuthFooter } from "../components/AuthFooter";
 import { ErrorBoundary } from "react-error-boundary";
-import { GenericFallback } from "../../../core/components/fallbacks/GenericFallback";
+import { GenericFallback } from "../../../core/components/fallback/GenericFallback";
 
 export const SignUpForm = () => {
   const {

@@ -22,7 +22,7 @@ import {
   removeItemFromList,
   setItemOrder,
 } from "../../../core/components/list/DragAndDropList";
-import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
+import { useScreenDimensions } from "../../../core/logic/dimensions/UseScreenDimensions";
 import { ITask, ITaskWithTime, TimeAndDurationMap } from "../model/model";
 import { useDraggableCalendarListContext } from "./UseCalendarListContext";
 import { useUpdateTaskDayWrapper } from "./UseUpdateTask";

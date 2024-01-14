@@ -4,8 +4,8 @@ import {
   useGetProjects,
   useGetTasksDayOrder,
 } from "../../../clients/time-planner-server/client";
-import { getRefreshInterval } from "../../../core/config/utils";
-import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
+import { getRefreshInterval } from "../../../core/logic/config/utils";
+import { useScreenDimensions } from "../../../core/logic/dimensions/UseScreenDimensions";
 import { DraggableCalendarList } from "../components/draggableCalendarList/DraggableCalendarList";
 import { CalendarListDataProvider } from "../logic/UseCalendarListContext";
 import { IProject, ITask } from "../model/model";

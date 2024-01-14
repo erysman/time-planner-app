@@ -11,7 +11,7 @@ import { Suspense, useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider, Theme, useTheme } from "tamagui";
 import tamaguiConfig from "../config/tamagui.config";
-import { ScreenDimensionsProvider } from "../src/core/dimensions/UseScreenDimensions";
+import { ScreenDimensionsProvider } from "../src/core/logic/dimensions/UseScreenDimensions";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "../src/features/auth/hooks/UseAuth";
 // export {

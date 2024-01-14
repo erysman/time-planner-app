@@ -9,7 +9,7 @@ import {
   XStack,
   YStack,
 } from "tamagui";
-import { useScreenDimensions } from "../dimensions/UseScreenDimensions";
+import { useScreenDimensions } from "../logic/dimensions/UseScreenDimensions";
 
 type StackProps = GetProps<typeof Stack>;
 

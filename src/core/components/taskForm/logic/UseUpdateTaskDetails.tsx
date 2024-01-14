@@ -6,8 +6,8 @@ import {
     getGetTaskQueryKey,
     getGetTasksDayOrderQueryKey,
     useUpdateTask
-} from "../../../clients/time-planner-server/client";
-import { TaskDTO } from "../../../clients/time-planner-server/model";
+} from "../../../../clients/time-planner-server/client";
+import { TaskDTO } from "../../../../clients/time-planner-server/model";
 
 
 export type UseUpdateTaskReturnType = ReturnType<typeof useUpdateTask>;

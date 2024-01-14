@@ -19,14 +19,14 @@ import {
   getGetTasksDayOrderQueryKey,
   useCreateTask,
 } from "../../../clients/time-planner-server/client";
-import { NoRetryFallback } from "../fallbacks/GenericFallback";
-import { SelectDay } from "./SelectDay";
-import { SelectDurationMin } from "./SelectDuration";
-import { SelectPriority } from "./SelectPriority";
-import { SelectProject } from "./SelectProject";
-import { SelectStartTime } from "./SelectStartTime";
+import { NoRetryFallback } from "../fallback/GenericFallback";
+import { SelectDay } from "./components/SelectDay";
+import { SelectDurationMin } from "./components/SelectDuration";
+import { SelectPriority } from "./components/SelectPriority";
+import { SelectProject } from "./components/SelectProject";
+import { SelectStartTime } from "./components/SelectStartTime";
 import { TaskFormHeader } from "./TaskFormHeader";
-import { useValidateName, useValidateStartDay, useValidateStartTime, useValidateDuration } from "./UseValidateTask";
+import { useValidateName, useValidateStartDay, useValidateStartTime, useValidateDuration } from "./logic/UseValidateTask";
 
 interface TaskCreateFormProps {
   projectId: string;

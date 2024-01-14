@@ -17,7 +17,6 @@ export const useEditTaskModal = () => {
   );
   const openTaskModal = useCallback(
     (id: string) => {
-      console.log(`open modal for ${id}`)
       setTaskId(id);
       setOpen(true);
     },

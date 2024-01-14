@@ -8,9 +8,9 @@ import {
   XStack,
   YStack,
 } from "tamagui";
-import { useGetProjects } from "../../../clients/time-planner-server/client";
-import { IProject } from "../../../features/dailyPlanner/model/model";
-import { ExpoIcon } from "../ExpoIcon";
+import { useGetProjects } from "../../../../clients/time-planner-server/client";
+import { IProject } from "../../../../features/dailyPlanner/model/model";
+import { ExpoIcon } from "../../ExpoIcon";
 
 interface SelectProjectProps {
   id: string;

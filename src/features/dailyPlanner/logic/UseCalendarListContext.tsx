@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState } from "react";
-import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
+import { useScreenDimensions } from "../../../core/logic/dimensions/UseScreenDimensions";
 import { DEFAULT_CALENDAR_STEP_MINUTES } from "../../../../config/constants";
 
 interface ICalendarListContext {

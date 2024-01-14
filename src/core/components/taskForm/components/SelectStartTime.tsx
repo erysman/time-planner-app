@@ -4,10 +4,10 @@ import DateTimePicker, {
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import { Button, SizableText } from "tamagui";
-import { TIME_FORMAT } from "../../../../config/constants";
-import { mapToDayjs } from "../../utils";
-import { ExpoIcon } from "../ExpoIcon";
-import { useScreenDimensions } from "../../dimensions/UseScreenDimensions";
+import { TIME_FORMAT } from "../../../../../config/constants";
+import { mapToDayjs } from "../../../utils";
+import { ExpoIcon } from "../../ExpoIcon";
+import { useScreenDimensions } from "../../../logic/dimensions/UseScreenDimensions";
 
 interface SelectStartTimeProps {
   startTime?: string;

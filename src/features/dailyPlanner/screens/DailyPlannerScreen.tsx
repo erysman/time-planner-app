@@ -5,7 +5,7 @@ import { DAY_FORMAT } from "../../../../config/constants";
 import { DatePickerTabHeader } from "../../../core/navigation/Header";
 import { DailyPlannerLoad } from "./DailyPlannerLoad";
 import { ErrorBoundary } from "react-error-boundary";
-import { GenericFallback } from "../../../core/components/fallbacks/GenericFallback";
+import { GenericFallback } from "../../../core/components/fallback/GenericFallback";
 
 export default function DailyPlannerScreen({ route, navigation }) {
   const day = route.name;
