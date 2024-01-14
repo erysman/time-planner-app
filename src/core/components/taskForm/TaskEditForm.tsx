@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { ScrollView, Separator, SizableText, YStack } from "tamagui";
 import { SelectDay } from "./SelectDay";
@@ -9,7 +9,7 @@ import { TaskFormHeader } from "./TaskFormHeader";
 import { useUpdateTaskDetails } from "./UseUpdateTaskDetails";
 import { DeleteButton } from "./DeleteButton";
 import { SelectPriority } from "./SelectPriority";
-import { debounce } from "lodash";
+import { debounce, uniqueId } from "lodash";
 import {
   useValidateName,
   useValidateStartDay,
@@ -40,6 +40,7 @@ export const TaskEditForm = ({
   isImportant,
   onClose,
 }: TaskEditFormProps) => {
+  const formId = useMemo(() => uniqueId(), []);
   const { updateTask } = useUpdateTaskDetails(id, projectId, day);
 
   const { isNameValid, nameMessage, validateName } = useValidateName();
@@ -124,7 +125,7 @@ export const TaskEditForm = ({
               <SizableText color={"$red9"}>{nameMessage}</SizableText>
             ) : null}
             <SelectPriority
-              id={id}
+              id={formId}
               isImportant={isImportant}
               isUrgent={isUrgent}
               updateImportant={updateImportant}
@@ -136,7 +137,13 @@ export const TaskEditForm = ({
               alignSelf="center"
             />
             <YStack space={8}>
-              <SelectDay day={day} updateDay={updateDay} isStartDayValid={isStartDayValid} validateStartDay={validateStartDay} errorMessage={startDayMessage}/>
+              <SelectDay
+                day={day}
+                updateDay={updateDay}
+                isStartDayValid={isStartDayValid}
+                validateStartDay={validateStartDay}
+                errorMessage={startDayMessage}
+              />
               <SelectStartTime
                 updateStartTime={updateStartTime}
                 startTime={startTime}
@@ -168,6 +175,7 @@ export const TaskEditForm = ({
           </YStack>
           <YStack marginHorizontal={12} marginTop={36}>
             <DeleteButton
+              name={name}
               day={day}
               id={id}
               projectId={projectId}

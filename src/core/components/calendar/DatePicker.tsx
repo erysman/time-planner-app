@@ -77,7 +77,7 @@ export const DatePicker = ({ onDayPress, initialDay }: DatePickerProps) => {
             selected: true,
             selectedColor: selectedDayBackgroundColor,
             selectedTextColor: color,
-            disableTouchEvent: true,
+            disableTouchEvent: false,
           },
         }}
         enableSwipeMonths

@@ -45,6 +45,7 @@ export const DraggableList = ({
       if (!task) return null;
       return (
         <ListItem
+          id={task.id}
           name={task.name}
           isEdited={false}
           isImportant={task.isImportant}

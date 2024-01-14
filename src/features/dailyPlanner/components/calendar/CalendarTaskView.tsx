@@ -3,10 +3,12 @@ import Animated, {
   interpolate,
   useAnimatedProps,
 } from "react-native-reanimated";
-import { SizableText, XStack } from "tamagui";
+import { Button, Checkbox, SizableText, XStack } from "tamagui";
 import { PriorityIcons } from "../../../../core/components/PriorityIcons";
 
 import { useAnimatedHeight } from "./CalendarTaskHeightEditHandler";
+import { ExpoIcon } from "../../../../core/components/ExpoIcon";
+import { useEditTaskModal } from "../../../../core/components/modal/UseEditTaskModal";
 
 interface CalendarTaskViewProps {
   id: string;
@@ -47,28 +49,36 @@ export const CalendarTaskView = ({
     );
     return { paddingTop };
   });
+  const { taskModal, openTaskModal } = useEditTaskModal();
 
   return (
-    <XStack
-      zIndex={100}
-      borderColor={isEdited ? "$blue8" : "$borderColor"}
-      borderWidth={isEdited ? 2 : 0}
-      backgroundColor={"$background"}
-      borderRadius={"$4"}
-      overflow="hidden"
-      height={"100%"}
-      onPress={() => onPress?.(id)}
-    >
-      <AnimatedXStack
-        width={"100%"}
+    <>
+      <XStack
+        zIndex={100}
+        borderColor={isEdited ? "$blue8" : "$borderColor"}
+        borderWidth={isEdited ? 2 : 0}
+        backgroundColor={"$background"}
+        borderRadius={"$4"}
+        overflow="hidden"
         height={"100%"}
-        borderColor={projectColor ?? "$background"}
-        borderLeftWidth={8}
-        animatedProps={xstackProps}
+        // width={"100%"}
+        pressStyle={{
+          backgroundColor: "$backgroundHover",
+        }}
+        onPress={() => {
+          onPress?.(id);
+        }}
       >
-        {/* <XStack width={60}>
-          {isEdited ? null : (
-            <Checkbox size="$1.5" circular marginHorizontal={16}>
+        <AnimatedXStack
+          flexGrow={1}
+          flexShrink={1}
+          height={"100%"}
+          borderColor={projectColor ?? "$background"}
+          borderLeftWidth={8}
+          animatedProps={xstackProps}
+        >
+          <XStack width={44}>
+            <Checkbox size="$1.5" circular marginHorizontal={12}>
               <Checkbox.Indicator>
                 <ExpoIcon
                   iconSet="MaterialIcons"
@@ -78,21 +88,37 @@ export const CalendarTaskView = ({
                 />
               </Checkbox.Indicator>
             </Checkbox>
-          )}
-        </XStack> */}
-        <AnimatedSizableText
-          marginLeft={8}
-          flexGrow={1}
-          flexShrink={1}
-          size={"$5"}
-          ellipsizeMode="tail"
-          onPress={() => onPress?.(id)}
-          animatedProps={nameProps}
-        >
-          {name}
-        </AnimatedSizableText>
-        <PriorityIcons isImportant={isImportant} isUrgent={isUrgent} />
-      </AnimatedXStack>
-    </XStack>
+          </XStack>
+          <AnimatedSizableText
+            flexGrow={1}
+            flexShrink={1}
+            marginLeft={8}
+            size={"$5"}
+            ellipsizeMode="tail"
+            animatedProps={nameProps}
+          >
+            {name}
+          </AnimatedSizableText>
+          <PriorityIcons isImportant={isImportant} isUrgent={isUrgent} />
+        </AnimatedXStack>
+
+        {isEdited ? (
+          <Button
+            borderRadius={"$3"}
+            h="auto"
+            icon={
+              <ExpoIcon
+                iconSet="MaterialIcons"
+                name="info-outline"
+                size={24}
+                color="color"
+              />
+            }
+            onPress={() => openTaskModal(id)}
+          />
+        ) : null}
+      </XStack>
+      {taskModal}
+    </>
   );
 };

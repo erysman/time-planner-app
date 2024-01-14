@@ -116,7 +116,7 @@ export const TaskCreateForm = ({
         projectId: editedProjectId,
       },
     });
-    if (createTask.isSuccess) {
+    if (!createTask.isError) {
       resetState();
     }
     onClose();

@@ -18,7 +18,10 @@ import { useValidateName } from "../../../core/components/taskForm/UseValidateTa
 import ColorPicker from "react-native-wheel-color-picker";
 import { Modal } from "../../../core/components/modal/Modal";
 import { useScreenDimensions } from "../../../core/dimensions/UseScreenDimensions";
-import { getGetProjectsQueryKey, useCreateProject } from "../../../clients/time-planner-server/client";
+import {
+  getGetProjectsQueryKey,
+  useCreateProject,
+} from "../../../clients/time-planner-server/client";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ProjectsListProps {
@@ -27,10 +30,14 @@ interface ProjectsListProps {
 
 export const ProjectsList = ({ projects }: ProjectsListProps) => {
   return (
-    <ScrollView h="100%" w="100%" alwaysBounceHorizontal={false}
-    alwaysBounceVertical={false}
-    bounces={false}
-    overScrollMode="never">
+    <ScrollView
+      h="100%"
+      w="100%"
+      alwaysBounceHorizontal={false}
+      alwaysBounceVertical={false}
+      bounces={false}
+      overScrollMode="never"
+    >
       <YStack marginVertical={24} marginHorizontal={24} space={12}>
         {projects?.map((project) => {
           return (
@@ -45,25 +52,6 @@ export const ProjectsList = ({ projects }: ProjectsListProps) => {
         <AddProject />
       </YStack>
     </ScrollView>
-  );
-};
-
-export const ProjectsListFallback = ({
-  error,
-  resetErrorBoundary,
-}: FallbackProps) => {
-  return (
-    <YStack mt={24} marginHorizontal={24} space={12}>
-      <H6>{`Something went wrong:`}</H6>
-      <SizableText>{error.message}</SizableText>
-      <Button
-        icon={<ExpoIcon iconSet="MaterialIcons" name="refresh" size={16} />}
-        onPress={resetErrorBoundary}
-      >
-        {"Retry"}
-      </Button>
-      <AddProject />
-    </YStack>
   );
 };
 
@@ -90,7 +78,7 @@ export const ProjectView = ({ color, name, id }: ProjectItemProps) => {
         elevation={10}
         backgroundColor={"$background"}
         pressStyle={{
-          backgroundColor: "$backgroundHover"
+          backgroundColor: "$backgroundHover",
         }}
       >
         <Circle backgroundColor={color} size="$1.5" marginHorizontal={16} />
@@ -122,7 +110,6 @@ export const AddProject = () => {
       onPress={() => setIsEdit((prev) => !prev)}
       borderWidth={namePressed || !isNameValid ? 1 : 0}
       borderColor={!isNameValid ? "$red9" : "$borderColor"}
-      
     >
       {isEdit ? (
         <AddProjectForm
@@ -163,37 +150,42 @@ export const AddProjectForm = ({
   setNamePressed,
   nameMessage,
   isNameValid,
-  onReset
+  onReset,
 }: AddProjectFormProps) => {
-  const defaultColor = "blue"
+  const defaultColor = "blue";
   const { screenWidth } = useScreenDimensions();
   const [color, setColor] = useState(defaultColor);
   const { openModal, taskModal } = useColorPickerModal(color, setColor);
   const queryClient = useQueryClient();
-  const createProject = useCreateProject({mutation: {
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: getGetProjectsQueryKey(),
-      });
+  const createProject = useCreateProject({
+    mutation: {
+      onSettled: () => {
+        queryClient.invalidateQueries({
+          queryKey: getGetProjectsQueryKey(),
+        });
+      },
     },
-  }});
+  });
 
   const resetState = () => {
-    setColor(defaultColor)
-    setName("")
-    setNamePressed(false)
+    setColor(defaultColor);
+    setName("");
+    setNamePressed(false);
     onReset();
-  }
+  };
 
   const onSave = () => {
     if (!isNameValid) return;
-    console.log(color)
-    createProject.mutate({data: {
-      name, color
-    }})
-    console.log(createProject.isError)
-    if(!createProject.isError) {
-      resetState()
+    console.log(color);
+    createProject.mutate({
+      data: {
+        name,
+        color,
+      },
+    });
+    console.log(createProject.isError);
+    if (!createProject.isError) {
+      resetState();
     }
   };
 

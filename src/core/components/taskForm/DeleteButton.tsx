@@ -9,14 +9,16 @@ import {
   useDeleteTask,
 } from "../../../clients/time-planner-server/client";
 import { ExpoIcon } from "../ExpoIcon";
+import { useConfirmDeleteModal } from "../modal/UseConfirmActionModal";
 
 export const DeleteButton = (props: {
+  name: string;
   id: string;
   day?: string;
   projectId: string;
   onPress: () => void;
 }) => {
-  const { id, day, projectId, onPress } = props;
+  const { id, day, projectId, onPress, name } = props;
   const queryClient = useQueryClient();
   const deleteTask = useDeleteTask({
     mutation: {
@@ -38,21 +40,29 @@ export const DeleteButton = (props: {
       },
     },
   });
+  const onDelete = () => {
+    deleteTask.mutate({ id });
+    onPress();
+  };
+  const { confirmDeleteModal, openConfirmDeleteModal } = useConfirmDeleteModal(
+    onDelete,
+    `Do you want to delete task ${name}?`
+  );
   return (
-    <Button
-      justifyContent="flex-start"
-      theme="red"
-      onPress={() => {
-        deleteTask.mutate({ id });
-        onPress();
-      }}
-    >
-      <ExpoIcon
-        iconSet="MaterialCommunityIcons"
-        name="delete-outline"
-        size={24}
-      />
-      <SizableText>{"Delete"}</SizableText>
-    </Button>
+    <>
+      <Button
+        justifyContent="flex-start"
+        theme="red"
+        onPress={openConfirmDeleteModal}
+      >
+        <ExpoIcon
+          iconSet="MaterialCommunityIcons"
+          name="delete-outline"
+          size={24}
+        />
+        <SizableText>{"Delete"}</SizableText>
+      </Button>
+      {confirmDeleteModal}
+    </>
   );
 };

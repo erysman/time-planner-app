@@ -1,8 +1,7 @@
-import { Spinner, H6 } from "tamagui";
+import { H6, Spinner } from "tamagui";
 import { useGetTask } from "../../../clients/time-planner-server/client";
 import { ITask } from "../../../features/dailyPlanner/model/model";
-import { TaskEditForm } from "../taskForm/TaskEditForm";
-
+import { TaskEditForm } from "./TaskEditForm";
 
 interface TaskEditFormLoadProps {
   id: string;
@@ -19,7 +18,7 @@ export const TaskEditFormLoad = ({ id, onClose }: TaskEditFormLoadProps) => {
     return <H6>Error while loading task data</H6>;
   }
   const task = data as ITask;
-  if(!task) return null;
+  if (!task) return null;
   return (
     <TaskEditForm
       name={task.name}

@@ -3,8 +3,10 @@ import { Checkbox, SizableText, StackProps, XStack } from "tamagui";
 import { minutesToShortTime } from "../../utils";
 import { ExpoIcon } from "../ExpoIcon";
 import { PriorityIcons } from "../PriorityIcons";
+import { useEditTaskModal } from "../modal/UseEditTaskModal";
 
 export interface ListItemProps extends StackProps {
+  id: string;
   name: string;
   first?: boolean;
   isEdited: boolean;
@@ -16,6 +18,7 @@ export interface ListItemProps extends StackProps {
 }
 
 export default function ListItem({
+  id,
   name,
   durationMin,
   isUrgent, isImportant,
@@ -25,7 +28,9 @@ export default function ListItem({
   projectColor,
   ...props
 }: ListItemProps) {
+  const { taskModal, openTaskModal } = useEditTaskModal();
   return (
+    <>
     <XStack
       h={"100%"}
       w={"100%"}
@@ -42,7 +47,10 @@ export default function ListItem({
         backgroundColor={"$background"}
         borderColor={projectColor ?? "$background"}
         borderLeftWidth={8}
-        onPress={onPress}
+        onPress={() => {
+          openTaskModal(id)
+          onPress?.();
+        }}
         pressStyle={{
           backgroundColor: "$backgroundHover"
         }}
@@ -74,5 +82,7 @@ export default function ListItem({
         ) : null}
       </XStack>
     </XStack>
+    {taskModal}
+    </>
   );
 }
