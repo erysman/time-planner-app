@@ -6,6 +6,6 @@
  */
 
 export interface CreateBannedRangeDTO {
-  scheduleStartTime?: string;
-  scheduleEndTime?: string;
+  startTime?: string;
+  endTime?: string;
 }

@@ -12,14 +12,15 @@ export const SignUpForm = () => {
   } = useAuth();
   return (
     <YStack alignItems={"center"} backgroundColor={"$background"} fullscreen>
-        <H1 marginTop={100} marginBottom={50}>{"TIME PLANNER"}</H1>
+      <H1 marginTop={100} marginBottom={50}>
+        {"TIME PLANNER"}
+      </H1>
       <EmailAndPasswordForm
         heading={"UTWÓRZ KONTO"}
         buttonText={"Załóż konto"}
         authenticate={signUpWithPassword}
         loginWithGoogle={loginWithGoogle}
         loggingInProgress={loggingInProgress}
-        
       />
 
       <AuthFooter

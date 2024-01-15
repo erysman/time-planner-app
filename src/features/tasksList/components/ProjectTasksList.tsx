@@ -10,25 +10,66 @@ import {
   useGetProject,
   useGetProjectTasks,
 } from "../../../clients/time-planner-server/client";
-import ListItem from "../../../core/components/list/ListItem";
-import { useEditTaskModal } from "../../../core/components/modal/UseEditTaskModal";
-import { getRefreshInterval } from "../../../core/logic/config/utils";
-import { ITask } from "../../dailyPlanner/model/model";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
+import ListItem from "../../../core/components/list/ListItem";
 import { useConfirmDeleteModal } from "../../../core/components/modal/UseConfirmActionModal";
+import { getRefreshInterval } from "../../../core/logic/config/utils";
+import { IProject, ITask } from "../../dailyPlanner/model/model";
+import { useErrorBoundary } from "react-error-boundary";
 
-export const ProjectTasksList = (props: { projectId: string }) => {
+export const ProjectTasksListLoad = (props: { projectId: string }) => {
   const { projectId } = props;
-  const router = useRouter();
-  const { data: tasks, isLoading } = useGetProjectTasks(projectId, {
-    query: { refetchInterval: getRefreshInterval(), useErrorBoundary: true },
+  const {
+    data: tasks,
+    isLoading,
+    isError: isErrorTasks,
+    error: errorTasks,
+  } = useGetProjectTasks(projectId, {
+    query: { refetchInterval: getRefreshInterval() },
   });
-  const { data: project, isLoading: isLoadingProject } = useGetProject(
-    projectId,
-    {
-      query: { refetchInterval: getRefreshInterval(), useErrorBoundary: true },
+  const {
+    data: project,
+    isLoading: isLoadingProject,
+    isError: isErrorProject,
+    error: errorProject,
+  } = useGetProject(projectId, {
+    query: { refetchInterval: getRefreshInterval() },
+  });
+  const { showBoundary } = useErrorBoundary();
+  useEffect(() => {
+    if (isErrorTasks) {
+      showBoundary(errorTasks);
     }
+    if (isErrorProject) {
+      showBoundary(errorProject);
+    }
+  }, [isErrorTasks, isErrorProject]);
+
+  if (isLoading || isLoadingProject) {
+    return <Spinner />; //print skeleton, not Spinner
+  }
+
+  return (
+    <ProjectTasksList
+      project={project as IProject}
+      projectId={projectId}
+      tasks={tasks as ITask[]}
+    />
   );
+};
+
+interface ProjectTasksListProps {
+  projectId: string;
+  project: IProject;
+  tasks: ITask[];
+}
+
+export const ProjectTasksList = ({
+  project,
+  projectId,
+  tasks,
+}: ProjectTasksListProps) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const deleteProject = useDeleteProject({
     mutation: {
@@ -45,18 +86,18 @@ export const ProjectTasksList = (props: { projectId: string }) => {
   const onProjectDelete = () => {
     deleteProject.mutate({ id: projectId });
     router.back();
-  }
+  };
 
-  const {confirmDeleteModal,openConfirmDeleteModal} = useConfirmDeleteModal(onProjectDelete, `Do you want to delete project ${project?.name}?`)
+  const { confirmDeleteModal, openConfirmDeleteModal } = useConfirmDeleteModal(
+    onProjectDelete,
+    `Do you want to delete project ${project?.name}?`
+  );
   const onProjectDeletePress = () => {
-    openConfirmDeleteModal()
-  }
+    openConfirmDeleteModal();
+  };
   const deleteButton = useMemo(() => {
     return (
-      <Button
-        variant="outlined"
-        onPress={onProjectDeletePress}
-      >
+      <Button variant="outlined" onPress={onProjectDeletePress}>
         <ExpoIcon
           iconSet="MaterialCommunityIcons"
           name="delete-outline"
@@ -73,10 +114,6 @@ export const ProjectTasksList = (props: { projectId: string }) => {
       headerRight: () => <>{deleteButton}</>,
     });
   }, [project?.name, navigation]);
-
-  if (isLoading || isLoadingProject) {
-    return <Spinner />; //print skeleton, not Spinner
-  }
 
   return (
     <ScrollView

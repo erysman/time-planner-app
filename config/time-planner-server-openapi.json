@@ -1308,11 +1308,11 @@
       "CreateBannedRangeDTO": {
         "type": "object",
         "properties": {
-          "scheduleStartTime": {
+          "startTime": {
             "pattern": "HH:mm",
             "type": "string"
           },
-          "scheduleEndTime": {
+          "endTime": {
             "pattern": "HH:mm",
             "type": "string"
           }

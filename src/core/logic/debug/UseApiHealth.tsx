@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { API_HEALTH_INTERVAL } from "../../../config/constants";
-import { useHealth } from "../../clients/time-planner-server/client";
+import { API_HEALTH_INTERVAL } from "../../../../config/constants";
+import { useHealth } from "../../../clients/time-planner-server/client";
+
 
 export const useApiHealth = () => {
     const {data, isError, isLoading, isRefetching} = useHealth({

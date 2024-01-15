@@ -1,7 +1,11 @@
-import { ErrorBoundary } from "react-error-boundary";
+
 import { AddTaskFab } from "../components/AddTaskFab";
 import { GenericFallback } from "../../../core/components/fallback/GenericFallback";
-import { ProjectTasksList } from "../components/ProjectTasksList";
+import { ProjectTasksList, ProjectTasksListLoad } from "../components/ProjectTasksList";
+import { uniqueId } from "lodash";
+import { useState } from "react";
+import React from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 export interface ProjectScreenProps {
   projectId: string;
@@ -10,8 +14,8 @@ export interface ProjectScreenProps {
 export const ProjectScreen = ({ projectId }: ProjectScreenProps) => {
   return (
     <>
-      <ErrorBoundary FallbackComponent={GenericFallback}>
-        <ProjectTasksList projectId={projectId} />
+      <ErrorBoundary FallbackComponent={GenericFallback} >
+        <ProjectTasksListLoad projectId={projectId}/>
       </ErrorBoundary>
       <AddTaskFab projectId={projectId} />
     </>
