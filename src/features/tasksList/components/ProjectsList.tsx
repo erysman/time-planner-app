@@ -23,6 +23,7 @@ import {
   useCreateProject,
 } from "../../../clients/time-planner-server/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { DEFAULT_PROJECT_COLOR } from "../../../../config/constants";
 
 interface ProjectsListProps {
   projects: IProject[];
@@ -109,7 +110,7 @@ export const AddProject = () => {
       backgroundColor={"$backgroundHover"}
       onPress={() => setIsEdit((prev) => !prev)}
       borderWidth={namePressed || !isNameValid ? 1 : 0}
-      borderColor={!isNameValid ? "$red9" : "$borderColor"}
+      borderColor={!isNameValid && isEdit ? "$red9" : "$borderColor"}
     >
       {isEdit ? (
         <AddProjectForm
@@ -152,9 +153,8 @@ export const AddProjectForm = ({
   isNameValid,
   onReset,
 }: AddProjectFormProps) => {
-  const defaultColor = "blue";
   const { screenWidth } = useScreenDimensions();
-  const [color, setColor] = useState(defaultColor);
+  const [color, setColor] = useState(DEFAULT_PROJECT_COLOR);
   const { openModal, taskModal } = useColorPickerModal(color, setColor);
   const queryClient = useQueryClient();
   const createProject = useCreateProject({
@@ -168,22 +168,20 @@ export const AddProjectForm = ({
   });
 
   const resetState = () => {
-    setColor(defaultColor);
+    setColor(DEFAULT_PROJECT_COLOR);
     setName("");
     setNamePressed(false);
     onReset();
   };
 
   const onSave = () => {
-    if (!isNameValid) return;
-    console.log(color);
+    if (!validateName(name)) return;
     createProject.mutate({
       data: {
         name,
         color,
       },
     });
-    console.log(createProject.isError);
     if (!createProject.isError) {
       resetState();
     }
@@ -206,7 +204,7 @@ export const AddProjectForm = ({
             placeholderTextColor={"$color"}
             onPress={() => setNamePressed(true)}
             onChangeText={(text) => {
-              if (!validateName(text)) return;
+              validateName(text);
               setName(text);
             }}
             onSubmitEditing={() => setNamePressed(false)}

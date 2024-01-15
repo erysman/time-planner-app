@@ -167,6 +167,36 @@
         }
       }
     },
+    "/user/initialize": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "initializeUser",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfoDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tasks": {
       "get": {
         "tags": [
@@ -827,6 +857,47 @@
         }
       }
     },
+    "/user": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Get user info",
+        "operationId": "getUserInfo",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfoDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfoDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{id}/tasks": {
       "get": {
         "tags": [
@@ -1169,6 +1240,14 @@
           },
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "UserInfoDTO": {
+        "type": "object",
+        "properties": {
+          "isInitialized": {
+            "type": "boolean"
           }
         }
       },

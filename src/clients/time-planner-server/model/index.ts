@@ -32,3 +32,4 @@ export * from './taskUpdateDTOPriority';
 export * from './updateProjectDTO';
 export * from './updateTaskDTO';
 export * from './updateTaskDTOPriority';
+export * from './userInfoDTO';

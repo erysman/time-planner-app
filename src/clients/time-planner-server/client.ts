@@ -18,6 +18,7 @@ import type {
 } from '@tanstack/react-query'
 import type {
   ErrorMessage,
+  UserInfoDTO,
   TaskDTO,
   GetTasksParams,
   CreateTaskDTO,
@@ -164,6 +165,53 @@ export const useUpdateTasksDayOrder = <TError = ErrorMessage,
 ) => {
     
       const mutationOptions = getUpdateTasksDayOrderMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+export const initializeUser = (
+    
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UserInfoDTO>(
+      {url: `/user/initialize`, method: 'post'
+    },
+      options);
+    }
+  
+
+
+export const getInitializeUserMutationOptions = <TError = ErrorMessage,
+    TVariables = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof initializeUser>>, TError,TVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof initializeUser>>, TError,TVariables, TContext> => {
+ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof initializeUser>>, TVariables> = () => {
+          
+
+          return  initializeUser(requestOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type InitializeUserMutationResult = NonNullable<Awaited<ReturnType<typeof initializeUser>>>
+    
+    export type InitializeUserMutationError = ErrorMessage
+
+    export const useInitializeUser = <TError = ErrorMessage,
+    TVariables = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof initializeUser>>, TError,TVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+      const mutationOptions = getInitializeUserMutationOptions(options);
      
       return useMutation(mutationOptions);
     }
@@ -1017,6 +1065,68 @@ export const useValidate = <TData = Awaited<ReturnType<typeof validate>>, TError
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
   const queryOptions = getValidateQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+/**
+ * @summary Get user info
+ */
+export const getUserInfo = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<UserInfoDTO>(
+      {url: `/user`, method: 'get', signal
+    },
+      options);
+    }
+  
+
+export const getGetUserInfoQueryKey = () => {
+    
+    return [`/user`] as const;
+    }
+  
+
+    
+export const getGetUserInfoQueryOptions = <TData = Awaited<ReturnType<typeof getUserInfo>>, TError = ErrorMessage>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUserInfo>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+    
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUserInfoQueryKey();
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserInfo>>> = ({ signal }) => getUserInfo(requestOptions, signal);
+
+      
+    
+      
+      
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserInfo>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetUserInfoQueryResult = NonNullable<Awaited<ReturnType<typeof getUserInfo>>>
+export type GetUserInfoQueryError = ErrorMessage
+
+/**
+ * @summary Get user info
+ */
+export const useGetUserInfo = <TData = Awaited<ReturnType<typeof getUserInfo>>, TError = ErrorMessage>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUserInfo>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetUserInfoQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

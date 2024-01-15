@@ -90,7 +90,7 @@ export const ProjectTasksList = ({
 
   const { confirmDeleteModal, openConfirmDeleteModal } = useConfirmDeleteModal(
     onProjectDelete,
-    `Do you want to delete project ${project?.name}?`
+    `Do you want to delete project ${project?.name} and all related tasks?`
   );
   const onProjectDeletePress = () => {
     openConfirmDeleteModal();

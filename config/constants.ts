@@ -11,3 +11,5 @@ export const DAY_LONG_READ_FORMAT = "DD MMM YY";
 export const DEFAULT_DURATION_MIN = 60;
 export const DEFAULT_CALENDAR_STEP_MINUTES = 15;
 export const MIN_TASK_DURATION_MINUTES = 30;
+
+export const DEFAULT_PROJECT_COLOR = "#1632e5";
