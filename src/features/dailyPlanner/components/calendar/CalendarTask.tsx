@@ -43,8 +43,7 @@ export const CalendarTask = ({
   });
   const { taskModal, openTaskModal } = useEditTaskModal();
   const zIndexAdd = timeToMinutes(task.startTime ?? "00:00")/10;
-  const zIndex = isEdited ? 200+zIndexAdd : 100+zIndexAdd
-  console.log(task.name, zIndex)
+  const zIndex = isEdited ? 200+zIndexAdd : 100+zIndexAdd;
   return (
     <>
       <Animated.View

@@ -32,4 +32,6 @@ export interface IProject {
   id: string;
   name: string;
   color: string;
+  scheduleStartTime: string;
+  scheduleEndTime: string;
 }

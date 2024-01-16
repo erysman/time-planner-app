@@ -85,7 +85,7 @@ export const ProjectTasksList = ({
   });
   const onProjectDelete = () => {
     deleteProject.mutate({ id: projectId });
-    router.back();
+    router.replace("/(tabs)/projects");
   };
 
   const { confirmDeleteModal, openConfirmDeleteModal } = useConfirmDeleteModal(

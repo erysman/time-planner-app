@@ -72,6 +72,7 @@ export const CalendarTaskView = ({
         onPress={() => {
           onPress?.(id);
         }}
+        elevation={isMoving ? 0:10}
       >
         <AnimatedXStack
           flexGrow={1}
@@ -113,7 +114,7 @@ export const CalendarTaskView = ({
             icon={
               <ExpoIcon
                 iconSet="MaterialIcons"
-                name="info-outline"
+                name="edit"
                 size={24}
                 color="color"
               />

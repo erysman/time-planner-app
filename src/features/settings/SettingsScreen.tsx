@@ -1,4 +1,4 @@
-import { Accordion, Button, H5, H6, Paragraph, Square, YStack } from "tamagui";
+import { Accordion, Button, H5, H6, Paragraph, Separator, Square, YStack } from "tamagui";
 import { useAuth } from "../auth/hooks/UseAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -12,8 +12,9 @@ import {
   BannedRangesListLoad,
 } from "./components/BannedRangesList";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { ProjectRangesListLoad } from "./components/ProjectRangesList";
 
-export const SettingsList = () => {
+export const MainSettingsList = () => {
   const {
     user,
     actions: { logout },
@@ -21,16 +22,19 @@ export const SettingsList = () => {
   return (
     <YStack mt={16} space={"$2"} marginHorizontal={24}>
       <SettingsMenu>
+        
         <SettingsMenuItem
           id="autoschedule"
           title="Automatic schedule"
           titleType={H5}
         >
-          <AutoscheduleConfig />
+          <AutoscheduleSubMenu />
         </SettingsMenuItem>
+        <Separator width="100%" alignSelf="center"/>
         <SettingsMenuItem id="user" title="User profile" titleType={H5}>
-          <Button onPress={logout}>{"Logout"}</Button>
+          <Button onPress={logout}>{"Log out"}</Button>
         </SettingsMenuItem>
+        <Separator width="100%" alignSelf="center"/>
         <SettingsMenuItem id="debug" title="Debug" titleType={H5}>
           <DebugSettings user={user}/>
         </SettingsMenuItem>
@@ -39,13 +43,20 @@ export const SettingsList = () => {
   );
 };
 
-export const AutoscheduleConfig = () => {
+export const AutoscheduleSubMenu = () => {
   return (
     <SettingsMenu>
-      <SettingsMenuItem id="banned-ranges" title="Banned ranges">
+      <Separator width="100%" alignSelf="center"/>
+      <SettingsMenuItem id="banned-ranges" title="Banned ranges" iconSize={20}>
         <YStack>
           <BannedRangesListLoad />
           <AddBannedRangeItem />
+        </YStack>
+      </SettingsMenuItem>
+      <Separator width="100%" alignSelf="center"/>
+      <SettingsMenuItem id="projects-ranges" title="Projects ranges" iconSize={20}>
+        <YStack>
+          <ProjectRangesListLoad />
         </YStack>
       </SettingsMenuItem>
     </SettingsMenu>
@@ -77,6 +88,7 @@ interface SettingsMenuItemProps {
   title: string;
   children: any;
   titleType?: ComponentType;
+  iconSize?: number;
 }
 
 export const SettingsMenuItem = ({
@@ -84,6 +96,7 @@ export const SettingsMenuItem = ({
   children,
   title,
   titleType,
+  iconSize,
 }: SettingsMenuItemProps) => {
   const TitleType = titleType ?? H6;
   return (
@@ -106,14 +119,14 @@ export const SettingsMenuItem = ({
               <ExpoIcon
                 iconSet="MaterialIcons"
                 name="arrow-forward"
-                size={24}
+                size={iconSize ?? 24}
               />
             </Square>
             <TitleType>{title}</TitleType>
           </>
         )}
       </Accordion.Trigger>
-      <Accordion.Content>{children}</Accordion.Content>
+      <Accordion.Content paddingTop={0} paddingRight={0}>{children}</Accordion.Content>
     </Accordion.Item>
   );
 };
@@ -122,7 +135,7 @@ export const SettingsScreen = () => {
   return (
     <SafeAreaView>
       <ErrorBoundary FallbackComponent={GenericFallback}>
-        <SettingsList />
+        <MainSettingsList />
       </ErrorBoundary>
     </SafeAreaView>
   );
