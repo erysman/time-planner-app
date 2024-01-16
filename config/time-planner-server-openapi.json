@@ -1244,6 +1244,9 @@
         }
       },
       "UserInfoDTO": {
+        "required": [
+          "isInitialized"
+        ],
         "type": "object",
         "properties": {
           "isInitialized": {
@@ -1293,7 +1296,11 @@
       },
       "TaskDTO": {
         "required": [
-          "name"
+          "id",
+          "isImportant",
+          "isUrgent",
+          "name",
+          "projectId"
         ],
         "type": "object",
         "properties": {
@@ -1359,6 +1366,7 @@
       },
       "ProjectDTO": {
         "required": [
+          "id",
           "name"
         ],
         "type": "object",
@@ -1372,11 +1380,13 @@
           },
           "scheduleStartTime": {
             "pattern": "HH:mm",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "scheduleEndTime": {
             "pattern": "HH:mm",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "color": {
             "type": "string",
@@ -1398,6 +1408,11 @@
         }
       },
       "BannedRangeDTO": {
+        "required": [
+          "endTime",
+          "id",
+          "startTime"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1473,6 +1488,9 @@
         }
       },
       "ScheduleInfoDTO": {
+        "required": [
+          "isScheduled"
+        ],
         "type": "object",
         "properties": {
           "isScheduled": {

@@ -3,10 +3,11 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
-import { mapDurationToHeight } from "../../logic/utils";
+import { mapDurationToHeight, timeToMinutes } from "../../logic/utils";
 import { ITask, TimeAndDurationMap } from "../../model/model";
 import { CalendarTaskHeightEditHandler } from "./CalendarTaskHeightEditHandler";
 import { CalendarTaskView } from "./CalendarTaskView";
+import { useEditTaskModal } from "../../../../core/components/modal/UseEditTaskModal";
 
 export interface CalendarTaskProps {
   task: ITask;
@@ -40,36 +41,44 @@ export const CalendarTask = ({
       ),
     };
   });
-
+  const { taskModal, openTaskModal } = useEditTaskModal();
+  const zIndexAdd = timeToMinutes(task.startTime ?? "00:00")/10;
+  const zIndex = isEdited ? 200+zIndexAdd : 100+zIndexAdd
+  console.log(task.name, zIndex)
   return (
-    <Animated.View
-      style={[
-        {
-          position: "absolute",
-          width: "100%",
-          marginLeft: 60,
-        },
-        topStyle,
-      ]}
-    >
-      <CalendarTaskHeightEditHandler
-        isEdited={isEdited}
-        id={task.id}
-        name={task.name}
-        day={task.startDay}
-        movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
+    <>
+      <Animated.View
+        style={[
+          {
+            position: "absolute",
+            width: "100%",
+            marginLeft: 60,
+            zIndex
+          },
+          topStyle,
+        ]}
       >
-        <CalendarTaskView
-          hourSlotHeight={itemHeight}
+        <CalendarTaskHeightEditHandler
+          isEdited={isEdited}
           id={task.id}
           name={task.name}
-          isImportant={task.isImportant}
-          isUrgent={task.isUrgent}
-          isEdited={isEdited}
-          onPress={onPress}
-          projectColor={projectColor}
-        />
-      </CalendarTaskHeightEditHandler>
-    </Animated.View>
+          day={task.startDay}
+          movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
+        >
+          <CalendarTaskView
+            hourSlotHeight={itemHeight}
+            id={task.id}
+            name={task.name}
+            isImportant={task.isImportant}
+            isUrgent={task.isUrgent}
+            isEdited={isEdited}
+            onPress={onPress}
+            projectColor={projectColor}
+            onEditPress={openTaskModal}
+          />
+        </CalendarTaskHeightEditHandler>
+      </Animated.View>
+      {taskModal}
+    </>
   );
 };

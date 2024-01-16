@@ -26,7 +26,7 @@ import { SelectPriority } from "./components/SelectPriority";
 import { SelectProject } from "./components/SelectProject";
 import { SelectStartTime } from "./components/SelectStartTime";
 import { TaskFormHeader } from "./TaskFormHeader";
-import { useValidateName, useValidateStartDay, useValidateStartTime, useValidateDuration } from "./logic/UseValidateTask";
+import { useValidateName, useValidateStartDay, useValidateTime, useValidateDuration } from "./logic/UseValidateTask";
 
 interface TaskCreateFormProps {
   projectId: string;
@@ -84,7 +84,7 @@ export const TaskCreateForm = ({
   const { isStartDayValid, startDayMessage, validateStartDay } =
     useValidateStartDay();
   const { isStartTimeValid, startTimeMessage, validateStartTime } =
-    useValidateStartTime();
+    useValidateTime();
   const { durationMessage, isDurationValid, validateDuration } =
     useValidateDuration();
 

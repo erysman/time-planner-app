@@ -6,9 +6,9 @@
  */
 
 export interface ProjectDTO {
-  id?: string;
+  id: string;
   name: string;
-  scheduleStartTime?: string;
-  scheduleEndTime?: string;
+  scheduleStartTime?: string | null;
+  scheduleEndTime?: string | null;
   color?: string | null;
 }

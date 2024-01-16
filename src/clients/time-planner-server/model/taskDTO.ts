@@ -6,12 +6,12 @@
  */
 
 export interface TaskDTO {
-  id?: string;
+  id: string;
   name: string;
   startDay?: string | null;
   startTime?: string | null;
   durationMin?: number | null;
-  isImportant?: boolean;
-  isUrgent?: boolean;
-  projectId?: string;
+  isImportant: boolean;
+  isUrgent: boolean;
+  projectId: string;
 }

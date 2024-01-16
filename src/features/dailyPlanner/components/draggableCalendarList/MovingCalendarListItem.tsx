@@ -60,7 +60,8 @@ export const MovingCalendarListItem = (props: {
         marginRight: 10,
         top: viewY.value,
         height: "auto",
-        opacity: 0.7
+        opacity: 0.7,
+        zIndex: 1240
       };
     }
   });

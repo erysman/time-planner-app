@@ -6,5 +6,5 @@
  */
 
 export interface UserInfoDTO {
-  isInitialized?: boolean;
+  isInitialized: boolean;
 }

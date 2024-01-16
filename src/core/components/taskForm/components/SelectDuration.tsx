@@ -7,6 +7,7 @@ import { Button, SizableText } from "tamagui";
 import { minutesToShortTime } from "../../../utils";
 import { ExpoIcon } from "../../ExpoIcon";
 import { useScreenDimensions } from "../../../logic/dimensions/UseScreenDimensions";
+import { DEFAULT_CALENDAR_STEP_MINUTES } from "../../../../../config/constants";
 
 interface SelectDurationMinProps {
   isDurationValid: boolean;
@@ -63,6 +64,7 @@ export const SelectDurationMin = ({
         <DateTimePicker
           mode="time"
           is24Hour
+          minuteInterval={DEFAULT_CALENDAR_STEP_MINUTES}
           value={initialDurationMin}
           onChange={setDurationTime}
         />

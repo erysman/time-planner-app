@@ -14,12 +14,15 @@ interface CalendarTaskViewProps {
   id: string;
   name: string;
   isEdited: boolean;
+  isMoving?: boolean;
   onPress?: (taskId: string) => void;
+  onEditPress?: (taskId: string) => void;
   hourSlotHeight: number;
   height?: number;
   isUrgent: boolean;
   isImportant: boolean;
   projectColor?: string;
+  zIndex?: number;
 }
 
 const AnimatedXStack = Animated.createAnimatedComponent(XStack);
@@ -32,8 +35,11 @@ export const CalendarTaskView = ({
   isImportant,
   isUrgent,
   isEdited,
+  isMoving,
   onPress,
+  onEditPress,
   projectColor,
+  zIndex,
 }: CalendarTaskViewProps) => {
   const { height } = useAnimatedHeight();
   const nameProps = useAnimatedProps(() => {
@@ -49,19 +55,17 @@ export const CalendarTaskView = ({
     );
     return { paddingTop };
   });
-  const { taskModal, openTaskModal } = useEditTaskModal();
 
   return (
     <>
       <XStack
         zIndex={100}
-        borderColor={isEdited ? "$blue8" : "$borderColor"}
-        borderWidth={isEdited ? 2 : 0}
+        borderColor={isEdited || isMoving ? "$blue8" : "$borderColor"}
+        borderWidth={isEdited || isMoving ? 2 : 0}
         backgroundColor={"$background"}
         borderRadius={"$4"}
         overflow="hidden"
         height={"100%"}
-        // width={"100%"}
         pressStyle={{
           backgroundColor: "$backgroundHover",
         }}
@@ -114,11 +118,10 @@ export const CalendarTaskView = ({
                 color="color"
               />
             }
-            onPress={() => openTaskModal(id)}
+            onPress={() => onEditPress?.(id)}
           />
         ) : null}
       </XStack>
-      {taskModal}
     </>
   );
 };

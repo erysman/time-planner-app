@@ -20,7 +20,7 @@ export interface MovingCalendarTaskProps {
   }: MovingCalendarTaskProps) => {
     return (
       <CalendarTaskHeightEditHandler
-        isEdited={true}
+        isEdited={false}
         id={task.id}
         name={task.name}
         day={task.startDay}
@@ -30,7 +30,8 @@ export interface MovingCalendarTaskProps {
           hourSlotHeight={minuteInPixels * 60}
           id={task.id}
           name={task.name}
-          isEdited={true}
+          isEdited={false}
+          isMoving={true}
           isImportant={task.isImportant}
           isUrgent={task.isUrgent}
           projectColor={projectColor}

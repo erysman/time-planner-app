@@ -13,7 +13,7 @@ import { debounce, uniqueId } from "lodash";
 import {
   useValidateName,
   useValidateStartDay,
-  useValidateStartTime,
+  useValidateTime,
   useValidateDuration,
 } from "./logic/UseValidateTask";
 
@@ -47,7 +47,7 @@ export const TaskEditForm = ({
   const { isStartDayValid, startDayMessage, validateStartDay } =
     useValidateStartDay();
   const { isStartTimeValid, startTimeMessage, validateStartTime } =
-    useValidateStartTime();
+    useValidateTime();
   const { durationMessage, isDurationValid, validateDuration } =
     useValidateDuration();
 

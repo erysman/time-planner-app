@@ -6,7 +6,7 @@ import {
   MIN_TASK_DURATION_MINUTES,
 } from "../../../../../config/constants";
 
-export const useValidateStartTime = () => {
+export const useValidateTime = () => {
   const startTimeSchema = z.string();
   // .refine(
   //   (value) => {

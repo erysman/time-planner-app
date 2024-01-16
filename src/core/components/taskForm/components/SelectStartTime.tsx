@@ -4,7 +4,7 @@ import DateTimePicker, {
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import { Button, SizableText } from "tamagui";
-import { TIME_FORMAT } from "../../../../../config/constants";
+import { DEFAULT_CALENDAR_STEP_MINUTES, TIME_FORMAT } from "../../../../../config/constants";
 import { mapToDayjs } from "../../../utils";
 import { ExpoIcon } from "../../ExpoIcon";
 import { useScreenDimensions } from "../../../logic/dimensions/UseScreenDimensions";
@@ -54,8 +54,9 @@ export const SelectStartTime = ({
         <DateTimePicker
           mode="time"
           value={
-            startTime ? mapToDayjs(undefined, startTime).toDate() : new Date()
+            startTime ? mapToDayjs(undefined, startTime).toDate() : dayjs().add(1, 'hour').startOf('hour').toDate()
           }
+          minuteInterval={DEFAULT_CALENDAR_STEP_MINUTES}
           onChange={setStartTime}
         />
       ) : null}

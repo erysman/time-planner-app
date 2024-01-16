@@ -6,7 +6,7 @@
  */
 
 export interface BannedRangeDTO {
-  id?: string;
-  startTime?: string;
-  endTime?: string;
+  id: string;
+  startTime: string;
+  endTime: string;
 }

@@ -6,5 +6,5 @@
  */
 
 export interface ScheduleInfoDTO {
-  isScheduled?: boolean;
+  isScheduled: boolean;
 }
