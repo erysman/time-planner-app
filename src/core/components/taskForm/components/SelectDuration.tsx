@@ -53,7 +53,7 @@ export const SelectDurationMin = ({
         borderWidth={!isDurationValid ? 1 : 0}
         borderColor={!isDurationValid ? "$red9" : "$borderColor"}
       >
-        <ExpoIcon iconSet="MaterialIcons" name="access-time" size={24} />
+        <ExpoIcon iconSet="MaterialIcons" name="timelapse" size={24} />
         <SizableText>
           {durationMin
             ? `Duration: ${minutesToShortTime(durationMin)}`

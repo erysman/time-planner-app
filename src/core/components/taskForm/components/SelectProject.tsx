@@ -14,7 +14,7 @@ import { ExpoIcon } from "../../ExpoIcon";
 
 interface SelectProjectProps {
   id: string;
-  projectId: string;
+  projectId?: string;
   updateProject: (projectId: string) => void;
 }
 

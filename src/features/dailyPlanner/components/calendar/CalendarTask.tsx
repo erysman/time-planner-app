@@ -8,6 +8,14 @@ import { ITask, TimeAndDurationMap } from "../../model/model";
 import { CalendarTaskHeightEditHandler } from "./CalendarTaskHeightEditHandler";
 import { CalendarTaskView } from "./CalendarTaskView";
 import { useEditTaskModal } from "../../../../core/components/modal/UseEditTaskModal";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  useDeleteTask,
+  getGetDayTasksQueryKey,
+  getGetTasksDayOrderQueryKey,
+  getGetProjectTasksQueryKey,
+  getGetTaskQueryKey,
+} from "../../../../clients/time-planner-server/client";
 
 export interface CalendarTaskProps {
   task: ITask;
@@ -42,8 +50,29 @@ export const CalendarTask = ({
     };
   });
   const { taskModal, openTaskModal } = useEditTaskModal();
-  const zIndexAdd = timeToMinutes(task.startTime ?? "00:00")/10;
-  const zIndex = isEdited ? 200+zIndexAdd : 100+zIndexAdd;
+  const zIndexAdd = timeToMinutes(task.startTime ?? "00:00") / 10;
+  const zIndex = isEdited ? 200 + zIndexAdd : 100 + zIndexAdd;
+  const queryClient = useQueryClient();
+  const deleteTask = useDeleteTask({
+    mutation: {
+      onSettled: () => {
+        if (task.startDay) {
+          queryClient.invalidateQueries({
+            queryKey: getGetDayTasksQueryKey(task.startDay),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getGetTasksDayOrderQueryKey(task.startDay),
+          });
+        }
+        queryClient.invalidateQueries({
+          queryKey: getGetProjectTasksQueryKey(task.projectId),
+        });
+        queryClient.invalidateQueries({
+          queryKey: getGetTaskQueryKey(task.id),
+        });
+      },
+    },
+  });
   return (
     <>
       <Animated.View
@@ -52,7 +81,7 @@ export const CalendarTask = ({
             position: "absolute",
             width: "100%",
             marginLeft: 60,
-            zIndex
+            zIndex,
           },
           topStyle,
         ]}
@@ -74,6 +103,11 @@ export const CalendarTask = ({
             onPress={onPress}
             projectColor={projectColor}
             onEditPress={openTaskModal}
+            onChecked={(checked) => {
+              if (checked) {
+                deleteTask.mutateAsync({ id: task.id });
+              }
+            }}
           />
         </CalendarTaskHeightEditHandler>
       </Animated.View>

@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import {
   ScrollView,
@@ -27,18 +27,22 @@ import { SelectProject } from "./components/SelectProject";
 import { SelectStartTime } from "./components/SelectStartTime";
 import { TaskFormHeader } from "./TaskFormHeader";
 import { useValidateName, useValidateStartDay, useValidateTime, useValidateDuration } from "./logic/UseValidateTask";
+import { uniqueId } from "lodash";
 
 interface TaskCreateFormProps {
-  projectId: string;
+  projectId?: string;
+  initialStartDay?: string;
   onClose: () => void;
   isOpen: boolean;
 }
 
 export const TaskCreateForm = ({
   projectId,
+  initialStartDay,
   onClose,
   isOpen,
 }: TaskCreateFormProps) => {
+  const formId = useMemo(() => uniqueId(),[]);
   const queryClient = useQueryClient();
   const createTask = useCreateTask({
     mutation: {
@@ -64,17 +68,17 @@ export const TaskCreateForm = ({
   const [name, setName] = useState<string>("");
   const [isImportant, setIsImportant] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
-  const [startDay, setStartDay] = useState<string>();
+  const [startDay, setStartDay] = useState<string|undefined>(initialStartDay);
   const [startTime, setStartTime] = useState<string>();
   const [durationMin, setDurationMin] = useState<number>();
-  const [editedProjectId, setEditedProjectId] = useState<string>(projectId);
+  const [editedProjectId, setEditedProjectId] = useState<string|undefined>(projectId);
 
   const resetState = () => {
     setNamePressed(false);
     setName("");
     setIsImportant(false);
     setIsUrgent(false);
-    setStartDay(undefined);
+    setStartDay(initialStartDay);
     setStartTime(undefined);
     setDurationMin(undefined);
     setEditedProjectId(projectId);
@@ -89,6 +93,7 @@ export const TaskCreateForm = ({
     useValidateDuration();
 
   useEffect(() => setEditedProjectId(projectId), [projectId]);
+  useEffect(() => setStartDay(initialStartDay), [initialStartDay]);
 
   const onSave = useCallback(() => {
     const isNameValid = validateName(name);
@@ -163,7 +168,7 @@ export const TaskCreateForm = ({
               <SizableText color={"$red9"}>{nameMessage}</SizableText>
             ) : null}
             <SelectPriority
-              id={"createForm"}
+              id={formId}
               isImportant={isImportant}
               isUrgent={isUrgent}
               updateImportant={setIsImportant}

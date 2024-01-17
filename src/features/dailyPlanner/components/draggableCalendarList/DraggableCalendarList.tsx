@@ -43,6 +43,7 @@ export const DraggableCalendarList = ({
           style={[{ flexDirection: "column" }]}
         >
           <DraggableList
+            day={day}
             tasks={tasks}
             projects={projects}
             itemsOrder={movingItem.itemsOrder}

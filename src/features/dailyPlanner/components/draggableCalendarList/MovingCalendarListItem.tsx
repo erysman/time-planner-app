@@ -81,6 +81,8 @@ export const MovingCalendarListItem = (props: {
           isUrgent={task.isUrgent}
           durationMin={task.durationMin}
           projectColor={project?.color}
+          projectId={task.projectId}
+          startDay={task.startDay}
         />
       </Animated.View>
       <Animated.View style={[calendarStyle]}>

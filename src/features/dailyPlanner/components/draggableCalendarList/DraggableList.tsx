@@ -7,8 +7,10 @@ import { MovableItem } from "../../../../core/components/list/MovableItem";
 import { MovingItemPointer } from "../../../../core/components/list/MovingItemPointer";
 import { useCallback } from "react";
 import { useDailyPlannerContext } from "../../logic/UseDailyPlannerContext";
+import { AddTaskFab } from "../../../../core/components/list/AddTaskFab";
 
 interface DraggableListProps {
+  day: string;
   listStyle: { height: number };
   tasks: ITask[];
   projects: IProject[];
@@ -26,6 +28,7 @@ interface DraggableListProps {
 }
 
 export const DraggableList = ({
+  day,
   listStyle,
   projects,
   tasks,
@@ -33,12 +36,12 @@ export const DraggableList = ({
   listPointerIndex,
   movingItemId,
   scrollProps,
-  scrollRef
+  scrollRef,
 }: DraggableListProps) => {
-  const {dimensions} = useDailyPlannerContext();
+  const { dimensions } = useDailyPlannerContext();
   const { itemHeight } = useDraggableCalendarListContext();
   const theme = useTheme();
-  const borderColor = theme.backgroundFocus.get()
+  const borderColor = theme.backgroundFocus.get();
   const renderItem = useCallback(
     (id: string): React.ReactNode => {
       const task = (tasks.find((task) => task.id === id) as ITask) ?? null;
@@ -51,14 +54,16 @@ export const DraggableList = ({
           isImportant={task.isImportant}
           isUrgent={task.isUrgent}
           durationMin={task.durationMin}
+          startDay={task.startDay}
+          projectId={task.projectId}
           projectColor={projects.find((p) => p.id === task.projectId)?.color}
         />
       );
     },
     [tasks]
   );
-    return (
-    <Animated.View style={[listStyle]}>
+  return (
+    <Animated.View style={[{overflow: "hidden"},listStyle]}>
       <Animated.ScrollView
         ref={scrollRef}
         alwaysBounceHorizontal={false}
@@ -67,7 +72,7 @@ export const DraggableList = ({
         overScrollMode="never"
         scrollEventThrottle={16}
         contentContainerStyle={{
-          height: tasks.length * itemHeight
+          height: (2+tasks.length) * itemHeight,
         }}
         borderBottomWidth={1}
         borderColor={borderColor}
@@ -92,6 +97,8 @@ export const DraggableList = ({
           />
         </YStack>
       </Animated.ScrollView>
+      <AddTaskFab startDay={day} />
     </Animated.View>
   );
 };
+//position="absolute" right={25} bottom={25}

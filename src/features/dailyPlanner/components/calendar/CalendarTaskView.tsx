@@ -17,6 +17,7 @@ interface CalendarTaskViewProps {
   isMoving?: boolean;
   onPress?: (taskId: string) => void;
   onEditPress?: (taskId: string) => void;
+  onChecked?: (checked:boolean) => void;
   hourSlotHeight: number;
   height?: number;
   isUrgent: boolean;
@@ -37,6 +38,7 @@ export const CalendarTaskView = ({
   isEdited,
   isMoving,
   onPress,
+  onChecked,
   onEditPress,
   projectColor,
   zIndex,
@@ -83,7 +85,7 @@ export const CalendarTaskView = ({
           animatedProps={xstackProps}
         >
           <XStack width={44}>
-            <Checkbox size="$1.5" circular marginHorizontal={12}>
+            <Checkbox size="$1.5" circular marginHorizontal={12} onCheckedChange={onChecked}>
               <Checkbox.Indicator>
                 <ExpoIcon
                   iconSet="MaterialIcons"

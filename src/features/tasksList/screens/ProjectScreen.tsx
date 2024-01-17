@@ -1,5 +1,5 @@
 
-import { AddTaskFab } from "../components/AddTaskFab";
+import { AddTaskFab } from "../../../core/components/list/AddTaskFab";
 import { GenericFallback } from "../../../core/components/fallback/GenericFallback";
 import { ProjectTasksList, ProjectTasksListLoad } from "../components/ProjectTasksList";
 import { uniqueId } from "lodash";
@@ -17,7 +17,6 @@ export const ProjectScreen = ({ projectId }: ProjectScreenProps) => {
       <ErrorBoundary FallbackComponent={GenericFallback} >
         <ProjectTasksListLoad projectId={projectId}/>
       </ErrorBoundary>
-      <AddTaskFab projectId={projectId} />
     </>
   );
 };

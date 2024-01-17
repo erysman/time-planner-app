@@ -16,6 +16,7 @@ import { useConfirmDeleteModal } from "../../../core/components/modal/UseConfirm
 import { getRefreshInterval } from "../../../core/logic/config/utils";
 import { IProject, ITask } from "../../dailyPlanner/model/model";
 import { useErrorBoundary } from "react-error-boundary";
+import { AddTaskFab } from "../../../core/components/list/AddTaskFab";
 
 export const ProjectTasksListLoad = (props: { projectId: string }) => {
   const { projectId } = props;
@@ -114,30 +115,36 @@ export const ProjectTasksList = ({
       headerRight: () => <>{deleteButton}</>,
     });
   }, [project?.name, navigation]);
-
+  const itemHeight = 55;
   return (
-    <ScrollView
-      alwaysBounceHorizontal={false}
-      alwaysBounceVertical={false}
-      bounces={false}
-      overScrollMode="never"
-    >
-      <YStack h={"100%"} w={"100%"}>
-        {(tasks as ITask[])?.map((task) => (
-          <ListItem
-            key={task.id}
-            id={task.id}
-            name={task.name}
-            isEdited={false}
-            isImportant={task.isImportant}
-            isUrgent={task.isUrgent}
-            durationMin={task.durationMin}
-            projectColor={project?.color ?? undefined}
-            height={55}
-          />
-        ))}
-      </YStack>
-      {confirmDeleteModal}
-    </ScrollView>
+    <YStack fullscreen>
+      <ScrollView
+        alwaysBounceHorizontal={false}
+        alwaysBounceVertical={false}
+        bounces={false}
+        overScrollMode="never"
+        contentContainerStyle={{height: (2+tasks?.length ?? 0) * itemHeight}}
+      >
+        <YStack h={"100%"} w={"100%"}>
+          {(tasks as ITask[])?.map((task) => (
+            <ListItem
+              key={task.id}
+              id={task.id}
+              name={task.name}
+              isEdited={false}
+              isImportant={task.isImportant}
+              isUrgent={task.isUrgent}
+              durationMin={task.durationMin}
+              startDay={task.startDay}
+              projectId={task.projectId}
+              projectColor={project?.color ?? undefined}
+              height={itemHeight}
+            />
+          ))}
+        </YStack>
+        {confirmDeleteModal}
+      </ScrollView>
+      <AddTaskFab projectId={projectId} />
+    </YStack>
   );
 };
