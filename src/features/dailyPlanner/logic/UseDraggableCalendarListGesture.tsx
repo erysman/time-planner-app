@@ -73,7 +73,7 @@ export const useDraggableCalendarListGesture = (
     null
   );
   const movingItemType = useSharedValue<"calendar" | "list" | null>(null);
-  const movingItemViewY = useSharedValue(0);
+  const movingItemViewTopY = useSharedValue(0);
   const pressedTaskOffsetToTop = useSharedValue<number>(0);
   const listPointerIndex = useSharedValue<number | null>(null);
   const movingItemsOrder = useSharedValue<string[]>(itemsOrder);
@@ -97,11 +97,12 @@ export const useDraggableCalendarListGesture = (
   const listScrollRef = useAnimatedRef<Animated.ScrollView>();
   const listScrollOffset = useScrollViewOffset(listScrollRef);
 
-  const listHeight = useDerivedValue(
-    () => {
-      return itemHeight * movingItemsOrder.value.length + (movingItemId.value ? itemHeight : 0);
-    }
-  );
+  const listHeight = useDerivedValue(() => {
+    return (
+      itemHeight * movingItemsOrder.value.length +
+      (movingItemId.value ? itemHeight : 0)
+    );
+  });
   const listScrollArea = useDragScrollArea(
     null,
     listViewHeight,
@@ -158,7 +159,9 @@ export const useDraggableCalendarListGesture = (
 
   function onListItemPressed(pressedViewY: number) {
     "worklet";
-    const pressedListIndex = Math.floor((pressedViewY + listScrollOffset.value) / itemHeight);
+    const pressedListIndex = Math.floor(
+      (pressedViewY + listScrollOffset.value) / itemHeight
+    );
     const pressedItemId = movingItemsOrder.value[pressedListIndex];
     if (!pressedItemId) {
       return;
@@ -166,7 +169,8 @@ export const useDraggableCalendarListGesture = (
     listPointerIndex.value = pressedListIndex;
     movingItemId.value = pressedItemId;
     removeItemFromList(pressedListIndex, movingItemsOrder);
-    pressedTaskOffsetToTop.value = pressedViewY + listScrollOffset.value - pressedListIndex * itemHeight;
+    pressedTaskOffsetToTop.value =
+      pressedViewY + listScrollOffset.value - pressedListIndex * itemHeight;
   }
 
   function findCalendarTaskByTime(
@@ -228,14 +232,17 @@ export const useDraggableCalendarListGesture = (
         calendarScrollArea.activateScrollIfItemInsideScrollArea(itemBoundries);
       }
     }
-    movingItemViewY.value = pressedViewY - pressedTaskOffsetToTop.value;
+    movingItemViewTopY.value = pressedViewY - pressedTaskOffsetToTop.value;
   }
 
   function setNewListPointerIndex(pressedViewY: number) {
     "worklet";
     const newPointer = Math.min(
       movingItemsOrder.value.length,
-      Math.max(0, Math.floor((pressedViewY + listScrollOffset.value) / itemHeight))
+      Math.max(
+        0,
+        Math.floor((pressedViewY + listScrollOffset.value) / itemHeight)
+      )
     );
     if (listPointerIndex.value !== newPointer) {
       listPointerIndex.value = newPointer;
@@ -251,32 +258,44 @@ export const useDraggableCalendarListGesture = (
     if (!movingItemId.value) {
       return;
     }
+    const maxViewY = listViewHeight.value + calendarViewHeight.value;
     const pressedViewY = e.absoluteY - headerHeight;
-    movingItemViewY.value = pressedViewY - pressedTaskOffsetToTop.value;
+    movingItemViewTopY.value = Math.max(
+      pressedViewY - pressedTaskOffsetToTop.value,
+      0
+    );
     const pressedAreaType = getPressedAreaType(
-      movingItemViewY.value,
+      Math.min(movingItemViewTopY.value, maxViewY-itemHeight),
       listViewHeight.value
     );
     movingItemType.value = pressedAreaType;
     if (pressedAreaType === "list") {
       calendarScrollArea.cancelScroll();
       setNewListPointerIndex(pressedViewY);
-      const itemPosition = {
-        top: movingItemViewY.value,
-        bottom: movingItemViewY.value + itemHeight,
-      };
-      listScrollArea.activateScrollIfItemInsideScrollArea(itemPosition);
+      let bottom = movingItemViewTopY.value + itemHeight;
+      if (bottom > maxViewY) {
+        movingItemViewTopY.value = maxViewY - itemHeight;
+        bottom = maxViewY;
+      }
+      listScrollArea.activateScrollIfItemInsideScrollArea({
+        top: movingItemViewTopY.value,
+        bottom,
+      });
     }
     if (pressedAreaType === "calendar") {
       listScrollArea.cancelScroll();
       listPointerIndex.value = null;
-      const top = pressedViewY - pressedTaskOffsetToTop.value;
       const task = tasks.find((t) => t.id === movingItemId.value);
       if (task && task.durationMin) {
         const height = mapDurationToHeight(task.durationMin, minuteInPixels);
-        const bottom = pressedViewY + height - pressedTaskOffsetToTop.value;
+        let bottom = pressedViewY + height - pressedTaskOffsetToTop.value;
+        if (bottom > maxViewY) {
+          movingItemViewTopY.value = maxViewY - height;
+          bottom = maxViewY
+        }
+        // const top = pressedViewY - pressedTaskOffsetToTop.value;
         calendarScrollArea.activateScrollIfItemInsideScrollArea({
-          top,
+          top: movingItemViewTopY.value,
           bottom,
         });
       }
@@ -284,12 +303,12 @@ export const useDraggableCalendarListGesture = (
       if (!calendarScrollArea.isScrollActive.value) {
         const movingItemCalendarY =
           calendarScrollOffset.value +
-          movingItemViewY.value -
+          movingItemViewTopY.value -
           listViewHeight.value;
         const snappedMovingItemCalendarY =
           Math.round(movingItemCalendarY / calendarStepHeight) *
           calendarStepHeight;
-        movingItemViewY.value =
+        movingItemViewTopY.value =
           snappedMovingItemCalendarY +
           listViewHeight.value -
           calendarScrollOffset.value;
@@ -320,7 +339,9 @@ export const useDraggableCalendarListGesture = (
       updateTasksMap(task.id, null, task.durationMin);
       runOnJS(setTaskTime)(task.id, null, task.durationMin);
     }
-    movingItemViewY.value = withTiming(listPointerIndex.value * itemHeight - listScrollOffset.value);
+    movingItemViewTopY.value = withTiming(
+      listPointerIndex.value * itemHeight - listScrollOffset.value
+    );
     setItemOrder(listPointerIndex.value, movingItemId.value, movingItemsOrder);
     movingItemId.value = null;
     listPointerIndex.value = null;
@@ -333,7 +354,9 @@ export const useDraggableCalendarListGesture = (
     calendarScrollArea.cancelScroll();
     //if scroll is not active, pin movingItemViewY.value to 15 minutes multiple
     const movingItemCalendarY =
-      calendarScrollOffset.value + movingItemViewY.value - listViewHeight.value;
+      calendarScrollOffset.value +
+      movingItemViewTopY.value -
+      listViewHeight.value;
     const snappedMovingItemCalendarY =
       Math.round(movingItemCalendarY / calendarStepHeight) * calendarStepHeight;
 
@@ -374,7 +397,7 @@ export const useDraggableCalendarListGesture = (
     dragGesture,
     movingItemsOrder,
     movingItemId: movingItemIdState,
-    movingItemViewY,
+    movingItemViewY: movingItemViewTopY,
     listPointerIndex,
     movingItemType,
     scroll: {
