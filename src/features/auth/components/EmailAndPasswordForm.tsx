@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, H1, H2, H3, H4, SizableText, Stack, StackProps, YStack } from "tamagui";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
 import { AuthInput } from "./AuthInput";
+import i18n from "../../../../config/i18n";
 
 export interface EmailAndPasswordFormProps extends StackProps {
   heading: string;
@@ -34,7 +35,7 @@ export function EmailAndPasswordForm({
       <Stack height="$3.5" justifyContent={"flex-end"}>
         {error.length === 0 ? null : (
           <SizableText color={"red"} mb={"$2"}>
-            {"Adres e-mail lub hasło jest niepoprawne."}
+            {i18n.t("auth.email_password_error")}
           </SizableText>
         )}
       </Stack>
@@ -42,7 +43,7 @@ export function EmailAndPasswordForm({
       <AuthInput
         value={email}
         setValue={setEmail}
-        placeholder={"Adres e-mail"}
+        placeholder={i18n.t("auth.email_placeholder")}
         inputMode={"email"}
         icon={
           <ExpoIcon
@@ -62,7 +63,7 @@ export function EmailAndPasswordForm({
         inputMode={"text"}
         value={password}
         setValue={setPassword}
-        placeholder={"Hasło"}
+        placeholder={i18n.t("auth.password_placeholder")}
         icon={
           <ExpoIcon
             iconSet={"MaterialIcons"}

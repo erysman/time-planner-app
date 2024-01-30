@@ -6,6 +6,7 @@ import { useErrorBoundary } from "react-error-boundary";
 import { uniqueId } from "lodash";
 import { useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import i18n from "../../../../config/i18n";
 
 export const GenericFallback = ({
   error,
@@ -13,13 +14,13 @@ export const GenericFallback = ({
 }: FallbackProps) => {
   return (
     <YStack mt={24} marginHorizontal={24} space={12}>
-      <H6 color={"$red9"}>{`Something went wrong:`}</H6>
+      <H6 color={"$red9"}>{`${i18n.t("common.generic_error_title")}:`}</H6>
       <SizableText color={"$red9"}>{error.message}</SizableText>
       <Button
         icon={<ExpoIcon iconSet="MaterialIcons" name="refresh" size={16} />}
         onPress={resetErrorBoundary}
       >
-        {"Retry"}
+        {i18n.t("common.retry")}
       </Button>
     </YStack>
   );
@@ -28,7 +29,7 @@ export const GenericFallback = ({
 export const NoRetryFallback = (props: { error: { message?: string } }) => {
   return (
     <YStack mt={24} marginHorizontal={24} space={12}>
-      <H6 color={"$red9"}>{`Something went wrong:`}</H6>
+      <H6 color={"$red9"}>{`${i18n.t("common.generic_error_title")}:`}</H6>
       <SizableText color={"$red9"}>{props.error?.message}</SizableText>
     </YStack>
   );

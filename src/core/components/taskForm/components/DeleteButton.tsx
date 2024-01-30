@@ -10,6 +10,7 @@ import {
 } from "../../../../clients/time-planner-server/client";
 import { ExpoIcon } from "../../ExpoIcon";
 import { useConfirmDeleteModal } from "../../modal/UseConfirmActionModal";
+import i18n from "../../../../../config/i18n";
 
 export const DeleteButton = (props: {
   name: string;
@@ -46,7 +47,7 @@ export const DeleteButton = (props: {
   };
   const { confirmDeleteModal, openConfirmDeleteModal } = useConfirmDeleteModal(
     onDelete,
-    `Do you want to delete task ${name}?`
+    i18n.t("task.confirm_delete", {name})
   );
   return (
     <>
@@ -60,7 +61,7 @@ export const DeleteButton = (props: {
           name="delete-outline"
           size={24}
         />
-        <SizableText>{"Delete"}</SizableText>
+        <SizableText>{i18n.t("common.delete")}</SizableText>
       </Button>
       {confirmDeleteModal}
     </>

@@ -4,6 +4,7 @@ import { EmailAndPasswordForm } from "../components/EmailAndPasswordForm";
 import { AuthFooter } from "../components/AuthFooter";
 import { ErrorBoundary } from "react-error-boundary";
 import { GenericFallback } from "../../../core/components/fallback/GenericFallback";
+import i18n from "../../../../config/i18n";
 
 export const SignUpForm = () => {
   const {
@@ -13,11 +14,11 @@ export const SignUpForm = () => {
   return (
     <YStack alignItems={"center"} backgroundColor={"$background"} fullscreen>
       <H1 marginTop={100} marginBottom={50}>
-        {"TIME PLANNER"}
+        {i18n.t("auth.app_title")}
       </H1>
       <EmailAndPasswordForm
-        heading={"UTWÓRZ KONTO"}
-        buttonText={"Załóż konto"}
+        heading={i18n.t("auth.create_account_title")}
+        buttonText={i18n.t("auth.signup_title")}
         authenticate={signUpWithPassword}
         loginWithGoogle={loginWithGoogle}
         loggingInProgress={loggingInProgress}
@@ -26,8 +27,8 @@ export const SignUpForm = () => {
       <AuthFooter
         onPress={loginWithGoogle}
         disabled={loggingInProgress}
-        redirectInfo={"Zaloguj się"}
-        redirectButtonText={"Jeszcze nie masz konta? "}
+        redirectInfo={i18n.t("auth.login_title")}
+        redirectButtonText={i18n.t("auth.account_question")}
         redirectHref={"/(auth)/login"}
       />
     </YStack>

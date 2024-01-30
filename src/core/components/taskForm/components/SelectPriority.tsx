@@ -2,6 +2,7 @@ import React from "react";
 import { YStack } from "tamagui";
 import { HourglassIcon, StartIcon } from "../../ExpoIcon";
 import { SwitchWithLabel } from "./SwitchWithLabel";
+import i18n from "../../../../../config/i18n";
 
 interface SelectPriorityProps {
   id: string;
@@ -23,7 +24,7 @@ export const SelectPriority = ({
       <SwitchWithLabel
         id={id}
         size={"$4"}
-        name={`Important`}
+        name={i18n.t("task.important_title")}
         icon={<StartIcon size={16} color={"color"} />}
         value={isImportant}
         setValue={(v) => updateImportant(v)}
@@ -31,7 +32,7 @@ export const SelectPriority = ({
       <SwitchWithLabel
         id={id}
         size={"$4"}
-        name={`Urgent`}
+        name={i18n.t("task.urgent_title")}
         icon={<HourglassIcon size={16} color={"color"} />}
         value={isUrgent}
         setValue={(v) => updateUrgent(v)}

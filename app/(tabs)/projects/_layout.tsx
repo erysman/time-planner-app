@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import { Header } from "../../../src/core/navigation/Header";
+import i18n from "../../../config/i18n";
 
 
 export default function ProjectsLayout() {
@@ -14,7 +15,7 @@ export default function ProjectsLayout() {
         name="index"
         options={{
           // header: (props) => (<Header {...props}/>),
-          title: "Projects and tasks"
+          title: i18n.t("tabs.projects_list_header")
         }}
       />
       <Stack.Screen

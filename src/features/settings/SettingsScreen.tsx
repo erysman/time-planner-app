@@ -1,5 +1,16 @@
-import { Accordion, Button, H5, H6, Paragraph, Separator, Square, YStack } from "tamagui";
-import { useAuth } from "../auth/hooks/UseAuth";
+import {
+  Accordion,
+  Button,
+  H5,
+  H6,
+  Paragraph,
+  Separator,
+  Square,
+  YStack,
+  Image,
+  Circle,
+} from "tamagui";
+import { IAuthContextActions, useAuth } from "../auth/hooks/UseAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "react-error-boundary";
@@ -13,30 +24,27 @@ import {
 } from "./components/BannedRangesList";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { ProjectRangesListLoad } from "./components/ProjectRangesList";
+import i18n from "../../../config/i18n";
 
 export const MainSettingsList = () => {
-  const {
-    user,
-    actions: { logout },
-  } = useAuth();
+  const { user, actions } = useAuth();
   return (
     <YStack mt={16} space={"$2"} marginHorizontal={24}>
       <SettingsMenu>
-        
         <SettingsMenuItem
           id="autoschedule"
-          title="Automatic schedule"
+          title={i18n.t("settings.autoschedule_title")}
           titleType={H5}
         >
           <AutoscheduleSubMenu />
         </SettingsMenuItem>
-        <Separator width="100%" alignSelf="center"/>
-        <SettingsMenuItem id="user" title="User profile" titleType={H5}>
-          <Button onPress={logout}>{"Log out"}</Button>
+        <Separator width="100%" alignSelf="center" />
+        <SettingsMenuItem id="user" title={i18n.t("settings.user_profile_title")} titleType={H5}>
+          <UserSettings user={user} userActions={actions} />
         </SettingsMenuItem>
-        <Separator width="100%" alignSelf="center"/>
+        <Separator width="100%" alignSelf="center" />
         <SettingsMenuItem id="debug" title="Debug" titleType={H5}>
-          <DebugSettings user={user}/>
+          <DebugSettings user={user} />
         </SettingsMenuItem>
       </SettingsMenu>
     </YStack>
@@ -46,15 +54,19 @@ export const MainSettingsList = () => {
 export const AutoscheduleSubMenu = () => {
   return (
     <SettingsMenu>
-      <Separator width="100%" alignSelf="center"/>
-      <SettingsMenuItem id="banned-ranges" title="Banned ranges" iconSize={20}>
+      <Separator width="100%" alignSelf="center" />
+      <SettingsMenuItem id="banned-ranges" title={i18n.t("settings.banned_ranges_title")} iconSize={20}>
         <YStack>
           <BannedRangesListLoad />
           <AddBannedRangeItem />
         </YStack>
       </SettingsMenuItem>
-      <Separator width="100%" alignSelf="center"/>
-      <SettingsMenuItem id="projects-ranges" title="Projects ranges" iconSize={20}>
+      <Separator width="100%" alignSelf="center" />
+      <SettingsMenuItem
+        id="projects-ranges"
+        title={i18n.t("settings.projects_ranges_title")}
+        iconSize={20}
+      >
         <YStack>
           <ProjectRangesListLoad />
         </YStack>
@@ -63,7 +75,34 @@ export const AutoscheduleSubMenu = () => {
   );
 };
 
-export const DebugSettings = (props:{user: FirebaseAuthTypes.User | null}) => {
+export const UserSettings = (props: {
+  user: FirebaseAuthTypes.User | null;
+  userActions: IAuthContextActions;
+}) => {
+  return (
+    <>
+      <Circle size={75} overflow="hidden" alignSelf="center">
+        {props.user ? (
+          <Image
+            h={75}
+            w={75}
+            alignSelf="center"
+            source={{ uri: props.user.photoURL ?? undefined }}
+          />
+        ) : null}
+      </Circle>
+      <H6 marginTop={12}>{`${i18n.t("settings.user_name_title")}: ${props.user?.displayName}`}</H6>
+      <H6>{`${i18n.t("settings.user_email_title")}: ${props.user?.email}`}</H6>
+      <Button marginTop={12} onPress={props.userActions.logout}>
+        {i18n.t("auth.logout")}
+      </Button>
+    </>
+  );
+};
+
+export const DebugSettings = (props: {
+  user: FirebaseAuthTypes.User | null;
+}) => {
   const { isServerAlive } = useApiHealth();
   return (
     <>
@@ -126,7 +165,9 @@ export const SettingsMenuItem = ({
           </>
         )}
       </Accordion.Trigger>
-      <Accordion.Content paddingTop={0} paddingRight={0}>{children}</Accordion.Content>
+      <Accordion.Content paddingTop={0} paddingRight={0}>
+        {children}
+      </Accordion.Content>
     </Accordion.Item>
   );
 };

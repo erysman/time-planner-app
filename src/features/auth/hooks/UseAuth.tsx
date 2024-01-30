@@ -165,7 +165,7 @@ function getAuthContextActions(
           console.log("user initialized");
         }
       }
-      console.log("Signed in with oauth!");
+      console.log("Signed in with google account!");
     } finally {
       setLoggingInProgress(false);
     }

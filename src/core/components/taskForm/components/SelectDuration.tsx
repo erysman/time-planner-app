@@ -8,6 +8,7 @@ import { minutesToShortTime } from "../../../utils";
 import { ExpoIcon } from "../../ExpoIcon";
 import { useScreenDimensions } from "../../../logic/dimensions/UseScreenDimensions";
 import { DEFAULT_CALENDAR_STEP_MINUTES } from "../../../../../config/constants";
+import i18n from "../../../../../config/i18n";
 
 interface SelectDurationMinProps {
   isDurationValid: boolean;
@@ -56,8 +57,8 @@ export const SelectDurationMin = ({
         <ExpoIcon iconSet="MaterialIcons" name="timelapse" size={24} />
         <SizableText>
           {durationMin
-            ? `Duration: ${minutesToShortTime(durationMin)}`
-            : `Set duration`}
+            ? `${i18n.t("task.duration_title")}: ${minutesToShortTime(durationMin)}`
+            : i18n.t("task.set_duration")}
         </SizableText>
       </Button>
       {durationPickerOpen ? (

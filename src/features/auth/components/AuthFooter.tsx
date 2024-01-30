@@ -3,6 +3,7 @@ import { SizableText, XStack, YStack } from "tamagui";
 
 import { Button } from "tamagui";
 import { ExpoIcon } from "../../../core/components/ExpoIcon";
+import i18n from "../../../../config/i18n";
 
 export interface AuthFooterProps {
   onPress: () => Promise<void>;
@@ -28,7 +29,7 @@ export const AuthFooter = ({
         </Link>
       </XStack>
       <YStack mt={"$4"} alignItems={"center"}>
-        <SizableText>{"lub zaloguj się przez"}</SizableText>
+        <SizableText>{i18n.t("auth.or_login_with")}</SizableText>
         <XStack space={"$3"} mt={"$3"}>
           <Button
             circular

@@ -8,6 +8,7 @@ import { DEFAULT_CALENDAR_STEP_MINUTES, TIME_FORMAT } from "../../../../../confi
 import { mapToDayjs } from "../../../utils";
 import { ExpoIcon } from "../../ExpoIcon";
 import { useScreenDimensions } from "../../../logic/dimensions/UseScreenDimensions";
+import i18n from "../../../../../config/i18n";
 
 interface SelectStartTimeProps {
   startTime?: string;
@@ -47,7 +48,7 @@ export const SelectStartTime = ({
       >
         <ExpoIcon iconSet="MaterialIcons" name="access-time" size={24} />
         <SizableText>
-          {startTime ? `Start time: ${startTime}` : `Set start time`}
+          {startTime ? `${i18n.t("task.start_time_title")}: ${startTime}` : i18n.t("task.set_start_time")}
         </SizableText>
       </Button>
       {startTimePickerOpen ? (

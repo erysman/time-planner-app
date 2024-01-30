@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Input, XStack } from "tamagui";
 import { useScreenDimensions } from "../../logic/dimensions/UseScreenDimensions";
 import { ExpoIcon } from "../ExpoIcon";
+import i18n from "../../../../config/i18n";
 
 interface TaskFormHeaderProps {
   name: string;
@@ -42,7 +43,7 @@ export const TaskFormHeader = ({
         size="$4"
         fontSize={"$5"}
         value={inputName}
-        placeholder={"Name..."}
+        placeholder={i18n.t("task.name_placeholder")}
         placeholderTextColor={"$color"}
         onPress={() => setNamePressed(true)}
         borderWidth={namePressed || !isNameValid ? 1 : 0}
@@ -72,7 +73,7 @@ export const TaskFormHeader = ({
       <XStack flexGrow={1} justifyContent="center"></XStack>
       <XStack flexGrow={1} justifyContent="flex-end" alignItems="center">
         {onSave ? <Button size="$4" onPress={onSave}>
-          {"Save"}
+          {i18n.t("common.save")}
         </Button> : null}
         
       </XStack>

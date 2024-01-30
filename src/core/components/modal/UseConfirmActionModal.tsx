@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Button, SizableText, Theme, ThemeName, XStack, YStack } from "tamagui";
 import { Modal } from "./Modal";
+import i18n from "../../../../config/i18n";
 
 export const useConfirmDeleteModal = (action: () => void, message: string) => {
   const [open, setOpen] = useState(false);
@@ -10,8 +11,8 @@ export const useConfirmDeleteModal = (action: () => void, message: string) => {
       <Modal open={open} setOpen={setOpen} snapPoints={[25]}>
         <ConfirmActionForm
           message={message}
-          confirm="Delete"
-          cancel="Cancel"
+          confirm={i18n.t("common.delete")}
+          cancel={i18n.t("common.cancel")}
           onCancel={() => setOpen(false)}
           onConfirm={() => {
             action();

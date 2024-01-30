@@ -200,7 +200,7 @@ export const AddProjectForm = ({
             borderWidth={0}
             backgroundColor={"$backgroundHover"}
             value={name}
-            placeholder={"Project name..."}
+            placeholder={i18n.t("project.name_placeholder")}
             placeholderTextColor={"$color"}
             onPress={() => setNamePressed(true)}
             onChangeText={(text) => {
@@ -212,7 +212,7 @@ export const AddProjectForm = ({
         </XStack>
         {onSave ? (
           <Button size="$4" onPress={onSave}>
-            {"Save"}
+            {i18n.t("common.save")}
           </Button>
         ) : null}
       </XStack>

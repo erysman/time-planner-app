@@ -11,6 +11,7 @@ import {
 import { useGetProjects } from "../../../../clients/time-planner-server/client";
 import { IProject } from "../../../../features/dailyPlanner/model/model";
 import { ExpoIcon } from "../../ExpoIcon";
+import i18n from "../../../../../config/i18n";
 
 interface SelectProjectProps {
   id: string;
@@ -44,7 +45,7 @@ export function SelectProject({
               name="drive-file-move-outline"
               size={24}
             />
-            <SizableText>{"Project:"}</SizableText>
+            <SizableText>{`${i18n.t("task.project_title")}:`}</SizableText>
           </XStack>
           {selectedProject ? (
             <XStack
@@ -95,7 +96,7 @@ export function SelectProject({
 
           <Select.Viewport minWidth={200}>
             <Select.Group>
-              <Select.Label>{"Select project"}</Select.Label>
+              <Select.Label>{i18n.t("task.select_project")}</Select.Label>
               {useMemo(
                 () =>
                   data?.map((projectDto, i) => {

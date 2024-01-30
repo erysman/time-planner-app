@@ -127,7 +127,7 @@ export const AddBannedRangeItem = () => {
       <Button justifyContent="flex-start" onPress={() => setIsEdit(true)}>
         <PlusIcon size={24} color={"color"} marginRight={8} />
         <SizableText ellipsizeMode="tail" numberOfLines={1}>
-          {"Add banned range"}
+          {i18n.t("settings.add_banned_range")}
         </SizableText>
       </Button>
     );
@@ -157,7 +157,7 @@ export const AddBannedRangeItem = () => {
           updateTime={(time) => setEndTime(time)}
         />
         </XStack>
-        <Button onPress={onSave}>{"Save"}</Button>
+        <Button onPress={onSave}>{i18n.t("common.save")}</Button>
       </XStack>
       {errorMessage ? (
         <SizableText color={"$red9"}>{errorMessage}</SizableText>

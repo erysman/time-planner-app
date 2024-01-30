@@ -11,6 +11,7 @@ import { DAY_FORMAT, DAY_LONG_READ_FORMAT } from "../../../../../config/constant
 import { ExpoIcon } from "../../ExpoIcon";
 import { DatePicker } from "../../calendar/DatePicker";
 import { useScreenDimensions } from "../../../logic/dimensions/UseScreenDimensions";
+import i18n from "../../../../../config/i18n";
 
 const AnimatedYStack = Animated.createAnimatedComponent(YStack);
 
@@ -66,8 +67,8 @@ export const SelectDay = ({
           <ExpoIcon iconSet="MaterialIcons" name="today" size={24} />
           <SizableText>
             {day
-              ? `Day: ${dayjs(day, DAY_FORMAT).format(DAY_LONG_READ_FORMAT)}`
-              : `Set planned day`}
+              ? `${i18n.t("task.day_title")}: ${dayjs(day, DAY_FORMAT).format(DAY_LONG_READ_FORMAT)}`
+              : i18n.t("task.set_planned_day")}
           </SizableText>
         </Button>
         <DatePicker
