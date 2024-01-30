@@ -9,13 +9,14 @@ import { ErrorBoundary } from "react-error-boundary";
 
 export interface ProjectScreenProps {
   projectId: string;
+  name: string;
 }
 
-export const ProjectScreen = ({ projectId }: ProjectScreenProps) => {
+export const ProjectScreen = ({ projectId, name }: ProjectScreenProps) => {
   return (
     <>
       <ErrorBoundary FallbackComponent={GenericFallback} >
-        <ProjectTasksListLoad projectId={projectId}/>
+        <ProjectTasksListLoad projectId={projectId} name={name}/>
       </ErrorBoundary>
     </>
   );

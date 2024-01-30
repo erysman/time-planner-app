@@ -68,7 +68,7 @@ export const ProjectView = ({ color, name, id }: ProjectItemProps) => {
   const router = useRouter();
   return (
     <Link
-      href={{ pathname: `/projects/[projectId]`, params: { projectId: id } }}
+      href={{ pathname: `/projects/[projectId]`, params: { projectId: id, name } }}
       asChild
     >
       <XStack

@@ -18,11 +18,12 @@ export const Auth = {
 const Project = {
     "add_project": "Add project",
     "name_placeholder": "Project name...",
+    "confirm_delete": "Do you want to delete project %{name} and all related tasks?"
 }
 
 const Task = {
     "name_placeholder": "Name...",
-    "confirm_delete": "Do you want to delete task :name ?",
+    "confirm_delete": "Do you want to delete task %{name} ?",
     "project_title": "Project",
     "select_project": "Select project",
     "important_title": "Important",

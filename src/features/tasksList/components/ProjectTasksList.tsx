@@ -17,8 +17,9 @@ import { getRefreshInterval } from "../../../core/logic/config/utils";
 import { IProject, ITask } from "../../dailyPlanner/model/model";
 import { useErrorBoundary } from "react-error-boundary";
 import { AddTaskFab } from "../../../core/components/list/AddTaskFab";
+import i18n from "../../../../config/i18n";
 
-export const ProjectTasksListLoad = (props: { projectId: string }) => {
+export const ProjectTasksListLoad = (props: { projectId: string, name: string }) => {
   const { projectId } = props;
   const {
     data: tasks,
@@ -54,6 +55,7 @@ export const ProjectTasksListLoad = (props: { projectId: string }) => {
     <ProjectTasksList
       project={project as IProject}
       projectId={projectId}
+      initialTitle={props.name}
       tasks={tasks as ITask[]}
     />
   );
@@ -62,12 +64,14 @@ export const ProjectTasksListLoad = (props: { projectId: string }) => {
 interface ProjectTasksListProps {
   projectId: string;
   project: IProject;
+  initialTitle: string;
   tasks: ITask[];
 }
 
 export const ProjectTasksList = ({
   project,
   projectId,
+  initialTitle,
   tasks,
 }: ProjectTasksListProps) => {
   const router = useRouter();
@@ -91,7 +95,7 @@ export const ProjectTasksList = ({
 
   const { confirmDeleteModal, openConfirmDeleteModal } = useConfirmDeleteModal(
     onProjectDelete,
-    `Do you want to delete project ${project?.name} and all related tasks?`
+    i18n.t("project.confirm_delete", {name: project?.name ?? initialTitle})
   );
   const onProjectDeletePress = () => {
     openConfirmDeleteModal();
@@ -111,7 +115,7 @@ export const ProjectTasksList = ({
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
-      title: `${project?.name ?? ""}`,
+      title: `${project?.name ?? initialTitle}`,
       headerRight: () => <>{deleteButton}</>,
     });
   }, [project?.name, navigation]);

@@ -19,11 +19,12 @@ const Auth = {
 const Project = {
     "add_project": "Dodaj projekt",
     "name_placeholder": "Nazwa projektu...",
+    "confirm_delete": "Czy chcesz usunąć projekt %{name} wraz z przypisanymi do niego zadaniami?"
 }
 
 const Task = {
     "name_placeholder": "Nazwa...",
-    "confirm_delete": "Czy chcesz usunąć zadanie :name ?",
+    "confirm_delete": "Czy chcesz usunąć zadanie %{name} ?",
     "project_title": "Projekt",
     "select_project": "Wybierz projekt",
     "important_title": "Ważne",

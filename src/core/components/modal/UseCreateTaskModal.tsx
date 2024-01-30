@@ -7,7 +7,7 @@ export const useCreateTaskModal = (projectId?: string, startDay?: string) => {
 
   const taskModal = useMemo(
     () => (
-      <Modal open={open} setOpen={setOpen}>
+      <Modal open={open} setOpen={setOpen} snapPoints={[60]}>
         <TaskCreateForm
             isOpen={open}
             projectId={projectId}

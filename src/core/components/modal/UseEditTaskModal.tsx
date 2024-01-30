@@ -7,7 +7,7 @@ export const useEditTaskModal = () => {
   const [taskId, setTaskId] = useState<string | null>(null);
   const taskModal = useMemo(
     () => (
-      <Modal open={open} setOpen={setOpen}>
+      <Modal open={open} setOpen={setOpen} snapPoints={[60]}>
         {taskId ? (
           <TaskEditFormLoad id={taskId} onClose={() => setOpen(false)} />
         ) : null}
