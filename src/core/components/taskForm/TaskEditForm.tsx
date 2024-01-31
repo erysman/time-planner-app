@@ -15,6 +15,7 @@ import {
   useValidateStartDay,
   useValidateTime,
   useValidateDuration,
+  MAX_TASK_NAME_LEN,
 } from "./logic/UseValidateTask";
 
 interface TaskEditFormProps {
@@ -43,7 +44,7 @@ export const TaskEditForm = ({
   const formId = useMemo(() => uniqueId(), []);
   const { updateTask } = useUpdateTaskDetails(id, projectId, day);
 
-  const { isNameValid, nameMessage, validateName } = useValidateName();
+  const { isNameValid, nameMessage, validateName } = useValidateName(MAX_TASK_NAME_LEN);
   const { isStartDayValid, startDayMessage, validateStartDay } =
     useValidateStartDay();
   const { isStartTimeValid, startTimeMessage, validateStartTime } =

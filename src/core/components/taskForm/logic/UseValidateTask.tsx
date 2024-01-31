@@ -76,10 +76,13 @@ export const useValidateDuration = () => {
   return { isDurationValid, durationMessage, validateDuration };
 };
 
-export const useValidateName = () => {
+export const MAX_PROJECT_NAME_LEN=25
+export const MAX_TASK_NAME_LEN=150
+
+export const useValidateName = (maxLength: number) => {
   const nameSchema = z
     .string()
-    .max(25)
+    .max(maxLength)
     .min(1, { message: "Name can't be empty" });
   const [isNameValid, setIsNameValid] = useState(true);
   const [nameMessage, setNameMessage] = useState<string>();

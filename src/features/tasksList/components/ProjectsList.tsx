@@ -14,7 +14,7 @@ import { ExpoIcon, PlusIcon } from "../../../core/components/ExpoIcon";
 import { IProject } from "../../dailyPlanner/model/model";
 import { FallbackProps } from "react-error-boundary";
 import { useCallback, useMemo, useState } from "react";
-import { useValidateName } from "../../../core/components/taskForm/logic/UseValidateTask";
+import { MAX_PROJECT_NAME_LEN, useValidateName as useValidateName } from "../../../core/components/taskForm/logic/UseValidateTask";
 import ColorPicker from "react-native-wheel-color-picker";
 import { Modal } from "../../../core/components/modal/Modal";
 import { useScreenDimensions } from "../../../core/logic/dimensions/UseScreenDimensions";
@@ -97,7 +97,7 @@ export const AddProject = () => {
   const [namePressed, setNamePressed] = useState(false);
   const [name, setName] = useState("");
 
-  const { isNameValid, nameMessage, validateName } = useValidateName();
+  const { isNameValid, nameMessage, validateName } = useValidateName(MAX_PROJECT_NAME_LEN);
 
   return (
     <XStack

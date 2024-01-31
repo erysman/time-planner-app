@@ -26,7 +26,7 @@ import { SelectPriority } from "./components/SelectPriority";
 import { SelectProject } from "./components/SelectProject";
 import { SelectStartTime } from "./components/SelectStartTime";
 import { TaskFormHeader } from "./TaskFormHeader";
-import { useValidateName, useValidateStartDay, useValidateTime, useValidateDuration } from "./logic/UseValidateTask";
+import { useValidateName, useValidateStartDay, useValidateTime, useValidateDuration, MAX_TASK_NAME_LEN } from "./logic/UseValidateTask";
 import { uniqueId } from "lodash";
 
 interface TaskCreateFormProps {
@@ -84,7 +84,7 @@ export const TaskCreateForm = ({
     setEditedProjectId(projectId);
   };
 
-  const { isNameValid, nameMessage, validateName } = useValidateName();
+  const { isNameValid, nameMessage, validateName } = useValidateName(MAX_TASK_NAME_LEN);
   const { isStartDayValid, startDayMessage, validateStartDay } =
     useValidateStartDay();
   const { isStartTimeValid, startTimeMessage, validateStartTime } =
