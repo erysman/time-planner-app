@@ -42,7 +42,7 @@ export const MainAuthForm = () => {
           onPress={loginWithGoogle}
           disabled={loggingInProgress}
           space={"$3"}
-          justifyContent={"flex-start"}
+          justifyContent={"center"}
           paddingHorizontal={"$5"}
         >
           <XStack space="$4">

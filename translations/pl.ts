@@ -3,7 +3,7 @@ const Auth = {
     "welcome_again_title": "WITAJ PONOWNIE",
     "login_title": "Zaloguj się",
     "signup_title": "Załóż teraz",
-    "account_question": "Jeszcze nie masz konta?", 
+    "account_question": "Jeszcze nie masz konta? ", 
     "create_account_title": "UTWÓRZ KONTO",
     "email_login_button": "Zaloguj się przez e-mail",
     "email_signup_button": "Załóż nowe konto",

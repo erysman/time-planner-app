@@ -3,7 +3,7 @@ export const Auth = {
     "welcome_again_title": "WELCOME AGAIN",
     "login_title": "Log in",
     "signup_title": "Sign now",
-    "account_question": "Don't have an account, yet?", 
+    "account_question": "Don't have an account, yet? ", 
     "create_account_title": "CREATE AN ACCOUNT",
     "email_login_button": "Log in with e-mail",
     "email_signup_button": "Create a new account",
