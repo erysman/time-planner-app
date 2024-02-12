@@ -229,7 +229,7 @@ export const useDraggableCalendarListGesture = (
     if (pressedAreaType === "calendar") {
       const itemBoundries = onCalendarItemPressed(pressedViewY);
       if (itemBoundries) {
-        calendarScrollArea.activateScrollIfItemInsideScrollArea(itemBoundries);
+        calendarScrollArea.activateScroll(itemBoundries);
       }
     }
     movingItemViewTopY.value = pressedViewY - pressedTaskOffsetToTop.value;
@@ -277,7 +277,7 @@ export const useDraggableCalendarListGesture = (
         movingItemViewTopY.value = maxViewY - itemHeight;
         bottom = maxViewY;
       }
-      listScrollArea.activateScrollIfItemInsideScrollArea({
+      listScrollArea.activateScroll({
         top: movingItemViewTopY.value,
         bottom,
       });
@@ -294,7 +294,7 @@ export const useDraggableCalendarListGesture = (
           bottom = maxViewY
         }
         // const top = pressedViewY - pressedTaskOffsetToTop.value;
-        calendarScrollArea.activateScrollIfItemInsideScrollArea({
+        calendarScrollArea.activateScroll({
           top: movingItemViewTopY.value,
           bottom,
         });

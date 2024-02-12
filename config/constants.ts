@@ -1,5 +1,5 @@
 export const API_HEALTH_INTERVAL=2000; //ms
-export const DATA_REFRESH_INTERVAL=10000; //ms
+export const DATA_REFRESH_INTERVAL=1000; //ms
 
 
 export const DAY_FORMAT = "YYYY-MM-DD";

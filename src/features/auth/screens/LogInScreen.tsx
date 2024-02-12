@@ -1,5 +1,5 @@
 import { H1, YStack } from "tamagui";
-import { useAuth } from "../hooks/UseAuth";
+import { AuthContext, useAuth } from "../hooks/UseAuth";
 import { EmailAndPasswordForm } from "../components/EmailAndPasswordForm";
 import { AuthFooter } from "../components/AuthFooter";
 import { ErrorBoundary } from "react-error-boundary";

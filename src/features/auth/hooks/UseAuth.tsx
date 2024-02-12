@@ -1,46 +1,22 @@
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { UseMutationResult } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useProtectRoutes } from "./UseProtectRoutes";
 import {
-  AXIOS_INSTANCE,
   addAuthenticationHeaderInterceptor,
   removeInterceptor,
 } from "../../../../config/axios-instance";
-import {
-  useGetUserInfo,
-  useInitializeUser,
-} from "../../../clients/time-planner-server/client";
-import { UseMutationResult } from "@tanstack/react-query";
+import { useInitializeUser } from "../../../clients/time-planner-server/client";
 import {
   ErrorMessage,
   UserInfoDTO,
 } from "../../../clients/time-planner-server/model";
+import { useProtectRoutes } from "./UseProtectRoutes";
 
 GoogleSignin.configure({
   webClientId: process.env.PUBLIC_EXPO_GOOGLE_OAUTH_CLIENT_ID,
 });
 
-export interface IAuthContext {
-  user: FirebaseAuthTypes.User | null;
-  loggingInProgress: boolean;
-  actions: IAuthContextActions;
-}
-
-export interface IAuthContextActions {
-  signUpWithPassword: (email: string, password: string) => Promise<void>;
-  logInWithPassword: (email: string, password: string) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
-  logout: () => Promise<void>;
-}
-
-const unsignedAuthContext: IAuthContext = {
-  user: null,
-  loggingInProgress: false,
-  actions: getAuthContextActions(() => {}),
-};
-
-const AuthContext = createContext<IAuthContext>(unsignedAuthContext);
 
 function useAuthInterceptor(user: FirebaseAuthTypes.User | null) {
   const [interceptor, setInterceptor] = useState<number | null>(null);
@@ -78,6 +54,28 @@ function useSetUserOnAuthStateChange(
     });
   }, [auth, setUser]);
 }
+
+export interface IAuthContextActions {
+  signUpWithPassword: (email: string, password: string) => Promise<void>;
+  logInWithPassword: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
+  logout: () => Promise<void>;
+}
+
+const unsignedAuthContext: IAuthContext = {
+  user: null,
+  loggingInProgress: false,
+  actions: getAuthContextActions(() => {}),
+};
+
+
+export interface IAuthContext {
+  user: FirebaseAuthTypes.User | null;
+  loggingInProgress: boolean;
+  actions: IAuthContextActions;
+}
+
+export const AuthContext = createContext<IAuthContext>(unsignedAuthContext);
 
 export const AuthProvider = (props: any) => {
   const [loggingInProgress, setLoggingInProgress] = useState(false);

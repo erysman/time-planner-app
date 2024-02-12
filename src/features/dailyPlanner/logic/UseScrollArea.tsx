@@ -136,7 +136,7 @@ export const useDragScrollArea = (
   }
 
   return {
-    activateScrollIfItemInsideScrollArea,
+    activateScroll: activateScrollIfItemInsideScrollArea,
     cancelScroll,
     scrollProps,
     isScrollActive,
