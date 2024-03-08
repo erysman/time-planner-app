@@ -36,45 +36,10 @@ export const TaskFormHeader = ({
 
   return (
     <XStack justifyContent="center" alignItems="center" w={"100%"}>
-      {/* <Input
-        autoFocus={autofocus}
-        position="absolute"
-        maxWidth={screenWidth * 0.6}
-        size="$4"
-        fontSize={"$5"}
-        value={inputName}
-        placeholder={i18n.t("task.name_placeholder")}
-        placeholderTextColor={"$color"}
-        onPress={() => setNamePressed(true)}
-        borderWidth={namePressed || !isNameValid ? 1 : 0}
-        borderColor={!isNameValid ? "$red9" : "$borderColor"}
-        onChangeText={(text) => {
-          setInputName(text);
-          if(!validateName(text)) return;
-          updateName(text);
-        }}
-        onSubmitEditing={() => setNamePressed(false)}
-      /> */}
-      {/* <XStack flexGrow={1} alignItems="center">
-        <Button
-          size="$3"
-          circular
-          icon={
-            <ExpoIcon
-              iconSet="MaterialIcons"
-              name="close"
-              size={24}
-              color="color"
-            />
-          }
-          onPress={onClose}
-        />
-      </XStack> */}
       <XStack flexGrow={1} >
       <Input
         multiline
         autoFocus={autofocus}
-        // position="absolute"
         width={onSave ? screenWidth*0.75 : "100%"}
         size="$4"
         fontSize={"$5"}

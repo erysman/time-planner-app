@@ -146,8 +146,9 @@ export const TaskCreateForm = ({
       }}
       accessible={false}
     >
-      <ScrollView flex={1} h="100%" w="100%">
+      <ScrollView h="100%" w="100%">
         <YStack h={"100%"} w={"100%"} space={8} paddingVertical={12}>
+          <YStack marginHorizontal={12} space={12}>
           {isOpen ? (
             <TaskFormHeader
               onSave={onSave}
@@ -163,7 +164,6 @@ export const TaskCreateForm = ({
           ) : null}
 
           <Separator borderBottomWidth={1} width={"100%"} />
-          <YStack marginHorizontal={12} space={12}>
             {nameMessage ? (
               <SizableText color={"$red9"}>{nameMessage}</SizableText>
             ) : null}

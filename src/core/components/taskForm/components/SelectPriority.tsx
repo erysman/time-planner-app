@@ -23,7 +23,7 @@ export const SelectPriority = ({
     <YStack>
       <SwitchWithLabel
         id={id}
-        size={"$4"}
+        size={"$4.5"}
         name={i18n.t("task.important_title")}
         icon={<StartIcon size={16} color={"color"} />}
         value={isImportant}
@@ -31,7 +31,7 @@ export const SelectPriority = ({
       />
       <SwitchWithLabel
         id={id}
-        size={"$4"}
+        size={"$4.5"}
         name={i18n.t("task.urgent_title")}
         icon={<HourglassIcon size={16} color={"color"} />}
         value={isUrgent}

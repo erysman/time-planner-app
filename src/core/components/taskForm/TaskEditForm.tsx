@@ -44,7 +44,8 @@ export const TaskEditForm = ({
   const formId = useMemo(() => uniqueId(), []);
   const { updateTask } = useUpdateTaskDetails(id, projectId, day);
 
-  const { isNameValid, nameMessage, validateName } = useValidateName(MAX_TASK_NAME_LEN);
+  const { isNameValid, nameMessage, validateName } =
+    useValidateName(MAX_TASK_NAME_LEN);
   const { isStartDayValid, startDayMessage, validateStartDay } =
     useValidateStartDay();
   const { isStartTimeValid, startTimeMessage, validateStartTime } =
@@ -109,19 +110,19 @@ export const TaskEditForm = ({
       }}
       accessible={false}
     >
-      <ScrollView flex={1} h="100%" w="100%">
+      <ScrollView h="100%" w="100%">
         <YStack h={"100%"} w={"100%"} space={8} paddingVertical={12}>
-          <TaskFormHeader
-            name={name}
-            updateName={updateName}
-            onClose={onClose}
-            namePressed={namePressed}
-            setNamePressed={setNamePressed}
-            isNameValid={isNameValid}
-            validateName={validateName}
-          />
-          <Separator borderBottomWidth={1} width={"100%"} />
           <YStack marginHorizontal={12} space={12}>
+            <TaskFormHeader
+              name={name}
+              updateName={updateName}
+              onClose={onClose}
+              namePressed={namePressed}
+              setNamePressed={setNamePressed}
+              isNameValid={isNameValid}
+              validateName={validateName}
+            />
+            <Separator borderBottomWidth={1} width={"100%"} />
             {nameMessage ? (
               <SizableText color={"$red9"}>{nameMessage}</SizableText>
             ) : null}
@@ -171,7 +172,6 @@ export const TaskEditForm = ({
                 projectId={projectId}
                 updateProject={updateProject}
               />
-              {/* <TextArea placeholder="Description..." /> */}
             </YStack>
           </YStack>
           <YStack marginHorizontal={12} marginTop={36}>

@@ -1,6 +1,6 @@
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { UseMutationResult } from "@tanstack/react-query";
+import { UseMutationResult, useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
 import {
   addAuthenticationHeaderInterceptor,
@@ -84,13 +84,14 @@ export const AuthProvider = (props: any) => {
   useProtectRoutes(user);
   useAuthInterceptor(user);
   const initializeUser = useInitializeUser();
+  const queryClient = useQueryClient();
 
   return (
     <AuthContext.Provider
       value={{
         user,
         loggingInProgress,
-        actions: getAuthContextActions(setLoggingInProgress, initializeUser),
+        actions: getAuthContextActions(setLoggingInProgress, initializeUser, () => queryClient.resetQueries()),
       }}
     >
       {props.children}
@@ -108,7 +109,8 @@ export function useAuth(): IAuthContext {
 
 function getAuthContextActions(
   setLoggingInProgress: React.Dispatch<React.SetStateAction<boolean>>,
-  initializeUser?: UseMutationResult<UserInfoDTO, ErrorMessage, void, unknown>
+  initializeUser?: UseMutationResult<UserInfoDTO, ErrorMessage, void, unknown>,
+  resetCache?: () => void
 ): IAuthContextActions {
   const signUpWithPassword = async (
     email: string,
@@ -161,6 +163,7 @@ function getAuthContextActions(
         initializeUser?.mutate();
         if (!initializeUser?.isError) {
           console.log("user initialized");
+          resetCache?.();
         }
       }
       console.log("Signed in with google account!");
@@ -174,6 +177,7 @@ function getAuthContextActions(
       setLoggingInProgress(true);
       await auth().signOut();
       // GoogleSignin.revokeAccess()
+      resetCache?.();
       console.log("Signed out!");
     } finally {
       setLoggingInProgress(false);

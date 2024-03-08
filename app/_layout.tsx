@@ -67,7 +67,7 @@ function RootLayoutNav() {
       <ScreenDimensionsProvider>
         <QueryClientProvider client={queryClient}>
           <TamaguiProvider config={tamaguiConfig}>
-            <Theme name="light_blue_alt1">
+            <Theme name="light_blue">
               <NavigationTheme>
                 <AuthProvider>
                   <Slot />
