@@ -1,10 +1,9 @@
-import { router, useNavigation, useSegments } from "expo-router";
+import { Href, router, useNavigation, useSegments } from "expo-router";
 import { useEffect } from "react";
 import {FirebaseAuthTypes} from "@react-native-firebase/auth";
 import { Platform } from "react-native";
-import { Href } from "expo-router/build/link/href";
 
-function redirect(path: Href) {
+function redirect(path: any) {
     if (Platform.OS === "ios") {
         setTimeout(() => {
             router.replace(path);

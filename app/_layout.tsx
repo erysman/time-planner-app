@@ -6,7 +6,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Slot, SplashScreen, Stack } from "expo-router";
+import { Slot, useNavigationContainerRef } from "expo-router";
 import { Suspense, useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider, Theme, useTheme } from "tamagui";
@@ -14,15 +14,19 @@ import tamaguiConfig from "../config/tamagui.config";
 import { ScreenDimensionsProvider } from "../src/core/logic/dimensions/UseScreenDimensions";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "../src/features/auth/hooks/UseAuth";
-// export {
-//   // Catch any errors thrown by the Layout component.
-//   ErrorBoundary,
-// } from "expo-router";
-import { UseThemeResult } from "@tamagui/web"
+export {
+  // Catch any errors thrown by the Layout component.
+  ErrorBoundary,
+} from "expo-router";
+import { UseThemeResult } from "@tamagui/web";
 import { useSetupReactQuery } from "../config/react-query";
-import {enableMapSet} from "immer"
+import { enableMapSet } from "immer";
+import { routingInstrumentation } from "../config/sentry";
+import * as Sentry from "@sentry/react-native";
+import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-enableMapSet()
+enableMapSet();
 
 export const unstable_settings = {
   initialRouteName: "(auth)",
@@ -31,7 +35,13 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
+  const ref = useNavigationContainerRef();
+  useEffect(() => {
+    if (ref) {
+      routingInstrumentation.registerNavigationContainer(ref);
+    }
+  }, [ref]);
   const [loaded, error] = useFonts({
     Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
     InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
@@ -60,7 +70,7 @@ const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  useSetupReactQuery()
+  useSetupReactQuery();
 
   return (
     <>
@@ -70,7 +80,9 @@ function RootLayoutNav() {
             <Theme name="light_blue">
               <NavigationTheme>
                 <AuthProvider>
-                  <Slot />
+                  <GestureHandlerRootView style={{width: "100%", height: "100%"}}>
+                    <Slot />
+                  </GestureHandlerRootView>
                 </AuthProvider>
               </NavigationTheme>
             </Theme>
@@ -97,6 +109,11 @@ export function getTamaguiTheme(theme: UseThemeResult) {
 
 export const NavigationTheme = (props: { children: any }) => {
   const theme = useTheme();
-  return <ThemeProvider value={getTamaguiTheme(theme)}>{props.children}</ThemeProvider>;
+  return (
+    <ThemeProvider value={getTamaguiTheme(theme)}>
+      {props.children}
+    </ThemeProvider>
+  );
 };
 
+export default Sentry.wrap(RootLayout);

@@ -4,9 +4,10 @@ import { AddProject } from "../../../features/tasksList/components/ProjectsList"
 import { ExpoIcon } from "../ExpoIcon";
 import { useErrorBoundary } from "react-error-boundary";
 import { uniqueId } from "lodash";
-import { useState } from "react";
+import { ErrorInfo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import i18n from "../../../../config/i18n";
+import * as Sentry from "@sentry/react-native";
 
 export const GenericFallback = ({
   error,
@@ -33,4 +34,8 @@ export const NoRetryFallback = (props: { error: { message?: string } }) => {
       <SizableText color={"$red9"}>{props.error?.message}</SizableText>
     </YStack>
   );
+};
+
+export const logError = (error: Error, info: ErrorInfo) => {
+  Sentry.captureException(error);
 };

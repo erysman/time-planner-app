@@ -14,7 +14,7 @@ import {
 import { useProtectRoutes } from "./UseProtectRoutes";
 
 GoogleSignin.configure({
-  webClientId: process.env.PUBLIC_EXPO_GOOGLE_OAUTH_CLIENT_ID,
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID,
 });
 
 

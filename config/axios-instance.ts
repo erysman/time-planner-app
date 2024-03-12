@@ -3,15 +3,16 @@ import Axios, { AxiosRequestConfig } from 'axios';
 
 import * as Device from 'expo-device';
 
-const hardcodedUrl = "http://192.168.1.106:8080/" //"https://time-planner-ltilgqmrgq-lm.a.run.app/"
-const baseUrlForRealDevice = hardcodedUrl || process.env.EXPO_PUBLIC_SERVER_BASE_URL
+const hardcodedUrl = "https://time-planner-ltilgqmrgq-lm.a.run.app/" 
+// const hardcodedUrl = "http://192.168.1.106:8080/" 
+const baseUrlForRealDevice = hardcodedUrl //|| process.env.EXPO_PUBLIC_SERVER_BASE_URL
 const baseUrlForEmulator = process.env.EXPO_PUBLIC_EMULATOR_SERVER_BASE_URL
 const baseUrl = Device.isDevice ? baseUrlForRealDevice : baseUrlForEmulator;
 console.log("Real device?: "+ Device.isDevice);
 console.log("baseUrl: "+baseUrl)
 
 export const AXIOS_INSTANCE = Axios.create({
-    baseURL: baseUrl
+    baseURL: hardcodedUrl
 });
 
 export const addAuthenticationHeaderInterceptor = (getToken: () => Promise<string>) => {

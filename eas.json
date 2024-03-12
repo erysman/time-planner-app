@@ -19,7 +19,7 @@
         }
       },
       "preview3": {
-        "developmentClient": true
+        "developmentClient": false
       }
     },
     "submit": {

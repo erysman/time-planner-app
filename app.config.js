@@ -33,7 +33,11 @@ export default {
     },
     plugins: [
       "expo-router",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      ["@sentry/react-native/expo", {
+          "organization": "eryk-ratynski-it-consulting",
+          "project": "time-planner"
+      }],
     ],
     experiments: {
       typedRoutes: true

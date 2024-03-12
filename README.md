@@ -4,8 +4,8 @@
 
 <table>
     <tr>
-        <td>Log in</td>
-        <td>Projects and tasks</td>
+        <td>Daily planner</td>
+        <td>Daily planner navigation</td>
     </tr>
     <tr>
         <td><img src="docs/login.gif" alt="log-in" width="350"></td>
@@ -16,12 +16,12 @@
     <td><img src="docs/daily-planner-auto.gif" alt="daily-planner-auto-schedule" width="200"></td> -->
     </tr>  
     <tr>
-        <td>Daily planner</td>
-        <td>Daily planner navigation</td>
+        <td>Log in</td>
+        <td>Projects and tasks</td>
     </tr>
     <tr>
         <td><img src="docs/login.gif" alt="log-in" width="350"></td>
-        <td><img src="docs/projects.gif" alt="log-in" width="350"></td>
+        <td><img src="docs/projects.gif" alt="projects" width="350"></td>
     </tr>
 </table>
 
@@ -31,6 +31,15 @@ Comming up:
 - Recurring tasks
 - Nested tasks
 - Manage "done" tasks
+- Report module
+
+## Architecture
+
+System:
+
+Application server:
+
+Scheduling server:
 
 ## Maintenance
 

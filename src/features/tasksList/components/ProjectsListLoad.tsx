@@ -12,7 +12,7 @@ export const ProjectsListLoad = () => {
     isError,
     error,
   } = useGetProjects({
-    query: { refetchInterval: getRefreshInterval() },
+    query: { refetchInterval: getRefreshInterval()},
   });
   const { showBoundary } = useErrorBoundary();
   useEffect(() => {
