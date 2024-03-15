@@ -4,7 +4,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import { mapDurationToHeight, timeToMinutes } from "../../logic/utils";
-import { ITask, TimeAndDurationMap } from "../../model/model";
+import { ITask, ITaskWithTime, TimeAndDurationMap } from "../../model/model";
 import { CalendarTaskHeightEditHandler } from "./CalendarTaskHeightEditHandler";
 import { CalendarTaskView } from "./CalendarTaskView";
 import { useEditTaskModal } from "../../../../core/components/modal/UseEditTaskModal";
@@ -16,9 +16,12 @@ import {
   getGetProjectTasksQueryKey,
   getGetTaskQueryKey,
 } from "../../../../clients/time-planner-server/client";
+import { Stack } from "tamagui";
+
+export const AnimatedStack= Animated.createAnimatedComponent(Stack);
 
 export interface CalendarTaskProps {
-  task: ITask;
+  task: ITaskWithTime;
   isEdited: boolean;
   onPress: (taskId: string) => void;
   movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
@@ -75,7 +78,7 @@ export const CalendarTask = ({
   });
   return (
     <>
-      <Animated.View
+      <AnimatedStack elevationAndroid={10} backgroundColor={"$background"} borderRadius={"$4"}
         style={[
           {
             position: "absolute",
@@ -110,7 +113,7 @@ export const CalendarTask = ({
             }}
           />
         </CalendarTaskHeightEditHandler>
-      </Animated.View>
+      </AnimatedStack>
       {taskModal}
     </>
   );

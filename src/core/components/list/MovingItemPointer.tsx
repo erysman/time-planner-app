@@ -28,6 +28,7 @@ export const MovingItemPointer = ({
       width={"100%"}
       borderColor={"red"}
       style={[separatorStyle]}
+      elevationAndroid={10}
     />
   );
 };

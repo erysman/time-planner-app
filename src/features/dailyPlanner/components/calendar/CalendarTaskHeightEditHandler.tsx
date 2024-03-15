@@ -42,6 +42,7 @@ export const CalendarTaskHeightEditHandler = ({
       width: "100%",
     };
   });
+  
 
   return (
     <Animated.View style={[style]}>
@@ -56,6 +57,7 @@ export const CalendarTaskHeightEditHandler = ({
             alignSelf="center"
             mt={-22}
             zIndex={0}
+            elevation={10}
           />
         </GestureDetector>
       )}

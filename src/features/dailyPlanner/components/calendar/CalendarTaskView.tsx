@@ -74,7 +74,6 @@ export const CalendarTaskView = ({
         onPress={() => {
           onPress?.(id);
         }}
-        elevation={isMoving ? 0:10}
       >
         <AnimatedXStack
           flexGrow={1}

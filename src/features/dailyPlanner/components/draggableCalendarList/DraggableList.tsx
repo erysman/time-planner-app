@@ -12,7 +12,6 @@ import { AddTaskFab } from "../../../../core/components/list/AddTaskFab";
 interface DraggableListProps {
   day: string;
   isLoading: boolean;
-  listStyle: { height: number };
   tasks: ITask[];
   projects: IProject[];
   itemsOrder: SharedValue<string[]>;
@@ -31,7 +30,6 @@ interface DraggableListProps {
 export const DraggableList = ({
   day,
   isLoading,
-  listStyle,
   projects,
   tasks,
   itemsOrder,
@@ -40,7 +38,7 @@ export const DraggableList = ({
   scrollProps,
   scrollRef,
 }: DraggableListProps) => {
-  const { dimensions } = useDailyPlannerContext();
+  const { styles: {listStyle} } = useDailyPlannerContext();
   const { itemHeight } = useDraggableCalendarListContext();
   const theme = useTheme();
   const borderColor = theme.backgroundFocus.get();
@@ -74,7 +72,7 @@ export const DraggableList = ({
         overScrollMode="never"
         scrollEventThrottle={16}
         contentContainerStyle={{
-          height: (2 + tasks.length) * itemHeight,
+          height: (2 + itemsOrder.value.length) * itemHeight,
         }}
         borderBottomWidth={1}
         borderColor={borderColor}

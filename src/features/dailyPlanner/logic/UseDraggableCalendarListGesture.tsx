@@ -34,6 +34,7 @@ import {
   timeToMinutes,
 } from "./utils";
 import { useDragScrollArea } from "./UseScrollArea";
+import { useDailyPlannerContext } from "./UseDailyPlannerContext";
 
 function buildTasksTimeAndDurationMap(tasks: ITask[]): TimeAndDurationMap {
   const map = Object.fromEntries(
@@ -49,15 +50,12 @@ function buildTasksTimeAndDurationMap(tasks: ITask[]): TimeAndDurationMap {
       },
     ])
   );
-  // console.log(`build new object:`, map);
   return map;
 }
 
 export const useDraggableCalendarListGesture = (
   day: string,
   itemsOrder: string[],
-  calendarViewHeight: SharedValue<number>,
-  listViewHeight: SharedValue<number>,
   tasks: ITask[]
 ) => {
   const {
@@ -67,6 +65,9 @@ export const useDraggableCalendarListGesture = (
     setEditedTaskId,
     calendarStepHeight,
   } = useDraggableCalendarListContext();
+  const {
+    dimensions: { listViewHeight, calendarViewHeight },
+  } = useDailyPlannerContext();
   const { headerHeight } = useScreenDimensions();
   const movingItemId = useSharedValue<string | null>(null);
   const [movingItemIdState, setMovingItemIdState] = useState<string | null>(
@@ -152,8 +153,7 @@ export const useDraggableCalendarListGesture = (
     ) {
       return "calendar";
     } else {
-      console.log("cant say if calendar or list");
-      return null;
+      throw new Error("cant say if moving item on calendar or list");
     }
   }
 
@@ -265,7 +265,7 @@ export const useDraggableCalendarListGesture = (
       0
     );
     const pressedAreaType = getPressedAreaType(
-      Math.min(movingItemViewTopY.value, maxViewY-itemHeight),
+      Math.min(movingItemViewTopY.value, maxViewY - itemHeight),
       listViewHeight.value
     );
     movingItemType.value = pressedAreaType;
@@ -291,9 +291,8 @@ export const useDraggableCalendarListGesture = (
         let bottom = pressedViewY + height - pressedTaskOffsetToTop.value;
         if (bottom > maxViewY) {
           movingItemViewTopY.value = maxViewY - height;
-          bottom = maxViewY
+          bottom = maxViewY;
         }
-        // const top = pressedViewY - pressedTaskOffsetToTop.value;
         calendarScrollArea.activateScroll({
           top: movingItemViewTopY.value,
           bottom,

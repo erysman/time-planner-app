@@ -34,7 +34,7 @@ export const CalendarTasks = ({
           <CalendarTask
             key={task.id}
             isEdited={editedTaskId === task.id}
-            task={task}
+            task={task as ITaskWithTime}
             onPress={onTaskPress}
             movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
             projectColor={projects.find(p => p.id === task.projectId)?.color}

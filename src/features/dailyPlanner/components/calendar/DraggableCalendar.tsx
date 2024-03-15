@@ -10,6 +10,7 @@ import { IProject, ITask, TimeAndDurationMap } from "../../model/model";
 import { CalendarCurrentTime } from "./CalendarCurrentTime";
 import { CalendarSlots } from "./CalendarSlots";
 import { CalendarTasks } from "./CalendarTasks";
+import { useDailyPlannerContext } from "../../logic/UseDailyPlannerContext";
 
 interface DraggableCalendarProps {
   day: string;
@@ -23,7 +24,6 @@ interface DraggableCalendarProps {
       y: number;
     };
   }>;
-  calendarStyle: { height: number };
   movingItemId: string | null;
   movingTimeAndDurationOfTasks: SharedValue<TimeAndDurationMap>;
 }
@@ -35,11 +35,11 @@ export const DraggableCalendar = ({
   projects,
   movingItemId,
   scrollRef,
-  calendarStyle,
   movingTimeAndDurationOfTasks,
   scrollProps,
 }: DraggableCalendarProps) => {
   const { calendarHeight } = useDraggableCalendarListContext();
+  const { styles: {calendarStyle} } = useDailyPlannerContext();
   return (
     <Animated.View style={[calendarStyle]}>
       <Animated.ScrollView

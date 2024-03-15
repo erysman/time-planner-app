@@ -1,31 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { SharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { useScreenDimensions } from "../../../core/logic/dimensions/UseScreenDimensions";
 import {
-  DailyPlannerViewMode,
   DailyPlannerViewModeProperties,
   useDailyPlannerViewMode,
-  useDimensionsByViewMode,
+  useDimensionsByViewMode
 } from "./UseDailyPlannerViewMode";
-import dayjs from "dayjs";
-import { DAY_FORMAT } from "../../../../config/constants";
-import { useNavigationState } from "@react-navigation/native";
-import { useAnimatedStyle, withTiming } from "react-native-reanimated";
 
 interface IDailyPlannerContext {
   viewModeProperties: DailyPlannerViewModeProperties;
-  dimensions: any;
+  dimensions: {calendarViewHeight: SharedValue<number>, listViewHeight: SharedValue<number>};
   styles: any;
 }
 
-const DailyPlannerContext = React.createContext<IDailyPlannerContext>({
-  viewModeProperties: {
-    changeViewModeButton: <></>,
-    viewMode: "both",
-    setViewMode: () => {},
-  },
-  dimensions: null,
-  styles: null,
-});
+const DailyPlannerContext = React.createContext<IDailyPlannerContext| undefined>(undefined);
 
 export const DailyPlannerContextProvider = (props: any) => {
   const { changeViewModeButton, viewMode, setViewMode } =
