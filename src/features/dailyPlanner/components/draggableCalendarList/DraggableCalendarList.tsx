@@ -1,6 +1,6 @@
 import { GestureDetector } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
-import { YStack } from "tamagui";
+import { Spinner, YStack } from "tamagui";
 import { useDraggableCalendarList } from "../../logic/UseDraggableCalendarList";
 import { IProject, ITask } from "../../model/model";
 import { DraggableCalendar } from "../calendar/DraggableCalendar";
@@ -8,20 +8,67 @@ import { DraggableList } from "./DraggableList";
 import { MovingCalendarListItem } from "./MovingCalendarListItem";
 import { useScreenDimensions } from "../../../../core/logic/dimensions/UseScreenDimensions";
 import { deviceName } from "expo-device";
+import {
+  useGetDayTasks,
+  useGetProjects,
+  useGetTasksDayOrder,
+} from "../../../../clients/time-planner-server/client";
+import { getRefreshInterval } from "../../../../core/logic/config/utils";
+import { useErrorBoundary } from "react-error-boundary";
+import { useEffect, useMemo } from "react";
 
 export interface DraggableCalendarListProps {
   day: string;
-  tasks: ITask[];
-  projects: IProject[];
-  tasksOrder: string[];
 }
 
-export const DraggableCalendarList = ({
-  day,
-  tasks,
-  projects,
-  tasksOrder,
-}: DraggableCalendarListProps) => {
+export const DraggableCalendarList = ({ day }: DraggableCalendarListProps) => {
+  const {
+    data: tasksData,
+    isError,
+    error,
+    isLoading: isDayTasksLoading,
+  } = useGetDayTasks(day, { query: { refetchInterval: getRefreshInterval() } });
+  const {
+    data: tasksOrderData,
+    isError: isErrorOrder,
+    error: errorOrder,
+    isLoading: isLoadingOrder,
+  } = useGetTasksDayOrder(day, {
+    query: { refetchInterval: getRefreshInterval() },
+  });
+
+  const {
+    data: projectsData,
+    isError: isErrorProjects,
+    error: errorProjects,
+    isLoading: isLoadingProjects,
+  } = useGetProjects({ query: { refetchInterval: getRefreshInterval() } });
+
+  const { showBoundary } = useErrorBoundary();
+  useEffect(() => {
+    if (isError) {
+      showBoundary(error);
+    }
+    if (isErrorOrder) {
+      showBoundary(errorOrder);
+    }
+    if (isErrorProjects) {
+      showBoundary(errorProjects);
+    }
+  }, [isError, isErrorOrder, isErrorProjects]);
+
+  const isLoading = useMemo(
+    () => isDayTasksLoading || isLoadingOrder || isLoadingProjects,
+    [isDayTasksLoading, isLoadingOrder, isLoadingProjects]
+  );
+
+  const tasks = (tasksData ?? []) as ITask[];
+  const tasksOrder = (tasksOrderData ?? []) as string[];
+  const projects = (projectsData ?? []) as IProject[];
+
+  // if (isLoading) {
+  //   return <Spinner />; //TODO: print skeleton, not Spinner
+  // }
   const {
     dragGesture,
     movingItem,
@@ -44,6 +91,7 @@ export const DraggableCalendarList = ({
         >
           <DraggableList
             day={day}
+            isLoading={isLoading}
             tasks={tasks}
             projects={projects}
             itemsOrder={movingItem.itemsOrder}
@@ -55,6 +103,7 @@ export const DraggableCalendarList = ({
           />
           <DraggableCalendar
             day={day}
+            isLoading={isLoading}
             projects={projects}
             tasks={tasks}
             movingItemId={movingItem.id}

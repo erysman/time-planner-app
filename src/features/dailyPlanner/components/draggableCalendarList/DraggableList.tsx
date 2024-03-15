@@ -1,5 +1,5 @@
 import Animated, { SharedValue } from "react-native-reanimated";
-import { ScrollView, YStack, useTheme } from "tamagui";
+import { ScrollView, Spinner, YStack, useTheme } from "tamagui";
 import { IProject, ITask } from "../../model/model";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import ListItem from "../../../../core/components/list/ListItem";
@@ -11,6 +11,7 @@ import { AddTaskFab } from "../../../../core/components/list/AddTaskFab";
 
 interface DraggableListProps {
   day: string;
+  isLoading: boolean;
   listStyle: { height: number };
   tasks: ITask[];
   projects: IProject[];
@@ -29,6 +30,7 @@ interface DraggableListProps {
 
 export const DraggableList = ({
   day,
+  isLoading,
   listStyle,
   projects,
   tasks,
@@ -63,7 +65,7 @@ export const DraggableList = ({
     [tasks]
   );
   return (
-    <Animated.View style={[{overflow: "hidden"},listStyle]}>
+    <Animated.View style={[{ overflow: "hidden" }, listStyle]}>
       <Animated.ScrollView
         ref={scrollRef}
         alwaysBounceHorizontal={false}
@@ -72,24 +74,28 @@ export const DraggableList = ({
         overScrollMode="never"
         scrollEventThrottle={16}
         contentContainerStyle={{
-          height: (2+tasks.length) * itemHeight,
+          height: (2 + tasks.length) * itemHeight,
         }}
         borderBottomWidth={1}
         borderColor={borderColor}
         animatedProps={scrollProps}
       >
         <YStack w={"100%"} h={"100%"}>
-          {tasks.map((task) => {
-            return (
-              <MovableItem
-                key={task.id}
-                id={task.id}
-                itemHeight={itemHeight}
-                itemsOrder={itemsOrder}
-                renderItem={renderItem}
-              />
-            );
-          })}
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            tasks.map((task) => {
+              return (
+                <MovableItem
+                  key={task.id}
+                  id={task.id}
+                  itemHeight={itemHeight}
+                  itemsOrder={itemsOrder}
+                  renderItem={renderItem}
+                />
+              );
+            })
+          )}
           <MovingItemPointer
             itemHeight={itemHeight}
             visible={!!movingItemId}
@@ -101,4 +107,3 @@ export const DraggableList = ({
     </Animated.View>
   );
 };
-//position="absolute" right={25} bottom={25}
