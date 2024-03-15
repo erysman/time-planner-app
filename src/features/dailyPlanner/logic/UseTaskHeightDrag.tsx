@@ -38,8 +38,7 @@ export const useTaskHeightDrag = (
   function calculateHeight() {
     "worklet";
     const duration = getDuration();
-    const heightTmp = mapDurationToHeight(duration, minuteInPixels);
-    const height = isEdited ? heightTmp : heightTmp - 2;
+    const height = mapDurationToHeight(duration, minuteInPixels)+1;
     return height;
   }
 

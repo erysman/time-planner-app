@@ -6,8 +6,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { Circle } from "tamagui";
 import { useTaskHeightDrag } from "../../logic/UseTaskHeightDrag";
-import { mapDurationToHeight } from "../../logic/utils";
-import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import { TimeAndDurationMap } from "../../model/model";
 
 export interface CalendarTaskEditHandlerProps {
@@ -31,7 +29,7 @@ export const CalendarTaskHeightEditHandler = ({
   movingTimeAndDurationOfTasks,
   children,
 }: CalendarTaskEditHandlerProps) => {
-  const { heightDragPan, height: height } = useTaskHeightDrag(
+  const { heightDragPan, height } = useTaskHeightDrag(
     isEdited,
     id,
     name,
