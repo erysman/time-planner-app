@@ -4,7 +4,7 @@ import Animated, {
   useScrollViewOffset,
   withTiming,
 } from "react-native-reanimated";
-import { YStack } from "tamagui";
+import { Spinner, YStack } from "tamagui";
 import { useDraggableCalendarListContext } from "../../logic/UseCalendarListContext";
 import { IProject, ITask, TimeAndDurationMap } from "../../model/model";
 import { CalendarCurrentTime } from "./CalendarCurrentTime";
@@ -13,6 +13,7 @@ import { CalendarTasks } from "./CalendarTasks";
 
 interface DraggableCalendarProps {
   day: string;
+  isLoading: boolean;
   tasks: ITask[];
   projects: IProject[];
   scrollRef: React.RefObject<Animated.ScrollView>;
@@ -29,13 +30,14 @@ interface DraggableCalendarProps {
 
 export const DraggableCalendar = ({
   day,
+  isLoading,
   tasks,
   projects,
   movingItemId,
   scrollRef,
   calendarStyle,
   movingTimeAndDurationOfTasks,
-  scrollProps
+  scrollProps,
 }: DraggableCalendarProps) => {
   const { calendarHeight } = useDraggableCalendarListContext();
   return (
@@ -54,12 +56,16 @@ export const DraggableCalendar = ({
       >
         <YStack backgroundColor="$backgroundFocus" height={calendarHeight}>
           <CalendarSlots />
-          <CalendarTasks
-            projects={projects}
-            tasks={tasks}
-            pressedTaskId={movingItemId}
-            movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
-          />
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <CalendarTasks
+              projects={projects}
+              tasks={tasks}
+              pressedTaskId={movingItemId}
+              movingTimeAndDurationOfTasks={movingTimeAndDurationOfTasks}
+            />
+          )}
           <CalendarCurrentTime day={day} />
         </YStack>
       </Animated.ScrollView>
