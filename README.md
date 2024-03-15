@@ -35,11 +35,11 @@ Comming up:
 
 ## Architecture
 
-System:
+![System architecture diagram](docs/c4containers2.png "System architecture diagram in C4 model.")
 
-Application server:
+Application server: [time-planner](https://github.com/erysman/time-planner)
 
-Scheduling server:
+Scheduling server: [time-planner-scheduling](https://github.com/erysman/time-planner-scheduling)
 
 ## Maintenance
 
@@ -49,6 +49,12 @@ Scheduling server:
 2. Run `npm run generate-api`
 3. Commit and push changes
 
-### Build new development build
+### Build app
+
+#### Development build
 
 `eas build -p android --profile development`
+
+#### Production preview build
+
+`eas build -p android --profile preview`
