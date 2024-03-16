@@ -42,7 +42,7 @@ Comming up:
 
 ![System architecture diagram](docs/arch.png "System architecture diagram in C4 model.")
 
-Application server (Java/Spring): [time-planner](https://github.com/erysman/time-planner)
+Application server (Java/Spring): [time-planner-server](https://github.com/erysman/time-planner-server)
 
 Scheduling server (Python/Flask/PuLP): [time-planner-scheduling](https://github.com/erysman/time-planner-scheduling)
 
