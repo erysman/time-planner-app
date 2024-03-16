@@ -8,12 +8,8 @@
         <td>Daily planner navigation</td>
     </tr>
     <tr>
-        <td><img src="docs/login.gif" alt="log-in" width="350"></td>
-        <td><img src="docs/projects.gif" alt="log-in" width="350"></td>
-    <!-- <td><img src="docs/projects.gif" alt="projects" width="200"></td>
-    <td><img src="docs/daily-planner.gif" alt="daily-planner" width="200"></td>
-    <td><img src="docs/daily-planner-nav.gif" alt="daily-planner-navigation" width="200"></td>
-    <td><img src="docs/daily-planner-auto.gif" alt="daily-planner-auto-schedule" width="200"></td> -->
+    <td><img src="docs/dailyplan.gif" alt="daily-planner" width="350"></td>
+    <td><img src="docs/navigation.gif" alt="daily-planner-navigation" width="350"></td>
     </tr>  
     <tr>
         <td>Log in</td>
@@ -31,15 +27,24 @@ Comming up:
 - Recurring tasks
 - Nested tasks
 - Manage "done" tasks
-- Report module
+- Reporting module
 
 ## Architecture
 
-![System architecture diagram](docs/c4containers2.png "System architecture diagram in C4 model.")
+![System architecture diagram](docs/arch.png "System architecture diagram in C4 model.")
 
 Application server: [time-planner](https://github.com/erysman/time-planner)
 
 Scheduling server: [time-planner-scheduling](https://github.com/erysman/time-planner-scheduling)
+
+## Technologies
+
+- React Native
+- Expo
+- Expo Router
+- Tamagui
+- React Query
+- Reanimated
 
 ## Maintenance
 
