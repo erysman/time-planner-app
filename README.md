@@ -29,14 +29,6 @@ Comming up:
 - Manage "done" tasks
 - Reporting module
 
-## Architecture
-
-![System architecture diagram](docs/arch.png "System architecture diagram in C4 model.")
-
-Application server: [time-planner](https://github.com/erysman/time-planner)
-
-Scheduling server: [time-planner-scheduling](https://github.com/erysman/time-planner-scheduling)
-
 ## Technologies
 
 - React Native
@@ -45,6 +37,19 @@ Scheduling server: [time-planner-scheduling](https://github.com/erysman/time-pla
 - Tamagui
 - React Query
 - Reanimated
+
+## Architecture
+
+![System architecture diagram](docs/arch.png "System architecture diagram in C4 model.")
+
+Application server (Java/Spring): [time-planner](https://github.com/erysman/time-planner)
+
+Scheduling server (Python/Flask/PuLP): [time-planner-scheduling](https://github.com/erysman/time-planner-scheduling)
+
+## API
+
+[Time-planner OpenAPI](https://time-planner-ltilgqmrgq-lm.a.run.app/swagger-ui/index.html)
+(wait few seconds for server startup)
 
 ## Maintenance
 
